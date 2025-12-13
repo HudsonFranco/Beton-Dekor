@@ -1,0 +1,227 @@
+[
+  {
+    "nodeId": "2:2",
+    "name": "Firefly_-Interior minimalista com parede de tijolos brancos bem iluminada 1",
+    "imageRef": "2afb6ed9fe9171ee3c9580e14c26181a57d07948",
+    "x": -116.0,
+    "y": -145.0,
+    "width": 1522.0,
+    "height": 743.0
+  },
+  {
+    "nodeId": "45:21",
+    "name": "Search",
+    "imageRef": "0e3ea1f4af7bdc0353252fa8af7de9366406fd82",
+    "x": 974.0,
+    "y": -89.0,
+    "width": 23.0,
+    "height": 23.0
+  },
+  {
+    "nodeId": "69:20",
+    "name": "Instagram",
+    "imageRef": "f99ca27c953cfe0ce4e5b10c1b0ab96fab0b7a7c",
+    "x": 13.126334190368652,
+    "y": 3601.0,
+    "width": 32.663700103759766,
+    "height": 29.0
+  },
+  {
+    "nodeId": "69:21",
+    "name": "Facebook",
+    "imageRef": "3c91ae23a60dcf659a2f0a47208b1353193c3bc7",
+    "x": 57.05337905883789,
+    "y": 3601.0,
+    "width": 33.790035247802734,
+    "height": 29.0
+  },
+  {
+    "nodeId": "77:45",
+    "name": "Letter",
+    "imageRef": "e655bbaad469a72f41fd2786c7fb1e44e17447ac",
+    "x": 105.48576354980469,
+    "y": 3590.0,
+    "width": 40.54804229736328,
+    "height": 52.0
+  },
+  {
+    "nodeId": "146:2",
+    "name": "Rectangle 1468",
+    "imageRef": "6b763bca8e76ae82ada57fec1b6cc6d1f98eb9e5",
+    "x": 79.0,
+    "y": 1515.0,
+    "width": 556.0,
+    "height": 282.0
+  },
+  {
+    "nodeId": "146:5",
+    "name": "Rectangle 1470",
+    "imageRef": "cee7d6c934e59b35bdc558f15657cd5619020c4e",
+    "x": 79.0,
+    "y": 1829.0,
+    "width": 556.0,
+    "height": 282.0
+  },
+  {
+    "nodeId": "146:4",
+    "name": "Rectangle 1469",
+    "imageRef": "cb9b9ae230aad23e3e2bb804c56946f89007e295",
+    "x": 655.0,
+    "y": 1515.0,
+    "width": 556.0,
+    "height": 282.0
+  },
+  {
+    "nodeId": "146:6",
+    "name": "Rectangle 1471",
+    "imageRef": "b5135430674f5f27132459f80d1cc55618c16152",
+    "x": 655.0,
+    "y": 1829.0,
+    "width": 556.0,
+    "height": 282.0
+  },
+  {
+    "nodeId": "146:22",
+    "name": "Right Arrow",
+    "imageRef": "4e83e8786321e71939c53cee96dc10a9c3d69986",
+    "x": 423.4104919433594,
+    "y": 1750.2066650390625,
+    "width": 21.056337356567383,
+    "height": 32.68693161010742
+  },
+  {
+    "nodeId": "146:34",
+    "name": "Right Arrow",
+    "imageRef": "4e83e8786321e71939c53cee96dc10a9c3d69986",
+    "x": 423.4104919433594,
+    "y": 2064.614013671875,
+    "width": 21.056337356567383,
+    "height": 32.68693161010742
+  },
+  {
+    "nodeId": "146:31",
+    "name": "Right Arrow",
+    "imageRef": "4e83e8786321e71939c53cee96dc10a9c3d69986",
+    "x": 997.410400390625,
+    "y": 1747.2066650390625,
+    "width": 21.056337356567383,
+    "height": 32.68693161010742
+  },
+  {
+    "nodeId": "146:37",
+    "name": "Right Arrow",
+    "imageRef": "4e83e8786321e71939c53cee96dc10a9c3d69986",
+    "x": 997.410400390625,
+    "y": 2064.614013671875,
+    "width": 21.056337356567383,
+    "height": 32.68693161010742
+  },
+  {
+    "nodeId": "104:35",
+    "name": "Star",
+    "imageRef": "fe3506b1a7bb554f224c3c092e4922e63239e9b3",
+    "x": 944.0,
+    "y": 2607.0,
+    "width": 20.0,
+    "height": 21.0
+  },
+  {
+    "nodeId": "104:36",
+    "name": "Star",
+    "imageRef": "fe3506b1a7bb554f224c3c092e4922e63239e9b3",
+    "x": 966.0,
+    "y": 2607.0,
+    "width": 20.0,
+    "height": 21.0
+  },
+  {
+    "nodeId": "104:37",
+    "name": "Star",
+    "imageRef": "fe3506b1a7bb554f224c3c092e4922e63239e9b3",
+    "x": 988.0,
+    "y": 2607.0,
+    "width": 20.0,
+    "height": 21.0
+  },
+  {
+    "nodeId": "104:38",
+    "name": "Star",
+    "imageRef": "fe3506b1a7bb554f224c3c092e4922e63239e9b3",
+    "x": 1010.0,
+    "y": 2607.0,
+    "width": 20.0,
+    "height": 21.0
+  },
+  {
+    "nodeId": "104:39",
+    "name": "Star",
+    "imageRef": "fe3506b1a7bb554f224c3c092e4922e63239e9b3",
+    "x": 1032.0,
+    "y": 2607.0,
+    "width": 20.0,
+    "height": 21.0
+  },
+  {
+    "nodeId": "104:24",
+    "name": "Profile",
+    "imageRef": "4b9c5386a36995ed619945c88f56a284b677294a",
+    "x": 939.0,
+    "y": 2526.0,
+    "width": 64.0,
+    "height": 64.0
+  },
+  {
+    "nodeId": "104:25",
+    "name": "Profile",
+    "imageRef": "206475e96dcbb5c271bb7604c810be8b2e4afe69",
+    "x": 654.0,
+    "y": 2526.0,
+    "width": 64.0,
+    "height": 64.0
+  },
+  {
+    "nodeId": "104:26",
+    "name": "Star",
+    "imageRef": "fe3506b1a7bb554f224c3c092e4922e63239e9b3",
+    "x": 659.0,
+    "y": 2607.0,
+    "width": 20.0,
+    "height": 21.0
+  },
+  {
+    "nodeId": "104:27",
+    "name": "Star",
+    "imageRef": "fe3506b1a7bb554f224c3c092e4922e63239e9b3",
+    "x": 681.0,
+    "y": 2607.0,
+    "width": 20.0,
+    "height": 21.0
+  },
+  {
+    "nodeId": "104:28",
+    "name": "Star",
+    "imageRef": "fe3506b1a7bb554f224c3c092e4922e63239e9b3",
+    "x": 703.0,
+    "y": 2607.0,
+    "width": 20.0,
+    "height": 21.0
+  },
+  {
+    "nodeId": "104:29",
+    "name": "Star",
+    "imageRef": "fe3506b1a7bb554f224c3c092e4922e63239e9b3",
+    "x": 725.0,
+    "y": 2607.0,
+    "width": 20.0,
+    "height": 21.0
+  },
+  {
+    "nodeId": "104:30",
+    "name": "Star",
+    "imageRef": "fe3506b1a7bb554f224c3c092e4922e63239e9b3",
+    "x": 747.0,
+    "y": 2607.0,
+    "width": 20.0,
+    "height": 21.0
+  }
+]

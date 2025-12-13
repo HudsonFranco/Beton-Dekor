@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Deletar Produto - Beton Dekor{% endblock %}
+
+{% block content %}
+<div style="min-height: 100vh; background: #f7f7f7; padding: 40px 20px;">
+    <div style="max-width: 600px; margin: 0 auto;">
+        <div style="background: white; padding: 40px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
+            <h1 style="font-family: 'Montserrat'; font-weight: 700; font-size: 28px; color: #262626; margin-bottom: 20px;">Confirmar Exclusão</h1>
+            
+            <p style="font-family: 'Montserrat'; font-size: 16px; color: #666; margin-bottom: 30px;">
+                Tem certeza que deseja deletar o produto <strong>{{ produto.nome }}</strong>? Esta ação não pode ser desfeita.
+            </p>
+            
+            <form method="POST" style="display: flex; gap: 10px;">
+                {% csrf_token %}
+                <button type="submit" style="padding: 14px 32px; background: #e33; color: white; border: none; border-radius: 8px; font-family: 'Montserrat'; font-weight: 600; font-size: 16px; cursor: pointer;">
+                    Sim, deletar
+                </button>
+                <a href="{% url 'admin-produtos' %}" style="padding: 14px 32px; background: #999; color: white; border-radius: 8px; text-decoration: none; font-family: 'Montserrat'; font-weight: 600; font-size: 16px; display: inline-block;">
+                    Cancelar
+                </a>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

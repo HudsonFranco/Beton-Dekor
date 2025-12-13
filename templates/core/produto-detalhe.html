@@ -1,0 +1,222 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ produto.nome }} - Beton Dekor{% endblock %}
+
+{% block content %}
+<!-- Header -->
+<header class="header header-produto-detalhe">
+    <div class="header-content">
+        <a href="{% url 'home' %}" 
+           hx-get="{% url 'home' %}" 
+           hx-target="body" 
+           hx-swap="outerHTML" 
+           hx-push-url="true"
+           class="logo">BETON DEKOR</a>
+        <button class="mobile-menu-toggle" aria-label="Toggle menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+        <nav class="nav">
+            <ul class="nav-menu">
+                <li><a href="{% url 'home' %}" hx-get="{% url 'home' %}" hx-target="body" hx-swap="outerHTML" hx-push-url="true">Home</a></li>
+                <li><a href="{% url 'quem-somos' %}" hx-get="{% url 'quem-somos' %}" hx-target="body" hx-swap="outerHTML" hx-push-url="true">Quem Somos</a></li>
+                <li><a href="{% url 'produtos' %}" hx-get="{% url 'produtos' %}" hx-target="body" hx-swap="outerHTML" hx-push-url="true">Produtos</a></li>
+                <!-- Botões de ação no menu hambúrguer -->
+                <li class="mobile-menu-actions">
+                    <a href="#" onclick="openContactModal(); return false;" class="mobile-action-button">Entre em Contato</a>
+                    {% if user.is_authenticated %}
+                        <a href="{% url 'admin-produtos' %}" class="mobile-action-button">Admin</a>
+                    {% else %}
+                        <a href="{% url 'login' %}" class="mobile-action-button">Entrar</a>
+                    {% endif %}
+                </li>
+            </ul>
+        </nav>
+        <div class="header-right">
+            <a href="#" class="contact-button" onclick="openContactModal(); return false;" style="margin-right: 10px;">Entre em Contato</a>
+            {% if user.is_authenticated %}
+                <a href="{% url 'admin-produtos' %}" class="contact-button">Admin</a>
+            {% else %}
+                <a href="{% url 'login' %}" class="contact-button">Entrar</a>
+            {% endif %}
+        </div>
+    </div>
+</header>
+
+<!-- Main Product Display Section -->
+<main id="product-detail-section" class="product-detail-main" style="background: #f7f7f7; padding: 200px 116px 80px; min-height: calc(100vh - 200px);">
+    <div class="product-detail-container" style="display: grid; grid-template-columns: 1fr 1fr; gap: 60px; max-width: 1400px; margin: 0 auto;">
+        <!-- Product Image Area -->
+        <div id="product-image-section" class="product-image-area" style="background: #e9e9e9; border-radius: 12px; position: relative; min-height: 500px; display: flex; align-items: center; justify-content: center;">
+            {% if produto.get_imagem_url %}
+                <img src="{{ produto.get_imagem_url }}" alt="{{ produto.nome }}" style="max-width: 100%; max-height: 500px; object-fit: contain;">
+            {% else %}
+                <div style="color: #999; font-family: 'Montserrat'; font-size: 18px;">Sem imagem</div>
+            {% endif %}
+            <!-- Carousel arrows (placeholder) -->
+            <button class="carousel-arrow carousel-arrow-left" style="position: absolute; left: 20px; top: 50%; transform: translateY(-50%); background: rgba(38, 38, 38, 0.8); border: none; border-radius: 50%; width: 48px; height: 48px; cursor: pointer; display: flex; align-items: center; justify-content: center;">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M15 18L9 12L15 6" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </button>
+            <button class="carousel-arrow carousel-arrow-right" style="position: absolute; right: 20px; top: 50%; transform: translateY(-50%); background: rgba(38, 38, 38, 0.8); border: none; border-radius: 50%; width: 48px; height: 48px; cursor: pointer; display: flex; align-items: center; justify-content: center;">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M9 18L15 12L9 6" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </button>
+        </div>
+
+        <!-- Product Information -->
+        <div class="product-info-area" style="display: flex; flex-direction: column; justify-content: flex-start;">
+            <p class="product-category-tag" style="font-family: 'Montserrat'; font-weight: 400; font-size: 14px; color: #999; margin-bottom: 16px;">
+                {% if produto.categoria_principal %}{{ produto.categoria_principal }}{% endif %}{% if produto.categoria %} ({{ produto.categoria }}){% endif %}
+            </p>
+            
+            <h1 class="product-name" style="font-family: 'Montserrat'; font-weight: 700; font-size: 48px; color: #262626; margin-bottom: 24px; line-height: 1.2;">
+                {{ produto.nome }}
+            </h1>
+
+            {% if produto.dimensoes %}
+            <p class="product-dimensions" style="font-family: 'Montserrat'; font-weight: 400; font-size: 16px; color: #262626; margin-bottom: 32px;">
+                <strong style="font-weight: 700;">Dimensões:</strong> {{ produto.dimensoes }}
+            </p>
+            {% endif %}
+
+            <div class="product-specifications" style="margin-bottom: 40px;">
+                <ul style="list-style: none; padding: 0; margin: 0;">
+                    {% if produto.categoria %}
+                    <li style="font-family: 'Montserrat'; font-weight: 400; font-size: 16px; color: #262626; margin-bottom: 12px;">
+                        <strong style="font-weight: 700;">Categoria:</strong> {{ produto.categoria }}
+                    </li>
+                    {% endif %}
+                    {% if produto.categoria_principal %}
+                    <li style="font-family: 'Montserrat'; font-weight: 400; font-size: 16px; color: #262626; margin-bottom: 12px;">
+                        <strong style="font-weight: 700;">Categoria Principal:</strong> {{ produto.categoria_principal }}
+                    </li>
+                    {% endif %}
+                    {% if produto.cor %}
+                    <li style="font-family: 'Montserrat'; font-weight: 400; font-size: 16px; color: #262626; margin-bottom: 12px;">
+                        <strong style="font-weight: 700;">Cor:</strong> {{ produto.cor }}
+                    </li>
+                    {% endif %}
+                    {% if produto.unidade_venda %}
+                    <li style="font-family: 'Montserrat'; font-weight: 400; font-size: 16px; color: #262626; margin-bottom: 12px;">
+                        <strong style="font-weight: 700;">Unidade de Venda:</strong> {{ produto.unidade_venda }}
+                    </li>
+                    {% endif %}
+                    {% if produto.especificacoes %}
+                    <li style="font-family: 'Montserrat'; font-weight: 400; font-size: 16px; color: #262626; margin-bottom: 12px;">
+                        <strong style="font-weight: 700;">Especificação:</strong> {{ produto.especificacoes }}
+                    </li>
+                    {% endif %}
+                </ul>
+            </div>
+
+            <a href="#" class="contact-button-main" onclick="openContactModal(); return false;" style="display: inline-block; padding: 14px 32px; background: #262626; color: white; border-radius: 45px; text-decoration: none; font-family: 'Montserrat'; font-weight: 600; font-size: 16px; text-align: center; max-width: 250px;">
+                Entre em Contato
+            </a>
+        </div>
+    </div>
+</main>
+
+<!-- Other Products Section -->
+<section class="other-products-section" style="background: #f7f7f7; padding: 80px 116px;">
+    <h2 class="other-products-title" style="text-align: center; font-family: 'Montserrat'; font-weight: 400; font-size: 40px; color: #262626; margin-bottom: 60px;">
+        <span style="font-weight: 400;">OUTROS</span> <strong style="font-weight: 700;">PRODUTOS</strong>
+    </h2>
+    
+    <div class="other-products-grid" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 22px; max-width: 1400px; margin: 0 auto;">
+        {% for outro_produto in outros_produtos %}
+        <a href="{% url 'produto-detalhe' outro_produto.slug %}" 
+           hx-get="{% url 'produto-detalhe' outro_produto.slug %}"
+           hx-target="body"
+           hx-swap="outerHTML"
+           hx-push-url="true"
+           class="product-card-wrapper product-card-link"
+           style="text-decoration: none; color: inherit;">
+            <div class="product-card-modern" style="background: #ffffff; border-radius: 12px; padding: 16px 16px 18px; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.08); border: 1px solid #f0f0f0; display: flex; flex-direction: column; gap: 10px; transition: box-shadow 0.2s ease;">
+                <p class="product-tag" style="margin: 0; font-family: 'Montserrat'; font-weight: 600; font-size: 10px; color: #c5c5c5;">{{ outro_produto.tag }}</p>
+                {% if outro_produto.get_imagem_url %}
+                    <img src="{{ outro_produto.get_imagem_url }}" alt="{{ outro_produto.nome }}" class="product-modern-image" style="max-width: 185px; width: 100%; height: auto; margin: 0 auto; object-fit: contain;">
+                {% else %}
+                    <div class="product-modern-image" style="background: #f0f0f0; height: 150px; display: flex; align-items: center; justify-content: center; color: #999; font-family: 'Montserrat'; font-size: 12px;">Sem imagem</div>
+                {% endif %}
+                <h3 class="product-modern-name" style="font-family: 'Montserrat'; font-weight: 700; font-size: 15px; color: #262626; margin: 0;">{{ outro_produto.nome }}</h3>
+                <p class="product-meta" style="margin: -4px 0 4px; font-family: 'Montserrat'; font-weight: 600; font-size: 10px; color: #9a9a9a; line-height: 1.4;">
+                    {% if outro_produto.categoria_principal %}{{ outro_produto.categoria_principal }}{% endif %}
+                    {% if outro_produto.categoria %}<br>({{ outro_produto.categoria }}){% endif %}
+                </p>
+                <button class="pill-button" style="display: inline-flex; align-items: center; justify-content: center; padding: 10px 20px; background: #0f0f0f; color: #fff; border: none; border-radius: 999px; font-family: 'Montserrat'; font-weight: 600; font-size: 12px; cursor: pointer; width: 100%; margin-top: 8px; transition: opacity 0.2s ease;">Ver detalhes</button>
+            </div>
+        </a>
+        {% empty %}
+        <p style="grid-column: 1 / -1; text-align: center; padding: 40px; color: #999; font-family: 'Montserrat';">Nenhum outro produto disponível.</p>
+        {% endfor %}
+    </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+    <div class="footer-content">
+        <div class="footer-left">
+            <h3 class="footer-logo">BETON DEKOR</h3>
+            <p class="footer-description">Revestimentos 3D e Artefatos em cimento</p>
+            <p class="footer-company-info">
+                Empresa especializada em Revestimentos 3D em concreto arquitetonico e toda linha em Elemento vazado, Cobogó, Pingadeira, concregrama, Lajota, Pisante.
+            </p>
+            <div class="footer-social">
+                <a href="#"><img src="{% static 'images/Instagram.png' %}" alt="Instagram" class="social-icon"></a>
+                <a href="#"><img src="{% static 'images/Facebook.png' %}" alt="Facebook" class="social-icon"></a>
+                <a href="#"><img src="{% static 'images/Email.png' %}" alt="Email" class="social-icon"></a>
+            </div>
+        </div>
+        <div class="footer-right">
+            <h4 class="footer-section-title">Empresa</h4>
+            <ul class="footer-links">
+                <li><a href="{% url 'quem-somos' %}" hx-get="{% url 'quem-somos' %}" hx-target="body" hx-swap="outerHTML" hx-push-url="true">Quem Somos</a></li>
+                <li><a href="{% url 'produtos' %}" hx-get="{% url 'produtos' %}" hx-target="body" hx-swap="outerHTML" hx-push-url="true">Produtos</a></li>
+                <li><a href="#" onclick="openContactModal(); return false;">Entre em contato</a></li>
+            </ul>
+            <div class="footer-contact-info">
+                <p class="footer-contact-text">CNPJ: 52.342.769/0001-91</p>
+                <p class="footer-contact-text">Rua Madre Peulina, 920, Lj 21 - Passa Vinte, Palhoça - SC, 88130-050</p>
+            </div>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <p class="footer-copyright">©2025 Beton Dekor. Todos os direitos reservados.</p>
+    </div>
+</footer>
+
+<script>
+    // Scroll para o topo da seção do produto (incluindo o espaço branco) quando a página carregar
+    function scrollToProductSection() {
+        const productSection = document.getElementById('product-detail-section');
+        if (productSection) {
+            const headerHeight = document.querySelector('.header')?.offsetHeight || 80;
+            const sectionPosition = productSection.getBoundingClientRect().top + window.pageYOffset - headerHeight;
+            
+            window.scrollTo({
+                top: sectionPosition,
+                behavior: 'smooth'
+            });
+        }
+    }
+    
+    // Executar quando a página carregar
+    document.addEventListener('DOMContentLoaded', function() {
+        setTimeout(scrollToProductSection, 100);
+    });
+    
+    // Executar após HTMX swap
+    if (typeof htmx !== 'undefined') {
+        document.body.addEventListener('htmx:afterSwap', function(event) {
+            if (event.detail.target === document.body) {
+                setTimeout(scrollToProductSection, 100);
+            }
+        });
+    }
+</script>
+{% endblock %}

@@ -1,0 +1,128 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{% if produto %}Editar{% else %}Criar{% endif %} Produto - Beton Dekor{% endblock %}
+
+{% block content %}
+<div style="min-height: 100vh; background: #f7f7f7; padding: 40px 20px;">
+    <div style="max-width: 800px; margin: 0 auto;">
+        <div style="margin-bottom: 30px;">
+            <h1 style="font-family: 'Montserrat'; font-weight: 700; font-size: 32px; color: #262626;">
+                {% if produto %}Editar Produto{% else %}Criar Novo Produto{% endif %}
+            </h1>
+            <a href="{% url 'admin-produtos' %}" style="font-family: 'Montserrat'; font-size: 14px; color: #666; text-decoration: none;">← Voltar para lista</a>
+        </div>
+        
+        <div style="background: white; padding: 40px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                
+                <div style="margin-bottom: 20px;">
+                    <label style="display: block; font-family: 'Montserrat'; font-weight: 600; font-size: 14px; color: #262626; margin-bottom: 8px;">Nome do Produto *</label>
+                    <input type="text" name="nome" value="{{ produto.nome|default:'' }}" required style="width: 100%; padding: 12px; border: 1px solid #e4e4e4; border-radius: 8px; font-family: 'Montserrat'; font-size: 14px;">
+                </div>
+                
+                <div style="margin-bottom: 20px;">
+                    <label style="display: block; font-family: 'Montserrat'; font-weight: 600; font-size: 14px; color: #262626; margin-bottom: 8px;">Imagem do Produto (Upload)</label>
+                    <input type="file" name="imagem" accept="image/*" style="width: 100%; padding: 12px; border: 1px solid #e4e4e4; border-radius: 8px; font-family: 'Montserrat'; font-size: 14px;">
+                    {% if produto.imagem %}
+                        <div style="margin-top: 10px;">
+                            <p style="font-family: 'Montserrat'; font-size: 12px; color: #666; margin-bottom: 5px;">Imagem atual:</p>
+                            <img src="{{ produto.imagem.url }}" alt="{{ produto.nome }}" style="max-width: 200px; max-height: 200px; border-radius: 8px; border: 1px solid #e4e4e4;">
+                        </div>
+                    {% endif %}
+                    <small style="font-family: 'Montserrat'; font-size: 12px; color: #666; display: block; margin-top: 8px;">Faça upload de uma imagem para o produto. Formatos aceitos: JPG, PNG, GIF</small>
+                </div>
+                
+                <div style="margin-bottom: 20px;">
+                    <label style="display: block; font-family: 'Montserrat'; font-weight: 600; font-size: 14px; color: #262626; margin-bottom: 8px;">Slug (URL) *</label>
+                    <input type="text" name="slug" value="{{ produto.slug|default:'' }}" required style="width: 100%; padding: 12px; border: 1px solid #e4e4e4; border-radius: 8px; font-family: 'Montserrat'; font-size: 14px;" placeholder="ex: pedra-madeira">
+                    <small style="font-family: 'Montserrat'; font-size: 12px; color: #666;">Use apenas letras minúsculas, números e hífens</small>
+                </div>
+                
+                <div style="margin-bottom: 20px;">
+                    <label style="display: block; font-family: 'Montserrat'; font-weight: 600; font-size: 14px; color: #262626; margin-bottom: 8px;">Descrição</label>
+                    <textarea name="descricao" rows="4" style="width: 100%; padding: 12px; border: 1px solid #e4e4e4; border-radius: 8px; font-family: 'Montserrat'; font-size: 14px;">{{ produto.descricao|default:'' }}</textarea>
+                </div>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;">
+                    <div>
+                        <label style="display: block; font-family: 'Montserrat'; font-weight: 600; font-size: 14px; color: #262626; margin-bottom: 8px;">Dimensões</label>
+                        <input type="text" name="dimensoes" value="{{ produto.dimensoes|default:'' }}" style="width: 100%; padding: 12px; border: 1px solid #e4e4e4; border-radius: 8px; font-family: 'Montserrat'; font-size: 14px;" placeholder="ex: 30x30x2cm">
+                    </div>
+                    
+                    <div>
+                        <label style="display: block; font-family: 'Montserrat'; font-weight: 600; font-size: 14px; color: #262626; margin-bottom: 8px;">Cor</label>
+                        <input type="text" name="cor" value="{{ produto.cor|default:'' }}" style="width: 100%; padding: 12px; border: 1px solid #e4e4e4; border-radius: 8px; font-family: 'Montserrat'; font-size: 14px;" placeholder="ex: Cor natural (concreto cinza)">
+                    </div>
+                </div>
+                
+                <div style="margin-bottom: 20px;">
+                    <label style="display: block; font-family: 'Montserrat'; font-weight: 600; font-size: 14px; color: #262626; margin-bottom: 8px;">Unidade de Venda</label>
+                    <input type="text" name="unidade_venda" value="{{ produto.unidade_venda|default:'' }}" style="width: 100%; padding: 12px; border: 1px solid #e4e4e4; border-radius: 8px; font-family: 'Montserrat'; font-size: 14px;" placeholder="ex: Vendido o M²">
+                </div>
+                
+                <div style="margin-bottom: 20px;">
+                    <label style="display: block; font-family: 'Montserrat'; font-weight: 600; font-size: 14px; color: #262626; margin-bottom: 8px;">Especificação</label>
+                    <input type="text" name="especificacoes" value="{{ produto.especificacoes|default:'' }}" style="width: 100%; padding: 12px; border: 1px solid #e4e4e4; border-radius: 8px; font-family: 'Montserrat'; font-size: 14px;" placeholder="ex: Mosaicos">
+                </div>
+                
+                <div style="margin-bottom: 20px;">
+                    <label style="display: block; font-family: 'Montserrat'; font-weight: 600; font-size: 14px; color: #262626; margin-bottom: 8px;">Categoria Principal *</label>
+                    <select name="categoria_principal" required style="width: 100%; padding: 12px; border: 1px solid #e4e4e4; border-radius: 8px; font-family: 'Montserrat'; font-size: 14px;">
+                        <option value="">Selecione uma categoria</option>
+                        <option value="Revestimento 3D cimentício" {% if produto.categoria_principal == "Revestimento 3D cimentício" %}selected{% endif %}>Revestimento 3D cimentício</option>
+                        <option value="Artefatos Cimentícios" {% if produto.categoria_principal == "Artefatos Cimentícios" %}selected{% endif %}>Artefatos Cimentícios</option>
+                        <option value="Cube Concreto" {% if produto.categoria_principal == "Cube Concreto" %}selected{% endif %}>Cube Concreto</option>
+                        <option value="Linha Jardim" {% if produto.categoria_principal == "Linha Jardim" %}selected{% endif %}>Linha Jardim</option>
+                        <option value="Elemento Vazado Cobogó" {% if produto.categoria_principal == "Elemento Vazado Cobogó" %}selected{% endif %}>Elemento Vazado Cobogó</option>
+                    </select>
+                    <small style="font-family: 'Montserrat'; font-size: 12px; color: #666;">Categoria principal para filtro no site</small>
+                </div>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;">
+                    <div>
+                        <label style="display: block; font-family: 'Montserrat'; font-weight: 600; font-size: 14px; color: #262626; margin-bottom: 8px;">Subcategoria</label>
+                        <input type="text" name="categoria" value="{{ produto.categoria|default:'' }}" style="width: 100%; padding: 12px; border: 1px solid #e4e4e4; border-radius: 8px; font-family: 'Montserrat'; font-size: 14px;" placeholder="ex: Tijolinho, Mosaicos">
+                    </div>
+                    
+                    <div>
+                        <label style="display: block; font-family: 'Montserrat'; font-weight: 600; font-size: 14px; color: #262626; margin-bottom: 8px;">Tag</label>
+                        <input type="text" name="tag" value="{{ produto.tag|default:'Base Cementícia' }}" style="width: 100%; padding: 12px; border: 1px solid #e4e4e4; border-radius: 8px; font-family: 'Montserrat'; font-size: 14px;">
+                    </div>
+                </div>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;">
+                    <div>
+                        <label style="display: block; font-family: 'Montserrat'; font-weight: 600; font-size: 14px; color: #262626; margin-bottom: 8px;">Nome da Imagem (Alternativa)</label>
+                        <input type="text" name="imagem_nome" value="{{ produto.imagem_nome|default:'' }}" style="width: 100%; padding: 12px; border: 1px solid #e4e4e4; border-radius: 8px; font-family: 'Montserrat'; font-size: 14px;" placeholder="ex: PedraMadeira.png">
+                        <small style="font-family: 'Montserrat'; font-size: 12px; color: #666;">Ou use o nome de um arquivo existente em static/images/</small>
+                    </div>
+                    
+                    <div>
+                        <label style="display: block; font-family: 'Montserrat'; font-weight: 600; font-size: 14px; color: #262626; margin-bottom: 8px;">Ordem</label>
+                        <input type="number" name="ordem" value="{{ produto.ordem|default:0 }}" style="width: 100%; padding: 12px; border: 1px solid #e4e4e4; border-radius: 8px; font-family: 'Montserrat'; font-size: 14px;">
+                    </div>
+                </div>
+                
+                <div style="margin-bottom: 30px;">
+                    <label style="display: flex; align-items: center; font-family: 'Montserrat'; font-size: 14px; color: #262626; cursor: pointer;">
+                        <input type="checkbox" name="ativo" {% if produto.ativo or not produto %}checked{% endif %} style="margin-right: 8px; width: 18px; height: 18px;">
+                        Produto ativo (visível no site)
+                    </label>
+                </div>
+                
+                <div style="display: flex; gap: 10px;">
+                    <button type="submit" style="padding: 14px 32px; background: #262626; color: white; border: none; border-radius: 8px; font-family: 'Montserrat'; font-weight: 600; font-size: 16px; cursor: pointer;">
+                        {% if produto %}Salvar Alterações{% else %}Criar Produto{% endif %}
+                    </button>
+                    <a href="{% url 'admin-produtos' %}" style="padding: 14px 32px; background: #999; color: white; border-radius: 8px; text-decoration: none; font-family: 'Montserrat'; font-weight: 600; font-size: 16px; display: inline-block;">
+                        Cancelar
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

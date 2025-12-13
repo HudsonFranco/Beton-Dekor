@@ -1,0 +1,359 @@
+{% load static %}
+{% load django_htmx %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <title>{% block title %}Beton Dekor{% endblock %}</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+    {% django_htmx_script %}
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    {% block content %}{% endblock %}
+    
+    <!-- Contact Modal (global) -->
+    <div id="contactModal" class="contact-modal">
+        <div class="contact-modal-overlay" onclick="closeContactModal()"></div>
+        <div class="contact-modal-content">
+            <button class="contact-modal-close" onclick="closeContactModal()">&times;</button>
+            
+            <!-- Tela de escolha (inicial) -->
+            <div id="contactOptions" class="contact-options-screen">
+                <h2 class="contact-modal-title">Como deseja entrar em contato?</h2>
+                <div class="contact-modal-options">
+                    <a href="#" onclick="showEmailForm(); return false;" class="contact-option contact-option-email">
+                        <div class="contact-option-icon">
+                            <svg width="40" height="40" viewBox="0 0 24 24" fill="#4285F4">
+                                <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+                            </svg>
+                        </div>
+                        <div class="contact-option-text">
+                            <h3>E-mail</h3>
+                            <p>Envie-nos um e-mail</p>
+                        </div>
+                    </a>
+                    <a href="https://wa.me/5548999999999?text=Ol%C3%A1,%20gostaria%20de%20saber%20mais%20sobre%20os%20produtos%20Beton%20Dekor" target="_blank" class="contact-option contact-option-whatsapp">
+                        <div class="contact-option-icon">
+                            <svg width="40" height="40" viewBox="0 0 24 24" fill="#25D366">
+                                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
+                            </svg>
+                        </div>
+                        <div class="contact-option-text">
+                            <h3>WhatsApp</h3>
+                            <p>Fale conosco pelo WhatsApp</p>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Tela do formulário de email -->
+            <div id="emailFormScreen" class="email-form-screen" style="display: none;">
+                <button class="contact-modal-back" onclick="showContactOptions(); return false;">← Voltar</button>
+                <h2 class="contact-modal-title">Entre em Contato</h2>
+                <form id="contactForm" class="contact-form" method="POST" action="{% url 'contato' %}" hx-post="{% url 'contato' %}" hx-target="#contactForm" hx-swap="outerHTML">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="nome" class="form-label">Nome</label>
+                        <input type="text" id="nome" name="nome" class="form-input" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email" class="form-label">E-mail</label>
+                        <input type="email" id="email" name="email" class="form-input" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="mensagem" class="form-label">Mensagem</label>
+                        <textarea id="mensagem" name="mensagem" class="form-textarea" rows="5" required></textarea>
+                    </div>
+                    <button type="submit" class="form-submit-button">Enviar Mensagem</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Função para inicializar menu hambúrguer
+        function initMobileMenu() {
+            const menuToggle = document.querySelector('.mobile-menu-toggle');
+            const nav = document.querySelector('.nav');
+            
+            if (!menuToggle || !nav) return;
+            
+            // Remover listeners antigos usando uma flag
+            if (menuToggle._menuInitialized) return;
+            menuToggle._menuInitialized = true;
+            
+            // Toggle menu ao clicar no botão
+            menuToggle.addEventListener('click', function(e) {
+                e.stopPropagation();
+                e.preventDefault();
+                menuToggle.classList.toggle('active');
+                nav.classList.toggle('active');
+            });
+            
+            // Fechar menu ao clicar em um link
+            const navLinks = nav.querySelectorAll('a');
+            navLinks.forEach(link => {
+                link.addEventListener('click', function() {
+                    menuToggle.classList.remove('active');
+                    nav.classList.remove('active');
+                });
+            });
+            
+            // Fechar menu ao clicar fora dele
+            function closeMenuOnOutsideClick(e) {
+                if (nav.classList.contains('active') && 
+                    !nav.contains(e.target) && 
+                    !menuToggle.contains(e.target)) {
+                    menuToggle.classList.remove('active');
+                    nav.classList.remove('active');
+                }
+            }
+            
+            document.addEventListener('click', closeMenuOnOutsideClick);
+        }
+        
+        // Inicializar ao carregar
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initMobileMenu);
+        } else {
+            initMobileMenu();
+        }
+        
+        // Reinicializar após swaps do HTMX
+        if (typeof htmx !== 'undefined') {
+            document.body.addEventListener('htmx:afterSwap', function() {
+                // Resetar flag para permitir reinicialização
+                const menuToggle = document.querySelector('.mobile-menu-toggle');
+                if (menuToggle) {
+                    menuToggle._menuInitialized = false;
+                }
+                setTimeout(initMobileMenu, 100);
+            });
+        }
+
+        function openContactModal() {
+            const modal = document.getElementById('contactModal');
+            if (!modal) return;
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeContactModal() {
+            const modal = document.getElementById('contactModal');
+            if (!modal) return;
+            modal.classList.remove('active');
+            document.body.style.overflow = 'auto';
+            // Resetar para tela inicial
+            showContactOptions();
+        }
+        
+        function showContactOptions() {
+            const optionsScreen = document.getElementById('contactOptions');
+            const formScreen = document.getElementById('emailFormScreen');
+            if (optionsScreen && formScreen) {
+                optionsScreen.style.display = 'block';
+                formScreen.style.display = 'none';
+            }
+        }
+        
+        function showEmailForm() {
+            const optionsScreen = document.getElementById('contactOptions');
+            const formScreen = document.getElementById('emailFormScreen');
+            if (optionsScreen && formScreen) {
+                optionsScreen.style.display = 'none';
+                formScreen.style.display = 'block';
+            }
+        }
+
+        // Close modal on ESC
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeContactModal();
+            }
+        });
+
+        // Scroll to top when HTMX swaps content
+        document.body.addEventListener('htmx:afterSwap', function(event) {
+            // Scroll to top when navigating to product detail page
+            // Mas não fazer scroll se houver parâmetro de categoria (deixar o JavaScript da página de produtos lidar com isso)
+            if (event.detail.target === document.body) {
+                const urlParams = new URLSearchParams(window.location.search);
+                // Não fazer scroll para o topo se houver parâmetro de categoria ou se for página de produtos
+                if (!urlParams.has('categoria') && !window.location.pathname.includes('/produtos')) {
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                }
+            }
+        });
+        
+        // Smooth scroll section by section
+        // Usar window para evitar redeclaração quando HTMX recarrega
+        if (typeof window.isScrolling === 'undefined') {
+            window.isScrolling = false;
+            window.scrollTimeout = null;
+            window.smoothScrollHandler = null;
+            window.sections = null;
+        }
+        
+        // Remover listener anterior se existir
+        if (window.smoothScrollHandler) {
+            window.removeEventListener('wheel', window.smoothScrollHandler);
+        }
+        
+        // Atualizar sections sempre que o DOM mudar
+        window.sections = document.querySelectorAll('.hero-section, .about-section, .products-section, .testimonials-section, .contact-section');
+        
+        window.smoothScrollHandler = function(e) {
+            if (window.isScrolling) return;
+            
+            clearTimeout(window.scrollTimeout);
+            window.scrollTimeout = setTimeout(() => {
+                window.isScrolling = false;
+            }, 1000);
+            
+            if (window.isScrolling) return;
+            window.isScrolling = true;
+            
+            const currentScroll = window.pageYOffset || document.documentElement.scrollTop;
+            const windowHeight = window.innerHeight;
+            const direction = e.deltaY > 0 ? 1 : -1;
+            
+            let targetSection = null;
+            
+            if (direction > 0) {
+                // Scrolling down - find next section
+                for (let i = 0; i < window.sections.length; i++) {
+                    const sectionTop = window.sections[i].offsetTop;
+                    if (sectionTop > currentScroll + 50) {
+                        targetSection = window.sections[i];
+                        break;
+                    }
+                }
+            } else {
+                // Scrolling up - find previous section
+                for (let i = window.sections.length - 1; i >= 0; i--) {
+                    const sectionTop = window.sections[i].offsetTop;
+                    if (sectionTop < currentScroll - 50) {
+                        targetSection = window.sections[i];
+                        break;
+                    }
+                }
+            }
+            
+            if (targetSection) {
+                e.preventDefault();
+                targetSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                setTimeout(() => {
+                    window.isScrolling = false;
+                }, 800);
+            } else {
+                window.isScrolling = false;
+            }
+        };
+        
+        window.addEventListener('wheel', window.smoothScrollHandler, { passive: false });
+    </script>
+    
+    <script>
+        // Detectar página atual e aplicar classe ao header
+        function detectPageAndSetHeaderClass() {
+            const header = document.querySelector('.header');
+            if (!header) return;
+            
+            const path = window.location.pathname;
+            const url = window.location.href;
+            
+            // Remover classes anteriores
+            header.classList.remove('header-home', 'header-produtos', 'header-quem-somos', 'header-produto-detalhe');
+            
+            // Verificar se é página de detalhe do produto (ex: /produtos/slug-do-produto/)
+            const pathParts = path.split('/').filter(p => p);
+            if (pathParts.length >= 2 && pathParts[0] === 'produtos' && pathParts.length > 1) {
+                // É uma página de detalhe de produto
+                header.classList.add('header-produto-detalhe');
+                return; // Não aplicar outras classes
+            }
+            
+            // Adicionar classe baseada na página
+            // Verificar também pela presença de elementos específicos da página
+            if (path === '/' || path.includes('home') || document.querySelector('.hero-section:not(.products-hero-section):not(.qs-hero)')) {
+                header.classList.add('header-home');
+            } else if (path.includes('produtos') || document.querySelector('.products-hero-section')) {
+                header.classList.add('header-produtos');
+            } else if (path.includes('quem-somos') || document.querySelector('.qs-hero')) {
+                header.classList.add('header-quem-somos');
+            }
+        }
+        
+        // Mudar background da nav baseado no scroll
+        function updateHeaderBackground() {
+            const header = document.querySelector('.header');
+            
+            // Se for página de detalhe do produto, manter preto sempre
+            if (header && header.classList.contains('header-produto-detalhe')) {
+                return; // Não fazer nada, manter preto
+            }
+            
+            // Verificar tanto .hero-section quanto .qs-hero (para página quem-somos)
+            const heroSection = document.querySelector('.hero-section') || document.querySelector('.qs-hero');
+            
+            if (!header || !heroSection) return;
+            
+            const scrollPosition = window.pageYOffset || document.documentElement.scrollTop;
+            const heroTop = heroSection.offsetTop;
+            const heroHeight = heroSection.offsetHeight;
+            const heroBottom = heroTop + heroHeight;
+            
+            // Se estiver dentro da hero section
+            if (scrollPosition < heroBottom - header.offsetHeight) {
+                // Dentro da hero section - remover classe scrolled para ficar transparente
+                header.classList.remove('scrolled');
+            } else {
+                // Fora da hero section - adicionar classe scrolled para mostrar imagem de fundo da página
+                header.classList.add('scrolled');
+            }
+        }
+        
+        function initHeaderBackground() {
+            // Detectar página e aplicar classe
+            detectPageAndSetHeaderClass();
+            
+            // Atualizar background baseado no scroll
+            updateHeaderBackground();
+        }
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            // Inicializar ao carregar
+            initHeaderBackground();
+            
+            // Atualizar ao fazer scroll
+            window.addEventListener('scroll', function() {
+                updateHeaderBackground();
+            }, { passive: true });
+            
+            // Atualizar após HTMX swap
+            if (typeof htmx !== 'undefined') {
+                document.body.addEventListener('htmx:afterSwap', function() {
+                    setTimeout(function() {
+                        initHeaderBackground();
+                        updateHeaderBackground();
+                    }, 100);
+                });
+            }
+        });
+        
+        // Executar também quando a página carregar sem DOMContentLoaded (caso já esteja carregada)
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initHeaderBackground);
+        } else {
+            initHeaderBackground();
+        }
+    </script>
+    
+    {% block extra_js %}{% endblock %}
+</body>
+</html>
+

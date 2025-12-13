@@ -1,0 +1,110 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Quem Somos - Beton Dekor{% endblock %}
+
+{% block content %}
+<div class="page-quem-somos">
+    <!-- Hero Section específica de Quem Somos -->
+    <section class="qs-hero">
+        <div class="qs-hero-overlay"></div>
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <a href="#" class="logo">BETON DEKOR</a>
+                <button class="mobile-menu-toggle" aria-label="Toggle menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+                <nav class="nav">
+                    <ul class="nav-menu">
+                        <li><a href="{% url 'home' %}" hx-get="{% url 'home' %}" hx-target="body" hx-swap="outerHTML" hx-push-url="true">Home</a></li>
+                        <li><a href="{% url 'quem-somos' %}" hx-get="{% url 'quem-somos' %}" hx-target="body" hx-swap="outerHTML" hx-push-url="true">Quem Somos</a></li>
+                        <li><a href="{% url 'produtos' %}" hx-get="{% url 'produtos' %}" hx-target="body" hx-swap="outerHTML" hx-push-url="true">Produtos</a></li>
+                        <!-- Botões de ação no menu hambúrguer -->
+                        <li class="mobile-menu-actions">
+                            <a href="#" onclick="openContactModal(); return false;" class="mobile-action-button">Entre em Contato</a>
+                            {% if user.is_authenticated %}
+                                <a href="{% url 'admin-produtos' %}" class="mobile-action-button">Admin</a>
+                            {% else %}
+                                <a href="{% url 'login' %}" class="mobile-action-button">Entrar</a>
+                            {% endif %}
+                        </li>
+                    </ul>
+                </nav>
+                <div class="header-right">
+                    <a href="#" class="contact-button" onclick="openContactModal(); return false;" style="margin-right: 10px;">Entre em Contato</a>
+                    {% if user.is_authenticated %}
+                        <a href="{% url 'admin-produtos' %}" class="contact-button">Admin</a>
+                    {% else %}
+                        <a href="{% url 'login' %}" class="contact-button">Entrar</a>
+                    {% endif %}
+                </div>
+            </div>
+        </header>
+
+        <div class="qs-hero-content">
+            <div class="qs-hero-kicker-wrapper">
+                <p class="qs-hero-kicker1">Conheça a </p>
+                <p class="qs-hero-kicker"><strong>BETON DEKOR</strong></p>
+            </div>
+            <h1 class="qs-hero-title">
+                Onde cada projeto é feito<br>
+                <span>sob medida</span> para você!
+            </h1>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- About Section -->
+        <section class="about-section">
+            <h2 class="about-title">BETON DEKOR</h2>
+            <p class="about-subtitle">Revestimentos 3D e Artefatos em cimento</p>
+            <p class="about-description">
+                Há mais de uma década, somos pioneiros na criação de <strong>revestimentos 3D</strong> que transformam ambientes comuns em espaços extraordinários. Nossa expertise combina design <strong>inovador</strong>, <strong>tecnologia de ponta</strong> e <strong>materiais premium</strong> para entregar soluções únicas e personalizadas.
+            </p>
+            <p class="section-title"><span>Onde nos</span> <strong>Encontrar</strong></p>
+            <div class="qs-map-wrapper">
+                <img src="{% static 'images/Mapa.png' %}" alt="Mapa" class="qs-map">
+            </div>
+            <p class="qs-address">Rua Madre Paulina, 920 - ParkMall Cassol Palhoça, Loja 21 - Passa Vinte, Palhoça - SC, 88133-015</p>
+        </section>
+    </main>
+</div>
+
+<!-- Footer -->
+<footer class="footer">
+    <div class="footer-content">
+        <div class="footer-left">
+            <h3 class="footer-logo">BETON DEKOR</h3>
+            <p class="footer-description">Revestimentos 3D e Artefatos em cimento</p>
+            <p class="footer-company-info">
+                Empresa especializada em Revestimentos 3D em concreto arquitetonico e toda linha em Elemento vazado, Cobogó, Pingadeira, concregrama, Lajota, Pisante.
+            </p>
+            <div class="footer-social">
+                <a href="#"><img src="{% static 'images/Instagram.png' %}" alt="Instagram" class="social-icon"></a>
+                <a href="#"><img src="{% static 'images/Facebook.png' %}" alt="Facebook" class="social-icon"></a>
+                <a href="#"><img src="{% static 'images/Email.png' %}" alt="Email" class="social-icon"></a>
+            </div>
+        </div>
+        <div class="footer-right">
+            <h4 class="footer-section-title">Empresa</h4>
+            <ul class="footer-links">
+                <li><a href="{% url 'quem-somos' %}" hx-get="{% url 'quem-somos' %}" hx-target="body" hx-swap="outerHTML" hx-push-url="true">Quem Somos</a></li>
+                <li><a href="{% url 'produtos' %}" hx-get="{% url 'produtos' %}" hx-target="body" hx-swap="outerHTML" hx-push-url="true">Produtos</a></li>
+                <li><a href="#" onclick="openContactModal(); return false;">Entre em contato</a></li>
+            </ul>
+            <div class="footer-contact-info">
+                <p class="footer-contact-text">CNPJ: 52.342.769/0001-91</p>
+                <p class="footer-contact-text">Rua Madre Peulina, 920, Lj 21 - Passa Vinte, Palhoça - SC, 88130-050</p>
+            </div>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <p class="footer-copyright">©2025 Beton Dekor. Todos os direitos reservados.</p>
+    </div>
+</footer>
+{% endblock %}
+

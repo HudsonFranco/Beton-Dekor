@@ -1,0 +1,171 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Produtos - Beton Dekor{% endblock %}
+
+{% block extra_css %}
+<style>
+    .products-hero-section {
+        background-image: url('{% static "images/ConhecaProdutos.jpg" %}') !important;
+        background-size: cover !important;
+        background-position: center !important;
+        background-repeat: no-repeat !important;
+        position: relative;
+        min-height: 560px;
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .products-hero-section.hero-section {
+        background-image: url('{% static "images/ConhecaProdutos.jpg" %}') !important;
+    }
+    
+    /* Garantir que a imagem de produtos sempre sobrescreva a de home */
+    section.hero-section.products-hero-section {
+        background-image: url('{% static "images/ConhecaProdutos.jpg" %}') !important;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section products-hero-section">
+    <div class="hero-overlay"></div>
+    <div class="hero-gradient"></div>
+    
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <a href="{% url 'home' %}" 
+               hx-get="{% url 'home' %}" 
+               hx-target="body" 
+               hx-swap="outerHTML" 
+               hx-push-url="true"
+               class="logo">BETON DEKOR</a>
+            <button class="mobile-menu-toggle" aria-label="Toggle menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <nav class="nav">
+                <ul class="nav-menu">
+                    <li><a href="{% url 'home' %}" hx-get="{% url 'home' %}" hx-target="body" hx-swap="outerHTML" hx-push-url="true">Home</a></li>
+                    <li><a href="{% url 'quem-somos' %}" hx-get="{% url 'quem-somos' %}" hx-target="body" hx-swap="outerHTML" hx-push-url="true">Quem Somos</a></li>
+                    <li><a href="{% url 'produtos' %}" hx-get="{% url 'produtos' %}" hx-target="body" hx-swap="outerHTML" hx-push-url="true">Produtos</a></li>
+                    <!-- Botões de ação no menu hambúrguer -->
+                    <li class="mobile-menu-actions">
+                        <a href="#" onclick="openContactModal(); return false;" class="mobile-action-button">Entre em Contato</a>
+                        {% if user.is_authenticated %}
+                            <a href="{% url 'admin-produtos' %}" class="mobile-action-button">Admin</a>
+                        {% else %}
+                            <a href="{% url 'login' %}" class="mobile-action-button">Entrar</a>
+                        {% endif %}
+                    </li>
+                </ul>
+            </nav>
+            <div class="header-right">
+                <a href="#" class="contact-button" onclick="openContactModal(); return false;" style="margin-right: 10px;">Entre em Contato</a>
+                {% if user.is_authenticated %}
+                    <a href="{% url 'admin-produtos' %}" class="contact-button">Admin</a>
+                {% else %}
+                    <a href="{% url 'login' %}" class="contact-button">Entrar</a>
+                {% endif %}
+            </div>
+        </div>
+    </header>
+    
+    <!-- Hero Content -->
+    <div class="hero-content">
+        <h1 class="hero-title">
+            <div class="hero-title-line-1">
+                <span class="hero-title-light">Conheça nossos</span>
+            </div>
+            <div class="hero-title-line-2">
+                <span class="hero-title-bold">Produtos</span>
+            </div>
+        </h1>
+    </div>
+</section>
+
+<!-- Main Content -->
+<main class="products-page" id="products-section">
+    <h2 class="products-page-title"><span>Todos os</span> <strong>Produtos</strong></h2>
+
+    <div class="products-layout">
+        <aside class="products-filter">
+            <div class="filter-search">
+                <input type="text" id="product-search" placeholder="Procurar produto..." autocomplete="off">
+            </div>
+
+            <div class="filter-group">
+                <button type="button" class="filter-all-products">
+                    Todos os Produtos
+                </button>
+            </div>
+
+            {% for item in produtos_agrupados_list %}
+            <div class="filter-group">
+                <h3 class="filter-category-title" data-categoria-principal="{{ item.categoria.nome|lower }}" style="cursor: pointer;">{{ item.categoria.nome }}</h3>
+                <ul>
+                    {% for produto in item.produtos %}
+                    <li class="filter-item">
+                        <a href="{% url 'produto-detalhe' produto.slug %}" 
+                           hx-get="{% url 'produto-detalhe' produto.slug %}"
+                           hx-target="body"
+                           hx-swap="outerHTML"
+                           hx-push-url="true"
+                           class="filter-product-link">{{ produto.nome }}</a>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endfor %}
+        </aside>
+
+        <div class="products-wrapper" id="products-cards-section">
+            <div class="products-cards-container">
+                <div class="products-cards">
+                    {% for produto in produtos %}
+                    {% if produto.slug %}
+                    <a href="{% url 'produto-detalhe' produto.slug %}" 
+                       hx-get="{% url 'produto-detalhe' produto.slug %}"
+                       hx-target="body"
+                       hx-swap="outerHTML"
+                       hx-push-url="true"
+                       class="product-card-wrapper product-card-link"
+                       data-product-name="{{ produto.nome|lower }}"
+                       data-product-category="{{ produto.categoria|lower }}"
+                       data-categoria-principal="{{ produto.categoria_principal|lower }}">
+                        <div class="product-card-modern">
+                            <p class="product-tag">{{ produto.tag }}</p>
+                            {% if produto.get_imagem_url %}
+                                <img src="{{ produto.get_imagem_url }}" alt="{{ produto.nome }}" class="product-modern-image">
+                            {% else %}
+                                <div class="product-modern-image" style="background: #f0f0f0; height: 150px; display: flex; align-items: center; justify-content: center; color: #999;">Sem imagem</div>
+                            {% endif %}
+                            <h3 class="product-modern-name">{{ produto.nome }}</h3>
+                            <p class="product-meta">
+                                {% if produto.categoria_principal %}{{ produto.categoria_principal }}{% endif %}
+                                {% if produto.categoria %}<br>({{ produto.categoria })}{% endif %}
+                            </p>
+                            <button class="pill-button">Ver detalhes</button>
+                        </div>
+                    </a>
+                    {% endif %}
+                    {% empty %}
+                    <p style="grid-column: 1 / -1; text-align: center; padding: 40px; color: #999;">Nenhum produto cadastrado ainda.</p>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/products-page.js' %}"></script>
+<script>
+// Configuração de debug (opcional - remover em produção)
+window.DEBUG = true;
+</script>
+{% endblock %}

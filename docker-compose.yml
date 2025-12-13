@@ -1,0 +1,45 @@
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: betondekor_db
+    environment:
+      POSTGRES_DB: betondekor
+      POSTGRES_USER: betondekor
+      POSTGRES_PASSWORD: betondekor_password
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U betondekor"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  web:
+    build: .
+    container_name: betondekor_web
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/app
+      - static_volume:/app/staticfiles
+      - media_volume:/app/media
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_NAME=betondekor
+      - DB_USER=betondekor
+      - DB_PASSWORD=betondekor_password
+
+volumes:
+  postgres_data:
+  static_volume:
+  media_volume:
+
