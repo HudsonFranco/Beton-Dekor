@@ -3,70 +3,38 @@
 
 {% block title %}Gerenciar Produtos - Beton Dekor{% endblock %}
 
+{% block extra_css %}
+<style>
+    .message-error { background: #fee; color: #c33; }
+    .message-success { background: #efe; color: #3c3; }
+    .status-ativo { background: #efe; color: #3c3; }
+    .status-inativo { background: #fee; color: #c33; }
+</style>
+{% endblock %}
+
 {% block content %}
 <div style="min-height: 100vh; background: #f7f7f7; padding: 40px 20px;">
     <div style="max-width: 1200px; margin: 0 auto;">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
-            <h1 style="font-family: 'Montserrat'; font-weight: 700; font-size: 32px; color: #262626;">Gerenciar Produtos</h1>
+            <h1 style="font-family: 'Montserrat'; font-weight: 700; font-size: 36px; color: #262626;">PAINEL BETON DEKOR</h1>
             <div>
-                <a href="{% url 'admin-produto-create' %}" style="display: inline-block; padding: 12px 24px; background: #262626; color: white; border-radius: 8px; text-decoration: none; font-family: 'Montserrat'; font-weight: 600; margin-right: 10px;">+ Novo Produto</a>
+                <a href="{% url 'admin-categoria-create' %}" style="display: inline-block; padding: 12px 24px; background: #262626; color: white; border-radius: 8px; text-decoration: none; font-family: 'Montserrat'; font-weight: 600; margin-right: 10px;">+ Nova Categoria</a>
+                <a href="{% url 'admin-produto-create' %}" style="display: inline-block; padding: 12px 24px; background: #4A90E2; color: white; border-radius: 8px; text-decoration: none; font-family: 'Montserrat'; font-weight: 600; margin-right: 10px;">+ Novo Produto</a>
                 <a href="{% url 'logout' %}" style="display: inline-block; padding: 12px 24px; background: #999; color: white; border-radius: 8px; text-decoration: none; font-family: 'Montserrat'; font-weight: 600;">Sair</a>
             </div>
         </div>
         
         {% if messages %}
             {% for message in messages %}
-                <div style="padding: 12px; margin-bottom: 20px; border-radius: 8px; background: {% if message.tags == 'error' %}#fee; color: #c33;{% else %}#efe; color: #3c3;{% endif %};">
+                <div class="{% if message.tags == 'error' %}message-error{% else %}message-success{% endif %}" style="padding: 12px; margin-bottom: 20px; border-radius: 8px;">
                     {{ message }}
                 </div>
             {% endfor %}
         {% endif %}
         
-        <div style="background: white; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); overflow: hidden;">
-            <table style="width: 100%; border-collapse: collapse;">
-                <thead>
-                    <tr style="background: #f7f7f7;">
-                        <th style="padding: 16px; text-align: left; font-family: 'Montserrat'; font-weight: 600; font-size: 14px; color: #262626; border-bottom: 1px solid #e4e4e4;">Nome</th>
-                        <th style="padding: 16px; text-align: left; font-family: 'Montserrat'; font-weight: 600; font-size: 14px; color: #262626; border-bottom: 1px solid #e4e4e4;">Categoria</th>
-                        <th style="padding: 16px; text-align: left; font-family: 'Montserrat'; font-weight: 600; font-size: 14px; color: #262626; border-bottom: 1px solid #e4e4e4;">Ordem</th>
-                        <th style="padding: 16px; text-align: center; font-family: 'Montserrat'; font-weight: 600; font-size: 14px; color: #262626; border-bottom: 1px solid #e4e4e4;">Status</th>
-                        <th style="padding: 16px; text-align: center; font-family: 'Montserrat'; font-weight: 600; font-size: 14px; color: #262626; border-bottom: 1px solid #e4e4e4;">Ações</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for produto in produtos %}
-                    <tr style="border-bottom: 1px solid #f0f0f0;">
-                        <td style="padding: 16px; font-family: 'Montserrat'; font-size: 14px; color: #262626;">{{ produto.nome }}</td>
-                        <td style="padding: 16px; font-family: 'Montserrat'; font-size: 14px; color: #666;">{{ produto.categoria|default:"-" }}</td>
-                        <td style="padding: 16px; font-family: 'Montserrat'; font-size: 14px; color: #666;">{{ produto.ordem }}</td>
-                        <td style="padding: 16px; text-align: center;">
-                            <span style="padding: 4px 12px; border-radius: 12px; font-family: 'Montserrat'; font-size: 12px; font-weight: 600; background: {% if produto.ativo %}#efe; color: #3c3;{% else %}#fee; color: #c33;{% endif %};">
-                                {% if produto.ativo %}Ativo{% else %}Inativo{% endif %}
-                            </span>
-                        </td>
-                        <td style="padding: 16px; text-align: center;">
-                            <a href="{% url 'admin-produto-edit' produto.pk %}" style="display: inline-block; padding: 6px 12px; background: #4A90E2; color: white; border-radius: 6px; text-decoration: none; font-family: 'Montserrat'; font-size: 12px; font-weight: 600; margin-right: 8px;">Editar</a>
-                            <a href="{% url 'admin-produto-duplicate' produto.pk %}" style="display: none; padding: 6px 12px; background: #28a745; color: white; border-radius: 6px; text-decoration: none; font-family: 'Montserrat'; font-size: 12px; font-weight: 600; margin-right: 8px;">Duplicar</a>
-                            <a href="{% url 'admin-produto-delete' produto.pk %}" style="display: inline-block; padding: 6px 12px; background: #e33; color: white; border-radius: 6px; text-decoration: none; font-family: 'Montserrat'; font-size: 12px; font-weight: 600;">Deletar</a>
-                        </td>
-                    </tr>
-                    {% empty %}
-                    <tr>
-                        <td colspan="5" style="padding: 40px; text-align: center; font-family: 'Montserrat'; font-size: 14px; color: #666;">
-                            Nenhum produto cadastrado ainda.
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-        
         <!-- Painel de Categorias -->
-        <div style="margin-top: 40px;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
-                <h2 style="font-family: 'Montserrat'; font-weight: 700; font-size: 32px; color: #262626;">Gerenciar Categorias</h2>
-                <a href="{% url 'admin-categoria-create' %}" style="display: inline-block; padding: 12px 24px; background: #262626; color: white; border-radius: 8px; text-decoration: none; font-family: 'Montserrat'; font-weight: 600; margin-right: 10px;">+ Nova Categoria</a>
-            </div>
+        <div style="margin-bottom: 40px;">
+            <h3 style="font-family: 'Montserrat'; font-weight: 600; font-size: 24px; color: #262626; margin-bottom: 30px;">Gerenciar Categorias</h3>
             
             <div style="background: white; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); overflow: hidden;">
                 <table style="width: 100%; border-collapse: collapse;">
@@ -84,14 +52,13 @@
                             <td style="padding: 16px; font-family: 'Montserrat'; font-size: 14px; color: #262626; font-weight: 600;">{{ categoria.nome }}</td>
                             <td style="padding: 16px; font-family: 'Montserrat'; font-size: 14px; color: #666;">{{ categoria.ordem }}</td>
                             <td style="padding: 16px; text-align: center;">
-                                <span style="padding: 4px 12px; border-radius: 12px; font-family: 'Montserrat'; font-size: 12px; font-weight: 600; background: {% if categoria.ativo %}#efe; color: #3c3;{% else %}#fee; color: #c33;{% endif %};">
+                                <span class="{% if categoria.ativo %}status-ativo{% else %}status-inativo{% endif %}" style="padding: 4px 12px; border-radius: 12px; font-family: 'Montserrat'; font-size: 12px; font-weight: 600;">
                                     {% if categoria.ativo %}Ativo{% else %}Inativo{% endif %}
                                 </span>
                             </td>
                             <td style="padding: 16px; text-align: center;">
                                 <div style="display: flex; gap: 8px; justify-content: center; align-items: center;">
                                     <a href="{% url 'admin-categoria-edit' categoria.pk %}" style="display: inline-block; padding: 6px 12px; background: #4A90E2; color: white; border-radius: 6px; text-decoration: none; font-family: 'Montserrat'; font-size: 12px; font-weight: 600;">Editar</a>
-                                    <a href="{% url 'admin-categoria-duplicate' categoria.pk %}" style="display: inline-block; padding: 6px 12px; background: #28a745; color: white; border-radius: 6px; text-decoration: none; font-family: 'Montserrat'; font-size: 12px; font-weight: 600;">Duplicar</a>
                                     <a href="{% url 'admin-categoria-delete' categoria.pk %}" style="display: inline-block; padding: 6px 12px; background: #e33; color: white; border-radius: 6px; text-decoration: none; font-family: 'Montserrat'; font-size: 12px; font-weight: 600;">Deletar</a>
                                 </div>
                             </td>
@@ -100,6 +67,50 @@
                         <tr>
                             <td colspan="4" style="padding: 40px; text-align: center; font-family: 'Montserrat'; font-size: 14px; color: #666;">
                                 Nenhuma categoria cadastrada ainda.
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <!-- Painel de Produtos -->
+        <div style="margin-top: 40px;">
+            <h3 style="font-family: 'Montserrat'; font-weight: 600; font-size: 24px; color: #262626; margin-bottom: 30px;">Gerenciar Produtos</h3>
+            
+            <div style="background: white; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); overflow: hidden;">
+                <table style="width: 100%; border-collapse: collapse;">
+                    <thead>
+                        <tr style="background: #f7f7f7;">
+                            <th style="padding: 16px; text-align: left; font-family: 'Montserrat'; font-weight: 600; font-size: 14px; color: #262626; border-bottom: 1px solid #e4e4e4;">Nome</th>
+                            <th style="padding: 16px; text-align: left; font-family: 'Montserrat'; font-weight: 600; font-size: 14px; color: #262626; border-bottom: 1px solid #e4e4e4;">Categoria</th>
+                            <th style="padding: 16px; text-align: left; font-family: 'Montserrat'; font-weight: 600; font-size: 14px; color: #262626; border-bottom: 1px solid #e4e4e4;">Ordem</th>
+                            <th style="padding: 16px; text-align: center; font-family: 'Montserrat'; font-weight: 600; font-size: 14px; color: #262626; border-bottom: 1px solid #e4e4e4;">Status</th>
+                            <th style="padding: 16px; text-align: center; font-family: 'Montserrat'; font-weight: 600; font-size: 14px; color: #262626; border-bottom: 1px solid #e4e4e4;">Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for produto in produtos %}
+                        <tr style="border-bottom: 1px solid #f0f0f0;">
+                            <td style="padding: 16px; font-family: 'Montserrat'; font-size: 14px; color: #262626;">{{ produto.nome }}</td>
+                            <td style="padding: 16px; font-family: 'Montserrat'; font-size: 14px; color: #666;">{{ produto.categoria|default:"-" }}</td>
+                            <td style="padding: 16px; font-family: 'Montserrat'; font-size: 14px; color: #666;">{{ produto.ordem }}</td>
+                            <td style="padding: 16px; text-align: center;">
+                                <span class="{% if produto.ativo %}status-ativo{% else %}status-inativo{% endif %}" style="padding: 4px 12px; border-radius: 12px; font-family: 'Montserrat'; font-size: 12px; font-weight: 600;">
+                                    {% if produto.ativo %}Ativo{% else %}Inativo{% endif %}
+                                </span>
+                            </td>
+                            <td style="padding: 16px; text-align: center;">
+                                <a href="{% url 'admin-produto-edit' produto.pk %}" style="display: inline-block; padding: 6px 12px; background: #4A90E2; color: white; border-radius: 6px; text-decoration: none; font-family: 'Montserrat'; font-size: 12px; font-weight: 600; margin-right: 8px;">Editar</a>
+                                <a href="{% url 'admin-produto-duplicate' produto.pk %}" style="display: none; padding: 6px 12px; background: #28a745; color: white; border-radius: 6px; text-decoration: none; font-family: 'Montserrat'; font-size: 12px; font-weight: 600; margin-right: 8px;">Duplicar</a>
+                                <a href="{% url 'admin-produto-delete' produto.pk %}" style="display: inline-block; padding: 6px 12px; background: #e33; color: white; border-radius: 6px; text-decoration: none; font-family: 'Montserrat'; font-size: 12px; font-weight: 600;">Deletar</a>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="5" style="padding: 40px; text-align: center; font-family: 'Montserrat'; font-size: 14px; color: #666;">
+                                Nenhum produto cadastrado ainda.
                             </td>
                         </tr>
                         {% endfor %}

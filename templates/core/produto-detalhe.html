@@ -167,9 +167,9 @@
                 Empresa especializada em Revestimentos 3D em concreto arquitetonico e toda linha em Elemento vazado, Cobogó, Pingadeira, concregrama, Lajota, Pisante.
             </p>
             <div class="footer-social">
-                <a href="#"><img src="{% static 'images/Instagram.png' %}" alt="Instagram" class="social-icon"></a>
-                <a href="#"><img src="{% static 'images/Facebook.png' %}" alt="Facebook" class="social-icon"></a>
-                <a href="#"><img src="{% static 'images/Email.png' %}" alt="Email" class="social-icon"></a>
+                <a href="https://www.instagram.com/betondekor" target="_blank" rel="noopener noreferrer"><img src="{% static 'images/Instagram.png' %}" alt="Instagram" class="social-icon"></a>
+                <a href="https://www.facebook.com/betondekor" target="_blank" rel="noopener noreferrer"><img src="{% static 'images/Facebook.png' %}" alt="Facebook" class="social-icon"></a>
+                <a href="mailto:contato@betondekor.com.br"><img src="{% static 'images/Email.png' %}" alt="Email" class="social-icon"></a>
             </div>
         </div>
         <div class="footer-right">
@@ -181,12 +181,10 @@
             </ul>
             <div class="footer-contact-info">
                 <p class="footer-contact-text">CNPJ: 52.342.769/0001-91</p>
-                <p class="footer-contact-text">Rua Madre Peulina, 920, Lj 21 - Passa Vinte, Palhoça - SC, 88130-050</p>
+                <p class="footer-contact-text">Rua Madre Peulina, 920, Lj 21 - Passa Vinte, Palhoça - SC, <span class="footer-cep">88130-050</span></p>
             </div>
+            <p class="footer-copyright">©2025 Beton Dekor. Todos os direitos reservados.</p>
         </div>
-    </div>
-    <div class="footer-bottom">
-        <p class="footer-copyright">©2025 Beton Dekor. Todos os direitos reservados.</p>
     </div>
 </footer>
 
@@ -195,26 +193,45 @@
     function scrollToProductSection() {
         const productSection = document.getElementById('product-detail-section');
         if (productSection) {
-            const headerHeight = document.querySelector('.header')?.offsetHeight || 80;
-            const sectionPosition = productSection.getBoundingClientRect().top + window.pageYOffset - headerHeight;
-            
-            window.scrollTo({
-                top: sectionPosition,
-                behavior: 'smooth'
-            });
+            // Aguardar um pouco mais para garantir que o layout esteja completo
+            setTimeout(function() {
+                const headerHeight = document.querySelector('.header')?.offsetHeight || 80;
+                const sectionPosition = productSection.getBoundingClientRect().top + window.pageYOffset - headerHeight - 20;
+                
+                window.scrollTo({
+                    top: Math.max(0, sectionPosition),
+                    behavior: 'smooth'
+                });
+            }, 200);
         }
     }
     
-    // Executar quando a página carregar
-    document.addEventListener('DOMContentLoaded', function() {
-        setTimeout(scrollToProductSection, 100);
-    });
+    // Executar quando a página carregar (carregamento normal)
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', function() {
+            scrollToProductSection();
+        });
+    } else {
+        // Página já carregada (pode ser via HTMX)
+        scrollToProductSection();
+    }
     
-    // Executar após HTMX swap
+    // Executar após HTMX swap (navegação via HTMX)
     if (typeof htmx !== 'undefined') {
+        // Usar htmx:afterSwap para garantir que o conteúdo foi totalmente renderizado
         document.body.addEventListener('htmx:afterSwap', function(event) {
             if (event.detail.target === document.body) {
-                setTimeout(scrollToProductSection, 100);
+                // Verificar se estamos na página de produto-detalhe
+                if (document.getElementById('product-detail-section')) {
+                    scrollToProductSection();
+                }
+            }
+        });
+        
+        // Também usar htmx:load para garantir
+        document.body.addEventListener('htmx:load', function(event) {
+            if (document.getElementById('product-detail-section')) {
+                scrollToProductSection();
             }
         });
     }

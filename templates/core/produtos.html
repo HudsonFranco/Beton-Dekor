@@ -167,5 +167,41 @@
 <script>
 // Configuração de debug (opcional - remover em produção)
 window.DEBUG = true;
+
+// Scroll para a seção de produtos quando a URL tiver o hash #products-section
+function scrollToProductsSection() {
+    if (window.location.hash === '#products-section') {
+        setTimeout(function() {
+            const productsSection = document.getElementById('products-section');
+            if (productsSection) {
+                const headerHeight = document.querySelector('.header')?.offsetHeight || 0;
+                const targetPosition = productsSection.offsetTop - headerHeight - 20;
+                window.scrollTo({
+                    top: targetPosition,
+                    behavior: 'smooth'
+                });
+            }
+        }, 100);
+    }
+}
+
+// Executar quando a página carregar
+document.addEventListener('DOMContentLoaded', scrollToProductsSection);
+
+// Executar após HTMX carregar a página
+if (typeof htmx !== 'undefined') {
+    document.body.addEventListener('htmx:afterSwap', function(event) {
+        if (event.detail.target === document.body) {
+            scrollToProductsSection();
+        }
+    });
+}
+
+// Executar também quando a página já estiver carregada
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', scrollToProductsSection);
+} else {
+    scrollToProductsSection();
+}
 </script>
 {% endblock %}
