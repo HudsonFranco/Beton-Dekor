@@ -3,96 +3,322 @@
 
 {% block title %}Gerenciar Produtos - Beton Dekor{% endblock %}
 
+{% block extra_css %}
+<style>
+    .message-error { background: #fee; color: #c33; }
+    .message-success { background: #efe; color: #3c3; }
+    .status-ativo { background: #efe; color: #3c3; }
+    .status-inativo { background: #fee; color: #c33; }
+    
+    /* Responsividade Admin */
+    .admin-container {
+        min-height: 100vh;
+        background: #f7f7f7;
+        padding: 40px 20px;
+    }
+    
+    .admin-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 30px;
+        flex-wrap: wrap;
+        gap: 15px;
+    }
+    
+    .admin-title {
+        font-family: 'Montserrat';
+        font-weight: 700;
+        font-size: 36px;
+        color: #262626;
+        margin: 0;
+    }
+    
+    .admin-actions {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+    }
+    
+    .admin-btn {
+        display: inline-block;
+        padding: 12px 24px;
+        color: white;
+        border-radius: 8px;
+        text-decoration: none;
+        font-family: 'Montserrat';
+        font-weight: 600;
+        font-size: 14px;
+        white-space: nowrap;
+    }
+    
+    .admin-table-wrapper {
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        overflow-x: auto;
+    }
+    
+    .admin-table {
+        width: 100%;
+        border-collapse: collapse;
+        min-width: 600px;
+    }
+    
+    .admin-table th,
+    .admin-table td {
+        padding: 16px;
+        text-align: left;
+        font-family: 'Montserrat';
+        font-size: 14px;
+    }
+    
+    .admin-table th {
+        background: #f7f7f7;
+        font-weight: 600;
+        color: #262626;
+        border-bottom: 1px solid #e4e4e4;
+    }
+    
+    .admin-table td {
+        color: #262626;
+        border-bottom: 1px solid #f0f0f0;
+    }
+    
+    .admin-table .text-center {
+        text-align: center;
+    }
+    
+    .admin-actions-cell {
+        display: flex;
+        gap: 8px;
+        justify-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+    
+    .admin-action-btn {
+        display: inline-block;
+        padding: 6px 12px;
+        color: white;
+        border-radius: 6px;
+        text-decoration: none;
+        font-family: 'Montserrat';
+        font-size: 12px;
+        font-weight: 600;
+        white-space: nowrap;
+    }
+    
+    .admin-section-title {
+        font-family: 'Montserrat';
+        font-weight: 600;
+        font-size: 24px;
+        color: #262626;
+        margin-bottom: 30px;
+    }
+    
+    @media (max-width: 768px) {
+        .admin-container {
+            padding: 20px 15px;
+        }
+        
+        .admin-header {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        
+        .admin-title {
+            font-size: 28px;
+        }
+        
+        .admin-actions {
+            width: 100%;
+            flex-direction: column;
+        }
+        
+        .admin-btn {
+            width: 100%;
+            text-align: center;
+            padding: 10px 20px;
+            font-size: 13px;
+        }
+        
+        .admin-section-title {
+            font-size: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .admin-table-wrapper {
+            border-radius: 8px;
+            overflow-x: visible;
+        }
+        
+        .admin-table {
+            font-size: 11px;
+            min-width: auto;
+            width: 100%;
+        }
+        
+        .admin-table th,
+        .admin-table td {
+            padding: 8px 6px;
+        }
+        
+        .admin-table th:first-child,
+        .admin-table td:first-child {
+            max-width: 100px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        
+        .admin-table th:nth-child(2),
+        .admin-table td:nth-child(2) {
+            max-width: 50px;
+        }
+        
+        /* Para tabela de produtos (5 colunas) */
+        .admin-table th:nth-child(3),
+        .admin-table td:nth-child(3) {
+            max-width: 50px;
+        }
+        
+        .admin-table td.text-center {
+            min-width: auto;
+            max-width: 80px;
+        }
+        
+        .admin-actions-cell {
+            display: flex !important;
+            flex-direction: column;
+            width: 100%;
+            gap: 6px;
+        }
+        
+        .admin-action-btn {
+            display: block !important;
+            width: 100%;
+            text-align: center;
+            padding: 6px 8px;
+            font-size: 10px;
+            min-width: auto;
+        }
+    }
+    
+    @media (max-width: 480px) {
+        .admin-container {
+            padding: 15px 10px;
+        }
+        
+        .admin-title {
+            font-size: 24px;
+        }
+        
+        .admin-section-title {
+            font-size: 18px;
+        }
+        
+        .admin-table {
+            font-size: 10px;
+            min-width: auto;
+        }
+        
+        .admin-table th,
+        .admin-table td {
+            padding: 6px 4px;
+        }
+        
+        .admin-table th:first-child,
+        .admin-table td:first-child {
+            max-width: 80px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        
+        .admin-table th:nth-child(2),
+        .admin-table td:nth-child(2) {
+            max-width: 40px;
+        }
+        
+        /* Para tabela de produtos (5 colunas) */
+        .admin-table th:nth-child(3),
+        .admin-table td:nth-child(3) {
+            max-width: 40px;
+        }
+        
+        .admin-table td.text-center {
+            min-width: auto;
+            max-width: 70px;
+        }
+        
+        .admin-actions-cell {
+            display: flex !important;
+            flex-direction: column;
+            width: 100%;
+            gap: 4px;
+        }
+        
+        .admin-action-btn {
+            display: block !important;
+            width: 100%;
+            text-align: center;
+            padding: 5px 6px;
+            min-width: auto;
+            font-size: 9px;
+        }
+    }
+</style>
+{% endblock %}
+
 {% block content %}
-<div style="min-height: 100vh; background: #f7f7f7; padding: 40px 20px;">
+<div class="admin-container">
     <div style="max-width: 1200px; margin: 0 auto;">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
-            <h1 style="font-family: 'Montserrat'; font-weight: 700; font-size: 32px; color: #262626;">Gerenciar Produtos</h1>
-            <div>
-                <a href="{% url 'admin-produto-create' %}" style="display: inline-block; padding: 12px 24px; background: #262626; color: white; border-radius: 8px; text-decoration: none; font-family: 'Montserrat'; font-weight: 600; margin-right: 10px;">+ Novo Produto</a>
-                <a href="{% url 'logout' %}" style="display: inline-block; padding: 12px 24px; background: #999; color: white; border-radius: 8px; text-decoration: none; font-family: 'Montserrat'; font-weight: 600;">Sair</a>
+        <div class="admin-header">
+            <h1 class="admin-title">PAINEL BETON DEKOR</h1>
+            <div class="admin-actions">
+                <a href="{% url 'admin-categoria-create' %}" class="admin-btn" style="background: #262626;">+ Nova Categoria</a>
+                <a href="{% url 'admin-produto-create' %}" class="admin-btn" style="background: #4A90E2;">+ Novo Produto</a>
+                <a href="{% url 'logout' %}" class="admin-btn" style="background: #999;">Sair</a>
             </div>
         </div>
         
         {% if messages %}
             {% for message in messages %}
-                <div style="padding: 12px; margin-bottom: 20px; border-radius: 8px; background: {% if message.tags == 'error' %}#fee; color: #c33;{% else %}#efe; color: #3c3;{% endif %};">
+                <div class="{% if message.tags == 'error' %}message-error{% else %}message-success{% endif %}" style="padding: 12px; margin-bottom: 20px; border-radius: 8px;">
                     {{ message }}
                 </div>
             {% endfor %}
         {% endif %}
         
-        <div style="background: white; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); overflow: hidden;">
-            <table style="width: 100%; border-collapse: collapse;">
-                <thead>
-                    <tr style="background: #f7f7f7;">
-                        <th style="padding: 16px; text-align: left; font-family: 'Montserrat'; font-weight: 600; font-size: 14px; color: #262626; border-bottom: 1px solid #e4e4e4;">Nome</th>
-                        <th style="padding: 16px; text-align: left; font-family: 'Montserrat'; font-weight: 600; font-size: 14px; color: #262626; border-bottom: 1px solid #e4e4e4;">Categoria</th>
-                        <th style="padding: 16px; text-align: left; font-family: 'Montserrat'; font-weight: 600; font-size: 14px; color: #262626; border-bottom: 1px solid #e4e4e4;">Ordem</th>
-                        <th style="padding: 16px; text-align: center; font-family: 'Montserrat'; font-weight: 600; font-size: 14px; color: #262626; border-bottom: 1px solid #e4e4e4;">Status</th>
-                        <th style="padding: 16px; text-align: center; font-family: 'Montserrat'; font-weight: 600; font-size: 14px; color: #262626; border-bottom: 1px solid #e4e4e4;">Ações</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for produto in produtos %}
-                    <tr style="border-bottom: 1px solid #f0f0f0;">
-                        <td style="padding: 16px; font-family: 'Montserrat'; font-size: 14px; color: #262626;">{{ produto.nome }}</td>
-                        <td style="padding: 16px; font-family: 'Montserrat'; font-size: 14px; color: #666;">{{ produto.categoria|default:"-" }}</td>
-                        <td style="padding: 16px; font-family: 'Montserrat'; font-size: 14px; color: #666;">{{ produto.ordem }}</td>
-                        <td style="padding: 16px; text-align: center;">
-                            <span style="padding: 4px 12px; border-radius: 12px; font-family: 'Montserrat'; font-size: 12px; font-weight: 600; background: {% if produto.ativo %}#efe; color: #3c3;{% else %}#fee; color: #c33;{% endif %};">
-                                {% if produto.ativo %}Ativo{% else %}Inativo{% endif %}
-                            </span>
-                        </td>
-                        <td style="padding: 16px; text-align: center;">
-                            <a href="{% url 'admin-produto-edit' produto.pk %}" style="display: inline-block; padding: 6px 12px; background: #4A90E2; color: white; border-radius: 6px; text-decoration: none; font-family: 'Montserrat'; font-size: 12px; font-weight: 600; margin-right: 8px;">Editar</a>
-                            <a href="{% url 'admin-produto-duplicate' produto.pk %}" style="display: none; padding: 6px 12px; background: #28a745; color: white; border-radius: 6px; text-decoration: none; font-family: 'Montserrat'; font-size: 12px; font-weight: 600; margin-right: 8px;">Duplicar</a>
-                            <a href="{% url 'admin-produto-delete' produto.pk %}" style="display: inline-block; padding: 6px 12px; background: #e33; color: white; border-radius: 6px; text-decoration: none; font-family: 'Montserrat'; font-size: 12px; font-weight: 600;">Deletar</a>
-                        </td>
-                    </tr>
-                    {% empty %}
-                    <tr>
-                        <td colspan="5" style="padding: 40px; text-align: center; font-family: 'Montserrat'; font-size: 14px; color: #666;">
-                            Nenhum produto cadastrado ainda.
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-        
         <!-- Painel de Categorias -->
-        <div style="margin-top: 40px;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
-                <h2 style="font-family: 'Montserrat'; font-weight: 700; font-size: 32px; color: #262626;">Gerenciar Categorias</h2>
-                <a href="{% url 'admin-categoria-create' %}" style="display: inline-block; padding: 12px 24px; background: #262626; color: white; border-radius: 8px; text-decoration: none; font-family: 'Montserrat'; font-weight: 600; margin-right: 10px;">+ Nova Categoria</a>
-            </div>
+        <div style="margin-bottom: 40px;">
+            <h3 class="admin-section-title">Gerenciar Categorias</h3>
             
-            <div style="background: white; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); overflow: hidden;">
-                <table style="width: 100%; border-collapse: collapse;">
+            <div class="admin-table-wrapper">
+                <table class="admin-table">
                     <thead>
-                        <tr style="background: #f7f7f7;">
-                            <th style="padding: 16px; text-align: left; font-family: 'Montserrat'; font-weight: 600; font-size: 14px; color: #262626; border-bottom: 1px solid #e4e4e4;">Nome</th>
-                            <th style="padding: 16px; text-align: left; font-family: 'Montserrat'; font-weight: 600; font-size: 14px; color: #262626; border-bottom: 1px solid #e4e4e4;">Ordem</th>
-                            <th style="padding: 16px; text-align: center; font-family: 'Montserrat'; font-weight: 600; font-size: 14px; color: #262626; border-bottom: 1px solid #e4e4e4;">Status</th>
-                            <th style="padding: 16px; text-align: center; font-family: 'Montserrat'; font-weight: 600; font-size: 14px; color: #262626; border-bottom: 1px solid #e4e4e4;">Ações</th>
+                        <tr>
+                            <th>Nome</th>
+                            <th>Ordem</th>
+                            <th class="text-center">Status</th>
+                            <th class="text-center">Ações</th>
                         </tr>
                     </thead>
                     <tbody>
                         {% for categoria in categorias %}
-                        <tr style="border-bottom: 1px solid #f0f0f0;">
-                            <td style="padding: 16px; font-family: 'Montserrat'; font-size: 14px; color: #262626; font-weight: 600;">{{ categoria.nome }}</td>
-                            <td style="padding: 16px; font-family: 'Montserrat'; font-size: 14px; color: #666;">{{ categoria.ordem }}</td>
-                            <td style="padding: 16px; text-align: center;">
-                                <span style="padding: 4px 12px; border-radius: 12px; font-family: 'Montserrat'; font-size: 12px; font-weight: 600; background: {% if categoria.ativo %}#efe; color: #3c3;{% else %}#fee; color: #c33;{% endif %};">
+                        <tr>
+                            <td style="font-weight: 600;">{{ categoria.nome }}</td>
+                            <td style="color: #666;">{{ categoria.ordem }}</td>
+                            <td class="text-center">
+                                <span class="{% if categoria.ativo %}status-ativo{% else %}status-inativo{% endif %}" style="padding: 4px 12px; border-radius: 12px; font-family: 'Montserrat'; font-size: 12px; font-weight: 600;">
                                     {% if categoria.ativo %}Ativo{% else %}Inativo{% endif %}
                                 </span>
                             </td>
-                            <td style="padding: 16px; text-align: center;">
-                                <div style="display: flex; gap: 8px; justify-content: center; align-items: center;">
-                                    <a href="{% url 'admin-categoria-edit' categoria.pk %}" style="display: inline-block; padding: 6px 12px; background: #4A90E2; color: white; border-radius: 6px; text-decoration: none; font-family: 'Montserrat'; font-size: 12px; font-weight: 600;">Editar</a>
-                                    <a href="{% url 'admin-categoria-duplicate' categoria.pk %}" style="display: inline-block; padding: 6px 12px; background: #28a745; color: white; border-radius: 6px; text-decoration: none; font-family: 'Montserrat'; font-size: 12px; font-weight: 600;">Duplicar</a>
-                                    <a href="{% url 'admin-categoria-delete' categoria.pk %}" style="display: inline-block; padding: 6px 12px; background: #e33; color: white; border-radius: 6px; text-decoration: none; font-family: 'Montserrat'; font-size: 12px; font-weight: 600;">Deletar</a>
+                            <td class="text-center">
+                                <div class="admin-actions-cell">
+                                    <a href="{% url 'admin-categoria-edit' categoria.pk %}" class="admin-action-btn" style="background: #4A90E2;">Editar</a>
+                                    <a href="{% url 'admin-categoria-delete' categoria.pk %}" class="admin-action-btn" style="background: #e33;">Deletar</a>
                                 </div>
                             </td>
                         </tr>
@@ -100,6 +326,52 @@
                         <tr>
                             <td colspan="4" style="padding: 40px; text-align: center; font-family: 'Montserrat'; font-size: 14px; color: #666;">
                                 Nenhuma categoria cadastrada ainda.
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <!-- Painel de Produtos -->
+        <div style="margin-top: 40px;">
+            <h3 class="admin-section-title">Gerenciar Produtos</h3>
+            
+            <div class="admin-table-wrapper">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Nome</th>
+                            <th>Categoria</th>
+                            <th>Ordem</th>
+                            <th class="text-center">Status</th>
+                            <th class="text-center">Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for produto in produtos %}
+                        <tr>
+                            <td>{{ produto.nome }}</td>
+                            <td style="color: #666;">{{ produto.categoria|default:"-" }}</td>
+                            <td style="color: #666;">{{ produto.ordem }}</td>
+                            <td class="text-center">
+                                <span class="{% if produto.ativo %}status-ativo{% else %}status-inativo{% endif %}" style="padding: 4px 12px; border-radius: 12px; font-family: 'Montserrat'; font-size: 12px; font-weight: 600;">
+                                    {% if produto.ativo %}Ativo{% else %}Inativo{% endif %}
+                                </span>
+                            </td>
+                            <td class="text-center">
+                                <div class="admin-actions-cell">
+                                    <a href="{% url 'admin-produto-edit' produto.pk %}" class="admin-action-btn" style="background: #4A90E2;">Editar</a>
+                                    <a href="{% url 'admin-produto-duplicate' produto.pk %}" style="display: none; padding: 6px 12px; background: #28a745; color: white; border-radius: 6px; text-decoration: none; font-family: 'Montserrat'; font-size: 12px; font-weight: 600; margin-right: 8px;">Duplicar</a>
+                                    <a href="{% url 'admin-produto-delete' produto.pk %}" class="admin-action-btn" style="background: #e33;">Deletar</a>
+                                </div>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="5" style="padding: 40px; text-align: center; font-family: 'Montserrat'; font-size: 14px; color: #666;">
+                                Nenhum produto cadastrado ainda.
                             </td>
                         </tr>
                         {% endfor %}

@@ -3,15 +3,193 @@
 
 {% block title %}Gerenciar Categorias - Beton Dekor{% endblock %}
 
+{% block extra_css %}
+<style>
+    .admin-container {
+        min-height: 100vh;
+        background: #f7f7f7;
+        padding: 40px 20px;
+    }
+    
+    .admin-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 30px;
+        flex-wrap: wrap;
+        gap: 15px;
+    }
+    
+    .admin-title {
+        font-family: 'Montserrat';
+        font-weight: 700;
+        font-size: 32px;
+        color: #262626;
+        margin: 0;
+    }
+    
+    .admin-actions {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+    }
+    
+    .admin-btn {
+        display: inline-block;
+        padding: 12px 24px;
+        color: white;
+        border-radius: 8px;
+        text-decoration: none;
+        font-family: 'Montserrat';
+        font-weight: 600;
+        font-size: 14px;
+        white-space: nowrap;
+    }
+    
+    .admin-category-card {
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        overflow: hidden;
+        margin-bottom: 30px;
+    }
+    
+    .admin-category-item {
+        border-bottom: 1px solid #f0f0f0;
+        padding: 20px;
+    }
+    
+    .admin-category-item:last-child {
+        border-bottom: none;
+    }
+    
+    .admin-category-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 15px;
+        flex-wrap: wrap;
+        gap: 15px;
+    }
+    
+    .admin-category-info h2 {
+        font-family: 'Montserrat';
+        font-weight: 700;
+        font-size: 20px;
+        color: #262626;
+        margin: 0 0 5px 0;
+    }
+    
+    .admin-category-actions {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+    }
+    
+    .admin-action-btn {
+        display: inline-block;
+        padding: 6px 12px;
+        color: white;
+        border-radius: 6px;
+        text-decoration: none;
+        font-family: 'Montserrat';
+        font-size: 12px;
+        font-weight: 600;
+        white-space: nowrap;
+    }
+    
+    @media (max-width: 768px) {
+        .admin-container {
+            padding: 20px 15px;
+        }
+        
+        .admin-header {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        
+        .admin-title {
+            font-size: 24px;
+        }
+        
+        .admin-actions {
+            width: 100%;
+            flex-direction: column;
+        }
+        
+        .admin-btn {
+            width: 100%;
+            text-align: center;
+            padding: 10px 20px;
+            font-size: 13px;
+        }
+        
+        .admin-category-header {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        
+        .admin-category-actions {
+            display: flex !important;
+            width: 100%;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .admin-action-btn {
+            display: block !important;
+            width: 100%;
+            text-align: center;
+            padding: 8px 12px;
+            min-width: 80px;
+        }
+    }
+    
+    @media (max-width: 480px) {
+        .admin-container {
+            padding: 15px 10px;
+        }
+        
+        .admin-title {
+            font-size: 20px;
+        }
+        
+        .admin-category-item {
+            padding: 15px;
+        }
+        
+        .admin-category-info h2 {
+            font-size: 18px;
+        }
+        
+        .admin-category-actions {
+            display: flex !important;
+            width: 100%;
+            flex-direction: column;
+            gap: 6px;
+        }
+        
+        .admin-action-btn {
+            display: block !important;
+            width: 100%;
+            text-align: center;
+            padding: 8px 10px;
+            min-width: 70px;
+            font-size: 11px;
+        }
+    }
+</style>
+{% endblock %}
+
 {% block content %}
-<div style="min-height: 100vh; background: #f7f7f7; padding: 40px 20px;">
+<div class="admin-container">
     <div style="max-width: 1200px; margin: 0 auto;">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
-            <h1 style="font-family: 'Montserrat'; font-weight: 700; font-size: 32px; color: #262626;">Gerenciar Categorias</h1>
-            <div>
-                <a href="{% url 'admin-categoria-create' %}" style="display: inline-block; padding: 12px 24px; background: #262626; color: white; border-radius: 8px; text-decoration: none; font-family: 'Montserrat'; font-weight: 600; margin-right: 10px;">+ Nova Categoria</a>
-                <a href="{% url 'admin-produtos' %}" style="display: inline-block; padding: 12px 24px; background: #4A90E2; color: white; border-radius: 8px; text-decoration: none; font-family: 'Montserrat'; font-weight: 600; margin-right: 10px;">Gerenciar Produtos</a>
-                <a href="{% url 'logout' %}" style="display: inline-block; padding: 12px 24px; background: #999; color: white; border-radius: 8px; text-decoration: none; font-family: 'Montserrat'; font-weight: 600;">Sair</a>
+        <div class="admin-header">
+            <h1 class="admin-title">Gerenciar Categorias</h1>
+            <div class="admin-actions">
+                <a href="{% url 'admin-categoria-create' %}" class="admin-btn" style="background: #262626;">+ Nova Categoria</a>
+                <a href="{% url 'admin-produtos' %}" class="admin-btn" style="background: #4A90E2;">Gerenciar Produtos</a>
+                <a href="{% url 'logout' %}" class="admin-btn" style="background: #999;">Sair</a>
             </div>
         </div>
         
@@ -29,12 +207,12 @@
             {% endfor %}
         {% endif %}
         
-        <div style="background: white; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); overflow: hidden; margin-bottom: 30px;">
+        <div class="admin-category-card">
             {% for categoria in categorias %}
-            <div style="border-bottom: 1px solid #f0f0f0; padding: 20px;">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-                    <div>
-                        <h2 style="font-family: 'Montserrat'; font-weight: 700; font-size: 20px; color: #262626; margin: 0 0 5px 0;">{{ categoria.nome }}</h2>
+            <div class="admin-category-item">
+                <div class="admin-category-header">
+                    <div class="admin-category-info">
+                        <h2>{{ categoria.nome }}</h2>
                         <p style="font-family: 'Montserrat'; font-size: 12px; color: #666; margin: 0;">
                             Ordem: {{ categoria.ordem }} | 
                             Status: <span style="padding: 2px 8px; border-radius: 12px; font-size: 11px; font-weight: 600; background: {% if categoria.ativo %}#efe; color: #3c3;{% else %}#fee; color: #c33;{% endif %};">
@@ -42,10 +220,9 @@
                             </span>
                         </p>
                     </div>
-                    <div style="display: flex; gap: 8px; align-items: center;">
-                        <a href="{% url 'admin-categoria-edit' categoria.pk %}" style="display: inline-block; padding: 6px 12px; background: #4A90E2; color: white; border-radius: 6px; text-decoration: none; font-family: 'Montserrat'; font-size: 12px; font-weight: 600;">Editar</a>
-                        <a href="{% url 'admin-categoria-duplicate' categoria.pk %}" style="display: inline-block; padding: 6px 12px; background: #28a745; color: white; border-radius: 6px; text-decoration: none; font-family: 'Montserrat'; font-size: 12px; font-weight: 600;">Duplicar</a>
-                        <a href="{% url 'admin-categoria-delete' categoria.pk %}" style="display: inline-block; padding: 6px 12px; background: #e33; color: white; border-radius: 6px; text-decoration: none; font-family: 'Montserrat'; font-size: 12px; font-weight: 600;">Deletar</a>
+                    <div class="admin-category-actions">
+                        <a href="{% url 'admin-categoria-edit' categoria.pk %}" class="admin-action-btn" style="background: #4A90E2;">Editar</a>
+                        <a href="{% url 'admin-categoria-delete' categoria.pk %}" class="admin-action-btn" style="background: #e33;">Deletar</a>
                     </div>
                 </div>
             </div>

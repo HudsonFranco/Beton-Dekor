@@ -834,6 +834,13 @@ section.hero-section.products-hero-section {
     }
 }
 
+@media (max-width: 480px) {
+    .page-quem-somos .qs-hero {
+        height: 400px;
+        min-height: 400px;
+    }
+}
+
 /* Main Content */
 .main-content {
     width: 100%;

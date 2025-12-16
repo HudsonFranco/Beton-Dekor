@@ -3,11 +3,88 @@
 
 {% block title %}{% if categoria %}Editar Categoria{% else %}Criar Nova Categoria{% endif %} - Beton Dekor{% endblock %}
 
+{% block extra_css %}
+<style>
+    .admin-form-container {
+        min-height: 100vh;
+        background: #f7f7f7;
+        padding: 40px 20px;
+    }
+    
+    .admin-form-wrapper {
+        max-width: 600px;
+        margin: 0 auto;
+    }
+    
+    .admin-form-header {
+        margin-bottom: 30px;
+    }
+    
+    .admin-form-title {
+        font-family: 'Montserrat';
+        font-weight: 700;
+        font-size: 32px;
+        color: #262626;
+        margin-bottom: 10px;
+    }
+    
+    .admin-form-card {
+        background: white;
+        padding: 40px;
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+    
+    .admin-form-actions {
+        display: flex;
+        gap: 10px;
+    }
+    
+    @media (max-width: 768px) {
+        .admin-form-container {
+            padding: 20px 15px;
+        }
+        
+        .admin-form-title {
+            font-size: 24px;
+        }
+        
+        .admin-form-card {
+            padding: 25px 20px;
+        }
+        
+        .admin-form-actions {
+            flex-direction: column;
+        }
+        
+        .admin-form-actions button,
+        .admin-form-actions a {
+            width: 100%;
+            text-align: center;
+        }
+    }
+    
+    @media (max-width: 480px) {
+        .admin-form-container {
+            padding: 15px 10px;
+        }
+        
+        .admin-form-title {
+            font-size: 20px;
+        }
+        
+        .admin-form-card {
+            padding: 20px 15px;
+        }
+    }
+</style>
+{% endblock %}
+
 {% block content %}
-<div style="min-height: 100vh; background: #f7f7f7; padding: 40px 20px;">
-    <div style="max-width: 600px; margin: 0 auto;">
-        <div style="margin-bottom: 30px;">
-            <h1 style="font-family: 'Montserrat'; font-weight: 700; font-size: 32px; color: #262626; margin-bottom: 10px;">
+<div class="admin-form-container">
+    <div class="admin-form-wrapper">
+        <div class="admin-form-header">
+            <h1 class="admin-form-title">
                 {% if categoria %}Editar Categoria{% else %}Criar Nova Categoria{% endif %}
             </h1>
             <a href="{% url 'admin-produtos' %}" style="font-family: 'Montserrat'; font-size: 14px; color: #666; text-decoration: none;">← Voltar para lista</a>
@@ -27,18 +104,18 @@
             {% endfor %}
         {% endif %}
         
-        <div style="background: white; padding: 40px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
+        <div class="admin-form-card">
             <form method="POST">
                 {% csrf_token %}
                 
                 <div style="margin-bottom: 20px;">
                     <label style="display: block; font-family: 'Montserrat'; font-weight: 600; font-size: 14px; color: #262626; margin-bottom: 8px;">Nome da Categoria *</label>
-                    <input type="text" name="nome" value="{% if categoria %}{{ categoria.nome }}{% endif %}" required style="width: 100%; padding: 12px; border: 1px solid #e4e4e4; border-radius: 8px; font-family: 'Montserrat'; font-size: 14px;">
+                    <input type="text" name="nome" value="{% if categoria %}{{ categoria.nome }}{% endif %}" required style="width: 100%; padding: 12px; border: 1px solid #e4e4e4; border-radius: 8px; font-family: 'Montserrat'; font-size: 14px; box-sizing: border-box;">
                 </div>
                 
                 <div style="margin-bottom: 20px;">
                     <label style="display: block; font-family: 'Montserrat'; font-weight: 600; font-size: 14px; color: #262626; margin-bottom: 8px;">Ordem</label>
-                    <input type="number" name="ordem" value="{% if categoria %}{{ categoria.ordem }}{% else %}0{% endif %}" style="width: 100%; padding: 12px; border: 1px solid #e4e4e4; border-radius: 8px; font-family: 'Montserrat'; font-size: 14px;">
+                    <input type="number" name="ordem" value="{% if categoria %}{{ categoria.ordem }}{% else %}0{% endif %}" style="width: 100%; padding: 12px; border: 1px solid #e4e4e4; border-radius: 8px; font-family: 'Montserrat'; font-size: 14px; box-sizing: border-box;">
                     <p style="font-family: 'Montserrat'; font-size: 12px; color: #666; margin-top: 5px;">Use números menores para aparecer primeiro na lista</p>
                 </div>
                 
@@ -49,11 +126,11 @@
                     </label>
                 </div>
                 
-                <div style="display: flex; gap: 10px;">
+                <div class="admin-form-actions">
                     <button type="submit" style="flex: 1; padding: 14px; background: #262626; color: white; border: none; border-radius: 8px; font-family: 'Montserrat'; font-weight: 600; font-size: 16px; cursor: pointer;">
                         {% if categoria %}Salvar Alterações{% else %}Criar Categoria{% endif %}
                     </button>
-                    <a href="{% url 'admin-produtos' %}" style="padding: 14px 32px; background: #999; color: white; border-radius: 8px; text-decoration: none; font-family: 'Montserrat'; font-weight: 600; font-size: 16px; display: inline-block;">
+                    <a href="{% url 'admin-produtos' %}" style="padding: 14px 32px; background: #999; color: white; border-radius: 8px; text-decoration: none; font-family: 'Montserrat'; font-weight: 600; font-size: 16px; display: inline-block; text-align: center;">
                         Cancelar
                     </a>
                 </div>
