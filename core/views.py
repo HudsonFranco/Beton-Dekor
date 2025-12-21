@@ -3,6 +3,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django_htmx.http import HttpResponseClientRedirect
+from django.core.mail import send_mail
 from .models import Produto, CategoriaPrincipal, Subcategoria, MensagemContato
 
 def home(request):
@@ -22,7 +23,7 @@ def produtos(request):
     for categoria in categorias_principais:
         produtos_categoria = Produto.objects.filter(
             ativo=True,
-            categoria_principal__iexact=categoria.nome
+            categoria_principal=categoria
         ).order_by('ordem', 'nome')
         if produtos_categoria.exists():
             produtos_agrupados_list.append({
@@ -69,6 +70,19 @@ def contato(request):
                 email=email,
                 mensagem=mensagem
             )
+
+            # Enviar e-mail para o administrador
+            try:
+                send_mail(
+                    subject=f'Nova mensagem de contato - {nome}',
+                    message=f'Nome: {nome}\nE-mail: {email}\n\nMensagem:\n{mensagem}',
+                    from_email=email,  # Usar o e-mail do cliente como from
+                    recipient_list=['hudsonfelipe123@gmail.com'],
+                    fail_silently=True,
+                )
+            except Exception as e:
+                # Log do erro, mas não falhar a operação
+                print(f'Erro ao enviar e-mail: {e}')
             
             if request.htmx:
                 # Retorna uma mensagem de sucesso via HTMX
@@ -129,13 +143,20 @@ def admin_produto_create(request):
         nome = request.POST.get('nome')
         slug = request.POST.get('slug')
         descricao = request.POST.get('descricao', '')
-        categoria_principal = request.POST.get('categoria_principal', '')
+        categoria_principal_id = request.POST.get('categoria_principal', '')
         categoria = request.POST.get('categoria', '')
         tag = request.POST.get('tag', 'Base Cementícia')
         imagem_nome = request.POST.get('imagem_nome', '')
         ordem = request.POST.get('ordem', 0)
         ativo = request.POST.get('ativo') == 'on'
-        
+
+        categoria_principal = None
+        if categoria_principal_id:
+            try:
+                categoria_principal = CategoriaPrincipal.objects.get(pk=categoria_principal_id)
+            except CategoriaPrincipal.DoesNotExist:
+                pass
+
         produto = Produto(
             nome=nome,
             slug=slug if slug else None,  # Será gerado automaticamente no save() se vazio
@@ -152,14 +173,19 @@ def admin_produto_create(request):
             ativo=ativo
         )
         
-        # Processar upload de imagem
+        # Processar upload de imagens
         if 'imagem' in request.FILES:
             produto.imagem = request.FILES['imagem']
+        if 'imagem_2' in request.FILES:
+            produto.imagem_2 = request.FILES['imagem_2']
+        if 'imagem_3' in request.FILES:
+            produto.imagem_3 = request.FILES['imagem_3']
         
         produto.save()  # Isso vai gerar o slug automaticamente se não foi fornecido
         messages.success(request, f'Produto "{produto.nome}" criado com sucesso!')
         return redirect('admin-produtos')
-    return render(request, 'core/admin/produto_form.html', {'produto': None})
+    categorias_principais = CategoriaPrincipal.objects.filter(ativo=True).order_by('ordem', 'nome')
+    return render(request, 'core/admin/produto_form.html', {'produto': None, 'categorias_principais': categorias_principais})
 
 @login_required
 def admin_produto_edit(request, pk):
@@ -168,7 +194,14 @@ def admin_produto_edit(request, pk):
         produto.nome = request.POST.get('nome')
         produto.slug = request.POST.get('slug')
         produto.descricao = request.POST.get('descricao', '')
-        produto.categoria_principal = request.POST.get('categoria_principal', '')
+        categoria_principal_id = request.POST.get('categoria_principal', '')
+        categoria_principal = None
+        if categoria_principal_id:
+            try:
+                categoria_principal = CategoriaPrincipal.objects.get(pk=categoria_principal_id)
+            except CategoriaPrincipal.DoesNotExist:
+                pass
+        produto.categoria_principal = categoria_principal
         produto.categoria = request.POST.get('categoria', '')
         produto.tag = request.POST.get('tag', 'Base Cementícia')
         produto.imagem_nome = request.POST.get('imagem_nome', '')
@@ -179,14 +212,42 @@ def admin_produto_edit(request, pk):
         produto.ordem = int(request.POST.get('ordem', 0)) if request.POST.get('ordem') else 0
         produto.ativo = request.POST.get('ativo') == 'on'
         
-        # Processar upload de imagem (se uma nova imagem foi enviada)
+        # Processar upload de imagens (se novas imagens foram enviadas)
         if 'imagem' in request.FILES:
             produto.imagem = request.FILES['imagem']
+        if 'imagem_2' in request.FILES:
+            produto.imagem_2 = request.FILES['imagem_2']
+        if 'imagem_3' in request.FILES:
+            produto.imagem_3 = request.FILES['imagem_3']
+
+        # Remover imagens existentes se o checkbox correspondente foi marcado
+        if request.POST.get('remove_imagem') == 'on':
+            try:
+                if produto.imagem:
+                    produto.imagem.delete(save=False)
+            except Exception:
+                pass
+            produto.imagem = None
+        if request.POST.get('remove_imagem_2') == 'on':
+            try:
+                if getattr(produto, 'imagem_2', None):
+                    produto.imagem_2.delete(save=False)
+            except Exception:
+                pass
+            produto.imagem_2 = None
+        if request.POST.get('remove_imagem_3') == 'on':
+            try:
+                if getattr(produto, 'imagem_3', None):
+                    produto.imagem_3.delete(save=False)
+            except Exception:
+                pass
+            produto.imagem_3 = None
         
         produto.save()
         messages.success(request, f'Produto "{produto.nome}" atualizado com sucesso!')
         return redirect('admin-produtos')
-    return render(request, 'core/admin/produto_form.html', {'produto': produto})
+    categorias_principais = CategoriaPrincipal.objects.filter(ativo=True).order_by('ordem', 'nome')
+    return render(request, 'core/admin/produto_form.html', {'produto': produto, 'categorias_principais': categorias_principais})
 
 @login_required
 def admin_produto_delete(request, pk):
@@ -222,6 +283,10 @@ def admin_produto_duplicate(request, pk):
     # Copiar imagem se existir
     if produto_original.imagem:
         novo_produto.imagem = produto_original.imagem
+    if getattr(produto_original, 'imagem_2', None):
+        novo_produto.imagem_2 = produto_original.imagem_2
+    if getattr(produto_original, 'imagem_3', None):
+        novo_produto.imagem_3 = produto_original.imagem_3
     
     # Salvar (o slug será gerado automaticamente)
     novo_produto.save()
@@ -276,7 +341,7 @@ def admin_categoria_delete(request, pk):
         
         # Deletar todos os produtos associados à categoria
         produtos_associados = Produto.objects.filter(
-            categoria_principal__iexact=categoria.nome
+            categoria_principal=categoria
         )
         quantidade_produtos = produtos_associados.count()
         produtos_associados.delete()
@@ -293,7 +358,7 @@ def admin_categoria_delete(request, pk):
     
     # Contar produtos associados para mostrar no template de confirmação
     produtos_associados = Produto.objects.filter(
-        categoria_principal__iexact=categoria.nome
+        categoria_principal=categoria
     )
     quantidade_produtos = produtos_associados.count()
     
@@ -318,7 +383,7 @@ def admin_categoria_duplicate(request, pk):
     # Duplicar todos os produtos associados à categoria original
     # Buscar produtos que tenham categoria_principal igual ao nome da categoria original
     produtos_originais = Produto.objects.filter(
-        categoria_principal__iexact=categoria_original.nome
+        categoria_principal=categoria_original
     )
     
     produtos_duplicados = 0
@@ -337,7 +402,7 @@ def admin_categoria_duplicate(request, pk):
             nome=nome_novo,
             slug=None,  # Será gerado automaticamente
             descricao=produto_original.descricao,
-            categoria_principal=nova_categoria.nome,  # Associar à nova categoria
+            categoria_principal=nova_categoria,  # Associar à nova categoria
             categoria=produto_original.categoria,
             tag=produto_original.tag,
             imagem_nome=produto_original.imagem_nome,

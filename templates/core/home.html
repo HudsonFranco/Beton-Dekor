@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}Beton Dekor - Revestimentos 3D e Artefatos em Cimento{% endblock %}
+{% block title %}BetonDekor - Revestimentos 3D e Artefatos em Cimento{% endblock %}
 
 {% block content %}
 <!-- Hero Section -->
@@ -9,41 +9,7 @@
     <div class="hero-overlay"></div>
     <div class="hero-gradient"></div>
     
-    <!-- Header -->
-    <header class="header">
-        <div class="header-content">
-            <a href="#" class="logo">BETON DEKOR</a>
-            <button class="mobile-menu-toggle" aria-label="Toggle menu">
-                <span></span>
-                <span></span>
-                <span></span>
-            </button>
-            <nav class="nav">
-                <ul class="nav-menu">
-                    <li><a href="{% url 'home' %}" hx-get="{% url 'home' %}" hx-target="body" hx-swap="outerHTML" hx-push-url="true">Home</a></li>
-                    <li><a href="{% url 'quem-somos' %}" hx-get="{% url 'quem-somos' %}" hx-target="body" hx-swap="outerHTML" hx-push-url="true">Quem Somos</a></li>
-                    <li><a href="{% url 'produtos' %}" hx-get="{% url 'produtos' %}" hx-target="body" hx-swap="outerHTML" hx-push-url="true">Produtos</a></li>
-                    <!-- Botões de ação no menu hambúrguer -->
-                    <li class="mobile-menu-actions">
-                        <a href="#" onclick="openContactModal(); return false;" class="mobile-action-button">Entre em Contato</a>
-                        {% if user.is_authenticated %}
-                            <a href="{% url 'admin-produtos' %}" class="mobile-action-button">Admin</a>
-                        {% else %}
-                            <a href="{% url 'login' %}" class="mobile-action-button">Entrar</a>
-                        {% endif %}
-                    </li>
-                </ul>
-            </nav>
-            <div class="header-right">
-                <a href="#" class="contact-button" onclick="openContactModal(); return false;" style="margin-right: 10px;">Entre em Contato</a>
-                {% if user.is_authenticated %}
-                    <a href="{% url 'admin-produtos' %}" class="contact-button">Admin</a>
-                {% else %}
-                    <a href="{% url 'login' %}" class="contact-button">Entrar</a>
-                {% endif %}
-            </div>
-        </div>
-    </header>
+    {% include 'core/_header.html' %}
     
     <!-- Hero Content -->
     <div class="hero-content">
@@ -55,11 +21,11 @@
             </div>
             <div class="hero-subtitle-text">unidas em cada detalhe</div>
         </h1>
-        <a href="{% url 'produtos' %}" 
+        <a href="{% url 'produtos' %}#todos-os-produtos" 
            hx-get="{% url 'produtos' %}" 
            hx-target="body" 
            hx-swap="outerHTML" 
-           hx-push-url="true"
+           hx-push-url="{% url 'produtos' %}#todos-os-produtos"
            class="hero-button">Conheça nossos produtos</a>
     </div>
 </section>
@@ -67,85 +33,116 @@
 <!-- Main Content -->
 <main class="main-content">
     <!-- About Section -->
-    <section class="about-section">
-        <h2 class="about-title">BETON DEKOR</h2>
-        <p class="about-subtitle">Revestimentos 3D e Artefatos em cimento</p>
-        <p class="about-description">
-            Há mais de uma década, somos pioneiros na criação de <strong>revestimentos 3D</strong> que transformam ambientes comuns em espaços extraordinários. Nossa expertise combina design <strong>inovador</strong>, <strong>tecnologia de ponta</strong> e <strong>materiais premium</strong> para entregar soluções únicas e personalizadas.
+    <section class="about-section-home">
+        <h2 class="about-title-home">BetonDekor</h2>
+        <p class="about-subtitle-home">Revestimentos 3D e Artefatos em cimento</p>
+        <p class="about-description-home">
+            Desenvolvemos e fabricamos <strong>revestimentos 3D</strong> cimentícios e artefatos de concreto com controle total do processo produtivo. Unimos <strong>design</strong>, <strong>tecnologia</strong> e engenharia do concreto para entregar soluções arquitetônicas com <strong>qualidade, resistência e durabilidade.</strong>
         </p>
-        <a href="{% url 'contato' %}" 
-           hx-get="{% url 'contato' %}" 
-           hx-target="body" 
-           hx-swap="outerHTML" 
-           hx-push-url="true"
-           class="about-button">Onde nos encontrar</a>
+          <a href="{% url 'quem-somos' %}#onde-nos-encontrar"
+              hx-get="{% url 'quem-somos' %}"
+              hx-target="body"
+              hx-swap="outerHTML"
+              hx-push-url="{% url 'quem-somos' %}#onde-nos-encontrar"
+              class="about-button-home">Onde nos encontrar</a>
     </section>
     
     <!-- Products Section -->
     <section class="products-section">
         <h2 class="products-main-title">CONHEÇA NOSSOS PRODUTOS</h2>
         <div class="products-grid">
-            <div class="product-card">
-                <img src="{% static 'images/revestimento3D.jpg' %}" alt="Revestimento 3D" class="product-image">
-                <div class="product-info">
-                    <h3 class="product-name">REVESTIMENTO 3D</h3>
-                    <a href="{% url 'produtos' %}?categoria=Revestimento 3D cimentício" 
-                       hx-get="{% url 'produtos' %}?categoria=Revestimento 3D cimentício" 
-                       hx-target="body" 
-                       hx-swap="outerHTML" 
-                       hx-push-url="true"
-                       class="product-link">
-                        VER DETALHES
-                        <img src="{% static 'images/arrow-right.png' %}" alt="Arrow" class="arrow-icon">
-                    </a>
+                <div class="product-card">
+                    <img src="{% static 'images/revestimento3D.jpeg' %}" alt="Revestimento 3D" class="product-image">
+                    <div class="product-info">
+                        <h3 class="product-name">REVESTIMENTO 3D</h3>
+                                <a href="{% url 'produtos' %}?categoria=Revestimento 3D cimentício&scroll=1" 
+                                    hx-get="{% url 'produtos' %}?categoria=Revestimento 3D cimentício&scroll=1" 
+                           hx-target="body" 
+                           hx-swap="outerHTML" 
+                           hx-push-url="true"
+                           class="product-link">
+                            VER DETALHES
+                            <img src="{% static 'images/arrow-right.png' %}" alt="Arrow" class="arrow-icon">
+                        </a>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <img src="{% static 'images/pisante.jpg' %}" alt="Pisante" class="product-image">
+                    <div class="product-info">
+                        <h3 class="product-name">PISANTE</h3>
+                                <a href="{% url 'produtos' %}?categoria=Linha Jardim&scroll=1" 
+                                    hx-get="{% url 'produtos' %}?categoria=Linha Jardim&scroll=1" 
+                           hx-target="body" 
+                           hx-swap="outerHTML" 
+                           hx-push-url="true"
+                           class="product-link">
+                            VER DETALHES
+                            <img src="{% static 'images/arrow-right.png' %}" alt="Arrow" class="arrow-icon">
+                        </a>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <img src="{% static 'images/linhaJardim.jpg' %}" alt="Linha Jardim" class="product-image">
+                    <div class="product-info">
+                        <h3 class="product-name">LINHA JARDIM</h3>
+                                <a href="{% url 'produtos' %}?categoria=Linha Jardim&scroll=1" 
+                                    hx-get="{% url 'produtos' %}?categoria=Linha Jardim&scroll=1" 
+                           hx-target="body" 
+                           hx-swap="outerHTML" 
+                           hx-push-url="true"
+                           class="product-link">
+                            VER DETALHES
+                            <img src="{% static 'images/arrow-right.png' %}" alt="Arrow" class="arrow-icon">
+                        </a>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <img src="{% static 'images/cobogo.png' %}" alt="Cobogó" class="product-image">
+                    <div class="product-info">
+                        <h3 class="product-name">COBOGÓ</h3>
+                                <a href="{% url 'produtos' %}?categoria=Elemento Vazado Cobogó&scroll=1" 
+                                    hx-get="{% url 'produtos' %}?categoria=Elemento Vazado Cobogó&scroll=1" 
+                           hx-target="body" 
+                           hx-swap="outerHTML" 
+                           hx-push-url="true"
+                           class="product-link">
+                            VER DETALHES
+                            <img src="{% static 'images/arrow-right.png' %}" alt="Arrow" class="arrow-icon">
+                        </a>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <img src="{% static 'images/cuba.png' %}" alt="Linha Jardim - 2" class="product-image">
+                    <div class="product-info">
+                        <h3 class="product-name">CUBA CONCRETO</h3>
+                                <a href="{% url 'produtos' %}?categoria=cubaconcreto&scroll=1" 
+                                    hx-get="{% url 'produtos' %}?categoria=cubaconcreto&scroll=1" 
+                           hx-target="body" 
+                           hx-swap="outerHTML" 
+                           hx-push-url="true"
+                           class="product-link">
+                            VER DETALHES
+                            <img src="{% static 'images/arrow-right.png' %}" alt="Arrow" class="arrow-icon">
+                        </a>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <img src="{% static 'images/Pingadeira.png' %}" alt="Cobogó - 2" class="product-image">
+                    <div class="product-info">
+                        <h3 class="product-name">ARTEFATOS</h3>
+                                <a href="{% url 'produtos' %}?categoria=Artefatos&scroll=1" 
+                                    hx-get="{% url 'produtos' %}?categoria=Artefatos&scroll=1" 
+                           hx-target="body" 
+                           hx-swap="outerHTML" 
+                           hx-push-url="true"
+                           class="product-link">
+                            VER DETALHES
+                            <img src="{% static 'images/arrow-right.png' %}" alt="Arrow" class="arrow-icon">
+                        </a>
+                    </div>
+                </div>
                 </div>
             </div>
-            <div class="product-card">
-                <img src="{% static 'images/pisante.jpg' %}" alt="Pisante" class="product-image">
-                <div class="product-info">
-                    <h3 class="product-name">PISANTE</h3>
-                    <a href="{% url 'produtos' %}?categoria=Linha Jardim" 
-                       hx-get="{% url 'produtos' %}?categoria=Linha Jardim" 
-                       hx-target="body" 
-                       hx-swap="outerHTML" 
-                       hx-push-url="true"
-                       class="product-link">
-                        VER DETALHES
-                        <img src="{% static 'images/arrow-right.png' %}" alt="Arrow" class="arrow-icon">
-                    </a>
-                </div>
-            </div>
-            <div class="product-card">
-                <img src="{% static 'images/linhaJardim.jpg' %}" alt="Linha Jardim" class="product-image">
-                <div class="product-info">
-                    <h3 class="product-name">LINHA JARDIM</h3>
-                    <a href="{% url 'produtos' %}?categoria=Linha Jardim" 
-                       hx-get="{% url 'produtos' %}?categoria=Linha Jardim" 
-                       hx-target="body" 
-                       hx-swap="outerHTML" 
-                       hx-push-url="true"
-                       class="product-link">
-                        VER DETALHES
-                        <img src="{% static 'images/arrow-right.png' %}" alt="Arrow" class="arrow-icon">
-                    </a>
-                </div>
-            </div>
-            <div class="product-card">
-                <img src="{% static 'images/cobogo.jpg' %}" alt="Cobogó" class="product-image">
-                <div class="product-info">
-                    <h3 class="product-name">COBOGÓ</h3>
-                    <a href="{% url 'produtos' %}?categoria=Elemento Vazado Cobogó" 
-                       hx-get="{% url 'produtos' %}?categoria=Elemento Vazado Cobogó" 
-                       hx-target="body" 
-                       hx-swap="outerHTML" 
-                       hx-push-url="true"
-                       class="product-link">
-                        VER DETALHES
-                        <img src="{% static 'images/arrow-right.png' %}" alt="Arrow" class="arrow-icon">
-                    </a>
-                </div>
-            </div>
-        </div>
     </section>
     
     <!-- Testimonials Section -->
@@ -223,22 +220,22 @@
 <footer class="footer">
     <div class="footer-content">
         <div class="footer-left">
-            <h3 class="footer-logo">BETON DEKOR</h3>
+            <h3 class="footer-logo">BetonDekor</h3>
             <p class="footer-description">Revestimentos 3D e Artefatos em cimento</p>
             <p class="footer-company-info">
                 Empresa especializada em Revestimentos 3D em concreto arquitetonico e toda linha em Elemento vazado, Cobogó, Pingadeira, concregrama, Lajota, Pisante.
             </p>
             <div class="footer-social">
-                <a href="#"><img src="{% static 'images/Instagram.png' %}" alt="Instagram" class="social-icon"></a>
-                <a href="#"><img src="{% static 'images/Facebook.png' %}" alt="Facebook" class="social-icon"></a>
-                <a href="#"><img src="{% static 'images/Email.png' %}" alt="Email" class="social-icon"></a>
+                <a href="https://www.instagram.com/betondekor/" target="_blank"><img src="{% static 'images/Instagram.png' %}" alt="Instagram" class="social-icon"></a>
+                <a href="https://www.facebook.com/p/BetonDekor-61556013232990/" target="_blank"><img src="{% static 'images/Facebook.png' %}" alt="Facebook" class="social-icon"></a>
+                <a href="#" target="_blank"><img src="{% static 'images/Email.png' %}" alt="Email" class="social-icon"></a>
             </div>
         </div>
         <div class="footer-right">
             <h4 class="footer-section-title">Empresa</h4>
             <ul class="footer-links">
                 <li><a href="{% url 'quem-somos' %}" hx-get="{% url 'quem-somos' %}" hx-target="body" hx-swap="outerHTML" hx-push-url="true">Quem Somos</a></li>
-                <li><a href="{% url 'produtos' %}" hx-get="{% url 'produtos' %}" hx-target="body" hx-swap="outerHTML" hx-push-url="true">Produtos</a></li>
+                <li><a href="{% url 'produtos' %}#todos-os-produtos" hx-get="{% url 'produtos' %}" hx-target="body" hx-swap="outerHTML" hx-push-url="{% url 'produtos' %}#todos-os-produtos">Produtos</a></li>
                 <li><a href="#" onclick="openContactModal(); return false;">Entre em contato</a></li>
             </ul>
             <div class="footer-contact-info">
@@ -248,8 +245,29 @@
         </div>
     </div>
     <div class="footer-bottom">
-        <p class="footer-copyright">©2025 Beton Dekor. Todos os direitos reservados.</p>
+        <p class="footer-copyright">©2025 BetonDekor. Todos os direitos reservados.</p>
     </div>
 </footer>
 
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const cards = document.querySelectorAll('.products-grid .product-card');
+    cards.forEach(card => {
+        // Avoid interfering with links/buttons inside the card
+        card.addEventListener('click', function(e) {
+            const clickedLink = e.target.closest('a, button');
+            if (clickedLink) return; // let default behaviour for inner links/buttons
+
+            const detailLink = card.querySelector('a.product-link');
+            if (detailLink) {
+                // Trigger a real click so HTMX handles hx-get, hx-swap if present
+                detailLink.click();
+            }
+        });
+    });
+});
+</script>
 {% endblock %}

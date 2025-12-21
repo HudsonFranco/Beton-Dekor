@@ -1,17 +1,19 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}Produtos - Beton Dekor{% endblock %}
+{% block title %}Produtos - BetonDekor{% endblock %}
 
 {% block extra_css %}
 <style>
     .products-hero-section {
         background-image: url('{% static "images/ConhecaProdutos.jpg" %}') !important;
         background-size: cover !important;
-        background-position: center !important;
+        /* mover um pouco o foco da imagem para cima */
+        background-position: center top !important;
         background-repeat: no-repeat !important;
         position: relative;
-        min-height: 560px;
+        /* diminuir um pouco a altura para que o bg fique mais para cima */
+        min-height: 520px;
         display: flex;
         flex-direction: column;
     }
@@ -24,6 +26,19 @@
     section.hero-section.products-hero-section {
         background-image: url('{% static "images/ConhecaProdutos.jpg" %}') !important;
     }
+    /* Ajustes móveis: reduzir ainda mais a altura em telas pequenas */
+    @media (max-width: 768px) {
+        .products-hero-section {
+            min-height: 420px;
+            background-position: center top !important;
+        }
+    }
+    @media (max-width: 480px) {
+        .products-hero-section {
+            min-height: 360px;
+            background-position: center top !important;
+        }
+    }
 </style>
 {% endblock %}
 
@@ -33,46 +48,7 @@
     <div class="hero-overlay"></div>
     <div class="hero-gradient"></div>
     
-    <!-- Header -->
-    <header class="header">
-        <div class="header-content">
-            <a href="{% url 'home' %}" 
-               hx-get="{% url 'home' %}" 
-               hx-target="body" 
-               hx-swap="outerHTML" 
-               hx-push-url="true"
-               class="logo">BETON DEKOR</a>
-            <button class="mobile-menu-toggle" aria-label="Toggle menu">
-                <span></span>
-                <span></span>
-                <span></span>
-            </button>
-            <nav class="nav">
-                <ul class="nav-menu">
-                    <li><a href="{% url 'home' %}" hx-get="{% url 'home' %}" hx-target="body" hx-swap="outerHTML" hx-push-url="true">Home</a></li>
-                    <li><a href="{% url 'quem-somos' %}" hx-get="{% url 'quem-somos' %}" hx-target="body" hx-swap="outerHTML" hx-push-url="true">Quem Somos</a></li>
-                    <li><a href="{% url 'produtos' %}" hx-get="{% url 'produtos' %}" hx-target="body" hx-swap="outerHTML" hx-push-url="true">Produtos</a></li>
-                    <!-- Botões de ação no menu hambúrguer -->
-                    <li class="mobile-menu-actions">
-                        <a href="#" onclick="openContactModal(); return false;" class="mobile-action-button">Entre em Contato</a>
-                        {% if user.is_authenticated %}
-                            <a href="{% url 'admin-produtos' %}" class="mobile-action-button">Admin</a>
-                        {% else %}
-                            <a href="{% url 'login' %}" class="mobile-action-button">Entrar</a>
-                        {% endif %}
-                    </li>
-                </ul>
-            </nav>
-            <div class="header-right">
-                <a href="#" class="contact-button" onclick="openContactModal(); return false;" style="margin-right: 10px;">Entre em Contato</a>
-                {% if user.is_authenticated %}
-                    <a href="{% url 'admin-produtos' %}" class="contact-button">Admin</a>
-                {% else %}
-                    <a href="{% url 'login' %}" class="contact-button">Entrar</a>
-                {% endif %}
-            </div>
-        </div>
-    </header>
+    {% include 'core/_header.html' %}
     
     <!-- Hero Content -->
     <div class="hero-content">
@@ -87,9 +63,61 @@
     </div>
 </section>
 
+<!-- Mobile Filter Menu -->
+<div class="mobile-filter-overlay" id="mobile-filter-overlay"></div>
+<div class="mobile-filter-menu" id="mobile-filter-menu">
+    <div class="mobile-filter-header">
+        <h3>Filtros</h3>
+        <button class="mobile-filter-close" id="mobile-filter-close" aria-label="Fechar filtros">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M18 6L6 18M6 6L18 18" stroke="#262626" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+        </button>
+    </div>
+    <div class="mobile-filter-content">
+        <div class="mobile-filter-search">
+            <input type="text" id="mobile-product-search" placeholder="Procurar produto..." autocomplete="off">
+        </div>
+
+        <div class="mobile-filter-group">
+            <button type="button" class="mobile-filter-all-products">
+                Todos os Produtos
+            </button>
+        </div>
+
+        {% for item in produtos_agrupados_list %}
+        <div class="mobile-filter-group">
+            <h3 class="mobile-filter-category-title" data-categoria-principal="{{ item.categoria.nome|lower }}">{{ item.categoria.nome }}</h3>
+            <ul>
+                {% for produto in item.produtos %}
+                <li class="mobile-filter-item">
+                    <a href="{% url 'produto-detalhe' produto.slug %}"
+                       hx-get="{% url 'produto-detalhe' produto.slug %}"
+                       hx-target="body"
+                       hx-swap="outerHTML"
+                       hx-push-url="true"
+                       class="mobile-filter-product-link">{{ produto.nome }}</a>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
 <!-- Main Content -->
 <main class="products-page" id="products-section">
-    <h2 class="products-page-title"><span>Todos os</span> <strong>Produtos</strong></h2>
+    <!-- Desktop Title -->
+    <div class="products-header-desktop">
+        <h2 class="products-page-title" id="todos-os-produtos"><span>Todos os</span> <strong>Produtos</strong></h2>
+    </div>
+
+    <div class="products-header-mobile">
+        <h2 class="products-page-title" id="todos-os-produtos-mobile"><span>Todos os</span> <strong>Produtos</strong></h2>
+        <button class="mobile-filter-toggle" id="mobile-filter-btn" aria-label="Abrir filtros">
+            Categorias
+        </button>
+    </div>
 
     <div class="products-layout">
         <aside class="products-filter">
@@ -167,5 +195,111 @@
 <script>
 // Configuração de debug (opcional - remover em produção)
 window.DEBUG = true;
+
+function initMobileFilterMenu() {
+    const mobileFilterBtn = document.getElementById('mobile-filter-btn');
+    const mobileFilterMenu = document.getElementById('mobile-filter-menu');
+    const mobileFilterOverlay = document.getElementById('mobile-filter-overlay');
+    const mobileFilterClose = document.getElementById('mobile-filter-close');
+    const mobileProductSearch = document.getElementById('mobile-product-search');
+    const mobileFilterAllProducts = document.querySelector('.mobile-filter-all-products');
+
+    // Open mobile filter menu
+    if (mobileFilterBtn) {
+        mobileFilterBtn.addEventListener('click', function() {
+            mobileFilterMenu.classList.add('active');
+            mobileFilterOverlay.classList.add('active');
+            document.body.style.overflow = 'hidden'; // Prevent background scrolling
+        });
+    }
+
+    // Close mobile filter menu
+    function closeMobileFilter() {
+        mobileFilterMenu.classList.remove('active');
+        mobileFilterOverlay.classList.remove('active');
+        document.body.style.overflow = ''; // Restore scrolling
+    }
+
+    if (mobileFilterClose) {
+        mobileFilterClose.addEventListener('click', closeMobileFilter);
+    }
+
+    if (mobileFilterOverlay) {
+        mobileFilterOverlay.addEventListener('click', closeMobileFilter);
+    }
+
+    // Mobile search functionality
+    if (mobileProductSearch) {
+        mobileProductSearch.addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            const productCards = document.querySelectorAll('.product-card-modern');
+            const productNames = document.querySelectorAll('.product-modern-name');
+
+            productCards.forEach((card, index) => {
+                const productName = productNames[index].textContent.toLowerCase();
+                if (productName.includes(searchTerm)) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        });
+    }
+
+    // Mobile "All Products" button
+    if (mobileFilterAllProducts) {
+        mobileFilterAllProducts.addEventListener('click', function() {
+            // Clear search
+            if (mobileProductSearch) {
+                mobileProductSearch.value = '';
+            }
+
+            // Show all products
+            const productCards = document.querySelectorAll('.product-card-modern');
+            productCards.forEach(card => {
+                card.style.display = 'block';
+            });
+
+            // Close menu
+            closeMobileFilter();
+        });
+    }
+
+    // Mobile category filtering
+    const mobileCategoryTitles = document.querySelectorAll('.mobile-filter-category-title');
+    mobileCategoryTitles.forEach(title => {
+        title.addEventListener('click', function() {
+            const categoriaPrincipal = this.getAttribute('data-categoria-principal');
+            const productCards = document.querySelectorAll('.product-card-modern');
+
+            productCards.forEach(card => {
+                const cardCategoria = card.getAttribute('data-categoria-principal');
+                if (cardCategoria === categoriaPrincipal) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+
+            // Close menu
+            closeMobileFilter();
+        });
+    });
+}
+
+// Initialize on page load
+document.addEventListener('DOMContentLoaded', initMobileFilterMenu);
+
+// Initialize immediately
+initMobileFilterMenu();
+
+// Re-initialize after HTMX swaps
+if (typeof htmx !== 'undefined') {
+    document.body.addEventListener('htmx:afterSwap', function(event) {
+        if (event.detail.target === document.body) {
+            initMobileFilterMenu();
+        }
+    });
+}
 </script>
 {% endblock %}

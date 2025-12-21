@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}{% if produto %}Editar{% else %}Criar{% endif %} Produto - Beton Dekor{% endblock %}
+{% block title %}{% if produto %}Editar{% else %}Criar{% endif %} Produto - BetonDekor{% endblock %}
 
 {% block extra_css %}
 <style>
@@ -112,14 +112,68 @@
                 
                 <div style="margin-bottom: 20px;">
                     <label style="display: block; font-family: 'Montserrat'; font-weight: 600; font-size: 14px; color: #262626; margin-bottom: 8px;">Imagem do Produto (Upload)</label>
-                    <input type="file" name="imagem" accept="image/*" style="width: 100%; padding: 12px; border: 1px solid #e4e4e4; border-radius: 8px; font-family: 'Montserrat'; font-size: 14px; box-sizing: border-box;">
+                    <div class="file-input-wrapper">
+                        <input type="file" id="id_imagem" name="imagem" accept="image/*" style="display:none;">
+                        <div class="file-input-controls">
+                            <button type="button" class="choose-file-btn" data-target="id_imagem">Escolher Imagem</button>
+                            <span class="file-name" id="file-name-imagem" {% if produto.imagem %}data-current="{{ produto.imagem.name }}"{% endif %}>Nenhum arquivo selecionado</span>
+                        </div>
+                    </div>
                     {% if produto.imagem %}
                         <div style="margin-top: 10px;">
                             <p style="font-family: 'Montserrat'; font-size: 12px; color: #666; margin-bottom: 5px;">Imagem atual:</p>
                             <img src="{{ produto.imagem.url }}" alt="{{ produto.nome }}" style="max-width: 200px; max-height: 200px; border-radius: 8px; border: 1px solid #e4e4e4;">
+                            <div style="margin-top:12px;">
+                                <input type="hidden" id="remove_imagem" name="remove_imagem" value="">
+                                <button type="button" data-input="remove_imagem" onclick="toggleRemove('remove_imagem', this)" class="remove-image-btn">Remover imagem</button>
+                            </div>
                         </div>
                     {% endif %}
                     <small style="font-family: 'Montserrat'; font-size: 12px; color: #666; display: block; margin-top: 8px;">Faça upload de uma imagem para o produto. Formatos aceitos: JPG, PNG, GIF</small>
+                </div>
+
+                <div style="margin-bottom: 20px;">
+                    <label style="display: block; font-family: 'Montserrat'; font-weight: 600; font-size: 14px; color: #262626; margin-bottom: 8px;">Imagem Adicional 1 (opcional)</label>
+                    <div class="file-input-wrapper">
+                        <input type="file" id="id_imagem_2" name="imagem_2" accept="image/*" style="display:none;">
+                        <div class="file-input-controls">
+                            <button type="button" class="choose-file-btn" data-target="id_imagem_2">Escolher Imagem</button>
+                            <span class="file-name" id="file-name-imagem_2" {% if produto.imagem_2 %}data-current="{{ produto.imagem_2.name }}"{% endif %}>Nenhum arquivo selecionado</span>
+                        </div>
+                    </div>
+                    {% if produto.imagem_2 %}
+                        <div style="margin-top: 10px;">
+                            <p style="font-family: 'Montserrat'; font-size: 12px; color: #666; margin-bottom: 5px;">Imagem atual (1):</p>
+                            <img src="{{ produto.imagem_2.url }}" alt="{{ produto.nome }} - 2" style="max-width: 200px; max-height: 200px; border-radius: 8px; border: 1px solid #e4e4e4;">
+                            <div style="margin-top:12px;">
+                                <input type="hidden" id="remove_imagem_2" name="remove_imagem_2" value="">
+                                <button type="button" data-input="remove_imagem_2" onclick="toggleRemove('remove_imagem_2', this)" class="remove-image-btn">Remover imagem 1</button>
+                            </div>
+                        </div>
+                    {% endif %}
+                    <small style="font-family: 'Montserrat'; font-size: 12px; color: #666; display: block; margin-top: 8px;">Imagem extra usada na galeria/carrossel (opcional).</small>
+                </div>
+
+                <div style="margin-bottom: 20px;">
+                    <label style="display: block; font-family: 'Montserrat'; font-weight: 600; font-size: 14px; color: #262626; margin-bottom: 8px;">Imagem Adicional 2 (opcional)</label>
+                    <div class="file-input-wrapper">
+                        <input type="file" id="id_imagem_3" name="imagem_3" accept="image/*" style="display:none;">
+                        <div class="file-input-controls">
+                            <button type="button" class="choose-file-btn" data-target="id_imagem_3">Escolher Imagem</button>
+                            <span class="file-name" id="file-name-imagem_3" {% if produto.imagem_3 %}data-current="{{ produto.imagem_3.name }}"{% endif %}>Nenhum arquivo selecionado</span>
+                        </div>
+                    </div>
+                    {% if produto.imagem_3 %}
+                        <div style="margin-top: 10px;">
+                            <p style="font-family: 'Montserrat'; font-size: 12px; color: #666; margin-bottom: 5px;">Imagem atual (2):</p>
+                            <img src="{{ produto.imagem_3.url }}" alt="{{ produto.nome }} - 3" style="max-width: 200px; max-height: 200px; border-radius: 8px; border: 1px solid #e4e4e4;">
+                            <div style="margin-top:12px;">
+                                <input type="hidden" id="remove_imagem_3" name="remove_imagem_3" value="">
+                                <button type="button" data-input="remove_imagem_3" onclick="toggleRemove('remove_imagem_3', this)" class="remove-image-btn">Remover imagem 2</button>
+                            </div>
+                        </div>
+                    {% endif %}
+                    <small style="font-family: 'Montserrat'; font-size: 12px; color: #666; display: block; margin-top: 8px;">Outra imagem extra para a galeria (opcional).</small>
                 </div>
                 
                 <div style="margin-bottom: 20px;">
@@ -159,11 +213,9 @@
                     <label style="display: block; font-family: 'Montserrat'; font-weight: 600; font-size: 14px; color: #262626; margin-bottom: 8px;">Categoria Principal *</label>
                     <select name="categoria_principal" required style="width: 100%; padding: 12px; border: 1px solid #e4e4e4; border-radius: 8px; font-family: 'Montserrat'; font-size: 14px; box-sizing: border-box;">
                         <option value="">Selecione uma categoria</option>
-                        <option value="Revestimento 3D cimentício" {% if produto.categoria_principal == "Revestimento 3D cimentício" %}selected{% endif %}>Revestimento 3D cimentício</option>
-                        <option value="Artefatos Cimentícios" {% if produto.categoria_principal == "Artefatos Cimentícios" %}selected{% endif %}>Artefatos Cimentícios</option>
-                        <option value="Cube Concreto" {% if produto.categoria_principal == "Cube Concreto" %}selected{% endif %}>Cube Concreto</option>
-                        <option value="Linha Jardim" {% if produto.categoria_principal == "Linha Jardim" %}selected{% endif %}>Linha Jardim</option>
-                        <option value="Elemento Vazado Cobogó" {% if produto.categoria_principal == "Elemento Vazado Cobogó" %}selected{% endif %}>Elemento Vazado Cobogó</option>
+                        {% for categoria in categorias_principais %}
+                        <option value="{{ categoria.id }}" {% if produto.categoria_principal and produto.categoria_principal.id == categoria.id %}selected{% endif %}>{{ categoria.nome }}</option>
+                        {% endfor %}
                     </select>
                     <small style="font-family: 'Montserrat'; font-size: 12px; color: #666;">Categoria principal para filtro no site</small>
                 </div>
@@ -212,5 +264,93 @@
         </div>
     </div>
 </div>
+{% endblock %}
+
+{% block extra_js %}
+<style>
+    .remove-image-btn {
+        display: inline-block;
+        padding: 10px 18px;
+        background: #c62828;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-family: 'Montserrat';
+        font-weight: 700;
+        font-size: 14px;
+        cursor: pointer;
+        box-shadow: 0 6px 18px rgba(198,40,40,0.18);
+    }
+    .remove-image-btn.armed {
+        background: #8b0000;
+        box-shadow: 0 8px 22px rgba(139,0,0,0.22);
+    }
+    .remove-image-btn:focus { outline: 3px solid rgba(198,40,40,0.18); }
+    /* Styled choose file button and filename */
+    .file-input-wrapper { margin-top: 6px; }
+    .file-input-controls { display:flex; align-items:center; gap:12px; }
+    .choose-file-btn {
+        display:inline-block;
+        padding: 10px 16px;
+        background: linear-gradient(180deg,#2b7bd6,#2464b3);
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-family: 'Montserrat';
+        font-weight: 700;
+        cursor: pointer;
+        box-shadow: 0 6px 20px rgba(36,100,179,0.18);
+    }
+    .choose-file-btn:hover { filter:brightness(.98); }
+    .file-name { font-family:'Montserrat'; color:#444; font-size:13px; max-width:420px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+</style>
+<script>
+function toggleRemove(inputId, btn){
+    var input = document.getElementById(inputId);
+    if(!input) return;
+    if(input.value === 'on'){
+        input.value = '';
+        btn.classList.remove('armed');
+        btn.textContent = btn.getAttribute('data-default') || 'Remover imagem';
+    } else {
+        input.value = 'on';
+        btn.classList.add('armed');
+        btn.setAttribute('data-default', btn.textContent);
+        btn.textContent = 'Pronto para remover — Salve para confirmar';
+    }
+}
+
+document.addEventListener('DOMContentLoaded', function(){
+    // initialize buttons text if inputs already set
+    ['remove_imagem','remove_imagem_2','remove_imagem_3'].forEach(function(id){
+        var inp = document.getElementById(id);
+        if(inp && inp.value === 'on'){
+            var btn = document.querySelector('button[data-input="'+id+'"]');
+            if(btn){ btn.classList.add('armed'); btn.textContent = 'Pronto para remover — Salve para confirmar'; }
+        }
+    });
+    // file chooser buttons
+    document.querySelectorAll('.choose-file-btn').forEach(function(btn){
+        var targetId = btn.getAttribute('data-target');
+        var input = document.getElementById(targetId);
+        var nameSpan = document.getElementById('file-name-' + targetId.replace('id_',''));
+        if(!input) return;
+        btn.addEventListener('click', function(){ input.click(); });
+        input.addEventListener('change', function(e){
+            var file = input.files && input.files[0];
+            if(file){
+                nameSpan.textContent = file.name;
+            } else {
+                // if cleared
+                nameSpan.textContent = nameSpan.getAttribute('data-current') || 'Nenhum arquivo selecionado';
+            }
+        });
+        // initialize name from data-current if present
+        if(nameSpan && nameSpan.getAttribute('data-current')){
+            nameSpan.textContent = nameSpan.getAttribute('data-current');
+        }
+    });
+});
+</script>
 {% endblock %}
 

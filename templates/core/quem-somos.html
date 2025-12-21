@@ -1,55 +1,21 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}Quem Somos - Beton Dekor{% endblock %}
+{% block title %}Quem Somos - BetonDekor{% endblock %}
 
 {% block content %}
-<div class="page-quem-somos">
+<div class="pagina-quem-somos">
     <!-- Hero Section específica de Quem Somos -->
-    <section class="qs-hero">
-        <div class="qs-hero-overlay"></div>
-        <!-- Header -->
-        <header class="header">
-            <div class="header-content">
-                <a href="#" class="logo">BETON DEKOR</a>
-                <button class="mobile-menu-toggle" aria-label="Toggle menu">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </button>
-                <nav class="nav">
-                    <ul class="nav-menu">
-                        <li><a href="{% url 'home' %}" hx-get="{% url 'home' %}" hx-target="body" hx-swap="outerHTML" hx-push-url="true">Home</a></li>
-                        <li><a href="{% url 'quem-somos' %}" hx-get="{% url 'quem-somos' %}" hx-target="body" hx-swap="outerHTML" hx-push-url="true">Quem Somos</a></li>
-                        <li><a href="{% url 'produtos' %}" hx-get="{% url 'produtos' %}" hx-target="body" hx-swap="outerHTML" hx-push-url="true">Produtos</a></li>
-                        <!-- Botões de ação no menu hambúrguer -->
-                        <li class="mobile-menu-actions">
-                            <a href="#" onclick="openContactModal(); return false;" class="mobile-action-button">Entre em Contato</a>
-                            {% if user.is_authenticated %}
-                                <a href="{% url 'admin-produtos' %}" class="mobile-action-button">Admin</a>
-                            {% else %}
-                                <a href="{% url 'login' %}" class="mobile-action-button">Entrar</a>
-                            {% endif %}
-                        </li>
-                    </ul>
-                </nav>
-                <div class="header-right">
-                    <a href="#" class="contact-button" onclick="openContactModal(); return false;" style="margin-right: 10px;">Entre em Contato</a>
-                    {% if user.is_authenticated %}
-                        <a href="{% url 'admin-produtos' %}" class="contact-button">Admin</a>
-                    {% else %}
-                        <a href="{% url 'login' %}" class="contact-button">Entrar</a>
-                    {% endif %}
-                </div>
-            </div>
-        </header>
+    <section class="secao-hero-quem-somos">
+        <div class="sobreposicao-hero-quem-somos"></div>
+        {% include 'core/_header.html' %}
 
-        <div class="qs-hero-content">
-            <div class="qs-hero-kicker-wrapper">
-                <p class="qs-hero-kicker1">Conheça a </p>
-                <p class="qs-hero-kicker"><strong>BETON DEKOR</strong></p>
+        <div class="conteudo-hero-quem-somos">
+            <div class="embrulho-gancho-hero-quem-somos">
+                <p class="gancho-hero-quem-somos-1">Conheça a </p>
+                <p class="gancho-hero-quem-somos"><strong>BetonDekor</strong></p>
             </div>
-            <h1 class="qs-hero-title">
+            <h1 class="titulo-hero-quem-somos">
                 Onde cada projeto é feito<br>
                 <span>sob medida</span> para você!
             </h1>
@@ -57,19 +23,64 @@
     </section>
 
     <!-- Main Content -->
-    <main class="main-content">
+    <main class="conteudo-principal">
         <!-- About Section -->
-        <section class="about-section">
-            <h2 class="about-title">BETON DEKOR</h2>
-            <p class="about-subtitle">Revestimentos 3D e Artefatos em cimento</p>
-            <p class="about-description">
-                Há mais de uma década, somos pioneiros na criação de <strong>revestimentos 3D</strong> que transformam ambientes comuns em espaços extraordinários. Nossa expertise combina design <strong>inovador</strong>, <strong>tecnologia de ponta</strong> e <strong>materiais premium</strong> para entregar soluções únicas e personalizadas.
+        <section class="secao-sobre">
+            <h2 class="titulo-sobre">BetonDekor</h2>
+            <p class="subtitulo-sobre">Revestimentos 3D e Artefatos em cimento</p>
+            <p class="descricao-sobre">
+                <strong>Quem Somos</strong>
             </p>
-            <p class="section-title"><span>Onde nos</span> <strong>Encontrar</strong></p>
-            <div class="qs-map-wrapper">
-                <img src="{% static 'images/Mapa.png' %}" alt="Mapa" class="qs-map">
+
+            <p class="descricao-sobre">
+                A BetonDekor é uma empresa especializada no desenvolvimento e fabricação de revestimentos 3D cimentícios e artefatos de concreto, unindo design, tecnologia e desempenho técnico. Atuamos com fábrica própria, o que nos permite total controle sobre cada etapa do processo produtivo da escolha das matérias-primas ao acabamento final.
+            </p>
+
+            <p class="descricao-sobre">
+                Nosso trabalho é conduzido com responsabilidade técnica, contando com engenheiro civil especialista em tecnologia do concreto, garantindo que cada produto atenda rigorosamente aos padrões de qualidade, resistência e durabilidade exigidos para aplicações arquitetônicas e construtivas.
+            </p>
+
+            <p class="descricao-sobre">
+                Acreditamos que confiança se constrói com procedência e comprovação técnica. Por isso, realizamos ensaios e testes de corpo de prova, avaliando o desempenho do concreto, sua resistência mecânica e comportamento ao longo do tempo. Esses processos asseguram produtos confiáveis, seguros e consistentes, entregues com o mesmo padrão do início ao fim.
+            </p>
+
+            <p class="descricao-sobre">
+                Mais do que estética, entregamos soluções responsáveis, desenvolvidas para atender arquitetos, engenheiros, construtoras e clientes finais que valorizam qualidade, seriedade e compromisso técnico. Cada peça que produzimos carrega nosso cuidado, nossa experiência e o respeito com quem confia no nosso trabalho.
+            </p>
+
+            <p class="descricao-sobre">
+                Trabalhamos com transparência, precisão e dedicação, porque entendemos que construir bem é assumir responsabilidade.
+            </p>
+
+            <!-- Partners Carousel Section -->
+            <section class="secao-parceiros">
+                <h3 class="titulo-parceiros">Nossas <strong>Parcerias</strong></h3>
+                <div class="carrossel-parceiros">
+                    <div class="container-parceiros">
+                        <div class="item-parceiro parceiro-esquerda">
+                                <img src="{% static 'images/cobogo.png' %}" alt="Parceiro 1" class="logo-parceiro">
+                            </div>
+                            <div class="item-parceiro parceiro-centro">
+                                <img src="{% static 'images/pisante.jpg' %}" alt="Parceiro 2" class="logo-parceiro">
+                            </div>
+                            <div class="item-parceiro parceiro-direita">
+                                <img src="{% static 'images/revestimento3D.jpeg' %}" alt="Parceiro 3" class="logo-parceiro">
+                            </div>
+                            <div class="item-parceiro parceiro-oculto">
+                                <img src="{% static 'images/pingadeira.png' %}" alt="Parceiro 4" class="logo-parceiro">
+                            </div>
+                            <div class="item-parceiro parceiro-oculto">
+                                <img src="{% static 'images/cuba.png' %}" alt="Parceiro 5" class="logo-parceiro">
+                            </div>
+                    </div>
+                </div>
+            </section>
+
+            <p id="onde-nos-encontrar" class="titulo-secao"><span>Onde nos</span> <strong>Encontrar</strong></p>
+            <div class="embrulho-mapa-quem-somos">
+                <img src="{% static 'images/Mapa.png' %}" alt="Mapa" class="mapa-quem-somos">
             </div>
-            <p class="qs-address">Rua Madre Paulina, 920 - ParkMall Cassol Palhoça, Loja 21 - Passa Vinte, Palhoça - SC, 88133-015</p>
+            <p class="endereco-quem-somos">Rua Madre Paulina, 920 - ParkMall Cassol Palhoça, Loja 21 - Passa Vinte, Palhoça - SC, 88133-015</p>
         </section>
     </main>
 </div>
@@ -78,7 +89,7 @@
 <footer class="footer">
     <div class="footer-content">
         <div class="footer-left">
-            <h3 class="footer-logo">BETON DEKOR</h3>
+            <h3 class="footer-logo">BetonDekor</h3>
             <p class="footer-description">Revestimentos 3D e Artefatos em cimento</p>
             <p class="footer-company-info">
                 Empresa especializada em Revestimentos 3D em concreto arquitetonico e toda linha em Elemento vazado, Cobogó, Pingadeira, concregrama, Lajota, Pisante.
@@ -93,7 +104,7 @@
             <h4 class="footer-section-title">Empresa</h4>
             <ul class="footer-links">
                 <li><a href="{% url 'quem-somos' %}" hx-get="{% url 'quem-somos' %}" hx-target="body" hx-swap="outerHTML" hx-push-url="true">Quem Somos</a></li>
-                <li><a href="{% url 'produtos' %}" hx-get="{% url 'produtos' %}" hx-target="body" hx-swap="outerHTML" hx-push-url="true">Produtos</a></li>
+                <li><a href="{% url 'produtos' %}#todos-os-produtos" hx-get="{% url 'produtos' %}" hx-target="body" hx-swap="outerHTML" hx-push-url="{% url 'produtos' %}#todos-os-produtos">Produtos</a></li>
                 <li><a href="#" onclick="openContactModal(); return false;">Entre em contato</a></li>
             </ul>
             <div class="footer-contact-info">
@@ -103,8 +114,50 @@
         </div>
     </div>
     <div class="footer-bottom">
-        <p class="footer-copyright">©2025 Beton Dekor. Todos os direitos reservados.</p>
+        <p class="footer-copyright">©2025 BetonDekor. Todos os direitos reservados.</p>
     </div>
 </footer>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Carrossel de Parceiros - Rotação Automática
+    const parceiros = document.querySelectorAll('.item-parceiro');
+    let indiceAtual = 0; // Começar com o primeiro item
+
+    function atualizarCarrossel() {
+        parceiros.forEach((parceiro, indice) => {
+            parceiro.classList.remove('parceiro-destacado');
+
+            if (indice === indiceAtual) {
+                parceiro.classList.add('parceiro-destacado');
+            }
+        });
+    }
+
+    function proximoParceiro() {
+        indiceAtual = (indiceAtual + 1) % parceiros.length;
+        atualizarCarrossel();
+    }
+
+    // Inicializar carrossel
+    atualizarCarrossel();
+
+    // Rotacionar automaticamente a cada 2.5 segundos
+    let idIntervalo = setInterval(proximoParceiro, 2500);
+
+    // Opcional: Pausar ao passar o mouse
+    const carrossel = document.querySelector('.carrossel-parceiros');
+
+    carrossel.addEventListener('mouseenter', () => {
+        clearInterval(idIntervalo);
+    });
+
+    carrossel.addEventListener('mouseleave', () => {
+        idIntervalo = setInterval(proximoParceiro, 2500);
+    });
+});
+</script>
 {% endblock %}
 

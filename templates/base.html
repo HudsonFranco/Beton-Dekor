@@ -36,7 +36,7 @@
                             <p>Envie-nos um e-mail</p>
                         </div>
                     </a>
-                    <a href="https://wa.me/5548999999999?text=Ol%C3%A1,%20gostaria%20de%20saber%20mais%20sobre%20os%20produtos%20Beton%20Dekor" target="_blank" class="contact-option contact-option-whatsapp">
+                    <a href="https://wa.me/5548996578140?text=Ol%C3%A1,%20gostaria%20de%20saber%20mais%20sobre%20os%20produtos%20Beton%20Dekor" target="_blank" class="contact-option contact-option-whatsapp">
                         <div class="contact-option-icon">
                             <svg width="40" height="40" viewBox="0 0 24 24" fill="#25D366">
                                 <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
@@ -176,85 +176,39 @@
             }
         });
 
-        // Scroll to top when HTMX swaps content
+        // Scroll behavior after HTMX swaps: prefer jumping to fragment/hash when present
         document.body.addEventListener('htmx:afterSwap', function(event) {
-            // Scroll to top when navigating to product detail page
-            // Mas não fazer scroll se houver parâmetro de categoria (deixar o JavaScript da página de produtos lidar com isso)
             if (event.detail.target === document.body) {
+                // If there's a fragment in the URL (hash), try to scroll to it
+                if (window.location.hash) {
+                    try {
+                        const id = window.location.hash.substring(1);
+                        const el = document.getElementById(id) || document.querySelector(window.location.hash);
+                        if (el) {
+                            const headerHeight = document.querySelector('.header')?.offsetHeight || 80;
+                            const top = el.getBoundingClientRect().top + window.pageYOffset - headerHeight;
+                            window.scrollTo({ top: top, behavior: 'smooth' });
+                            return;
+                        }
+                    } catch (e) {
+                        console.warn('Error scrolling to hash:', e);
+                    }
+                }
+
+                // Fallback: Scroll to top when navigating between pages, unless a category param or products page is present
                 const urlParams = new URLSearchParams(window.location.search);
-                // Não fazer scroll para o topo se houver parâmetro de categoria ou se for página de produtos
                 if (!urlParams.has('categoria') && !window.location.pathname.includes('/produtos')) {
                     window.scrollTo({ top: 0, behavior: 'smooth' });
                 }
             }
         });
         
-        // Smooth scroll section by section
-        // Usar window para evitar redeclaração quando HTMX recarrega
-        if (typeof window.isScrolling === 'undefined') {
-            window.isScrolling = false;
-            window.scrollTimeout = null;
-            window.smoothScrollHandler = null;
-            window.sections = null;
-        }
-        
-        // Remover listener anterior se existir
-        if (window.smoothScrollHandler) {
-            window.removeEventListener('wheel', window.smoothScrollHandler);
-        }
-        
-        // Atualizar sections sempre que o DOM mudar
-        window.sections = document.querySelectorAll('.hero-section, .about-section, .products-section, .testimonials-section, .contact-section');
-        
-        window.smoothScrollHandler = function(e) {
-            if (window.isScrolling) return;
-            
-            clearTimeout(window.scrollTimeout);
-            window.scrollTimeout = setTimeout(() => {
-                window.isScrolling = false;
-            }, 1000);
-            
-            if (window.isScrolling) return;
-            window.isScrolling = true;
-            
-            const currentScroll = window.pageYOffset || document.documentElement.scrollTop;
-            const windowHeight = window.innerHeight;
-            const direction = e.deltaY > 0 ? 1 : -1;
-            
-            let targetSection = null;
-            
-            if (direction > 0) {
-                // Scrolling down - find next section
-                for (let i = 0; i < window.sections.length; i++) {
-                    const sectionTop = window.sections[i].offsetTop;
-                    if (sectionTop > currentScroll + 50) {
-                        targetSection = window.sections[i];
-                        break;
-                    }
-                }
-            } else {
-                // Scrolling up - find previous section
-                for (let i = window.sections.length - 1; i >= 0; i--) {
-                    const sectionTop = window.sections[i].offsetTop;
-                    if (sectionTop < currentScroll - 50) {
-                        targetSection = window.sections[i];
-                        break;
-                    }
-                }
-            }
-            
-            if (targetSection) {
-                e.preventDefault();
-                targetSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                setTimeout(() => {
-                    window.isScrolling = false;
-                }, 800);
-            } else {
-                window.isScrolling = false;
-            }
-        };
-        
-        window.addEventListener('wheel', window.smoothScrollHandler, { passive: false });
+        // Smooth section-to-section scrolling was intentionally disabled.
+        // The previous implementation attached a 'wheel' listener and forced
+        // scrollIntoView for the next/previous section. That behavior caused
+        // poor UX on some devices, so it was removed. If you need a similar
+        // feature later, consider using a well-tested library or a
+        // progressively-enhanced implementation scoped to specific pages.
     </script>
     
     <script>
@@ -354,6 +308,61 @@
     </script>
     
     {% block extra_js %}{% endblock %}
+    <script>
+        // Global fallback: se a página atual contém a seção de detalhe do produto,
+        // garanta posicionamento imediato e inicialize carousel simples.
+        (function() {
+            function scrollToProductSectionImmediate() {
+                const productSection = document.getElementById('product-detail-section');
+                if (!productSection) return false;
+                const headerHeight = document.querySelector('.header')?.offsetHeight || 80;
+                const sectionPosition = productSection.getBoundingClientRect().top + window.pageYOffset - headerHeight;
+                window.scrollTo({ top: sectionPosition, behavior: 'auto' });
+                return true;
+            }
+
+            function initFallbackProductCarousel() {
+                const slides = Array.from(document.querySelectorAll('.product-image-slide'));
+                const leftBtn = document.querySelector('.carousel-arrow-left');
+                const rightBtn = document.querySelector('.carousel-arrow-right');
+                if (!slides.length) {
+                    if (leftBtn) leftBtn.style.display = 'none';
+                    if (rightBtn) rightBtn.style.display = 'none';
+                    return;
+                }
+                let currentIndex = 0;
+                function showIndex(i) {
+                    currentIndex = (i + slides.length) % slides.length;
+                    slides.forEach((s, idx) => s.style.display = idx === currentIndex ? 'block' : 'none');
+                }
+                showIndex(0);
+                if (slides.length <= 1) {
+                    if (leftBtn) leftBtn.style.display = 'none';
+                    if (rightBtn) rightBtn.style.display = 'none';
+                } else {
+                    if (leftBtn) leftBtn.addEventListener('click', (e) => { e.preventDefault(); showIndex(currentIndex - 1); });
+                    if (rightBtn) rightBtn.addEventListener('click', (e) => { e.preventDefault(); showIndex(currentIndex + 1); });
+                }
+                // Reposition after images load
+                slides.forEach(img => {
+                    if (!img.complete) img.addEventListener('load', () => scrollToProductSectionImmediate());
+                });
+                setTimeout(() => scrollToProductSectionImmediate(), 500);
+            }
+
+            function runIfProductDetail() {
+                const found = scrollToProductSectionImmediate();
+                if (found) initFallbackProductCarousel();
+            }
+
+            document.addEventListener('DOMContentLoaded', runIfProductDetail);
+            if (typeof htmx !== 'undefined') {
+                document.body.addEventListener('htmx:afterSwap', function() {
+                    runIfProductDetail();
+                });
+            }
+        })();
+    </script>
 </body>
 </html>
 

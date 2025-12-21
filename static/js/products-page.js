@@ -228,9 +228,16 @@
     // ============================================
     const ScrollManager = {
         /**
-         * Faz scroll para a seção de produtos
+         * Faz scroll para a seção de produtos — somente se `scroll=1` estiver
+         * presente na querystring (i.e., quando o usuário clicou em um card na Home).
          */
         scrollToProducts() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('scroll') !== '1') {
+                utils.log('scrollToProducts: skipped (no scroll=1 param)');
+                return Promise.resolve(false);
+            }
+
             utils.log('Fazendo scroll para produtos');
             
             return new Promise((resolve) => {
@@ -268,10 +275,10 @@
                     
                     utils.log('Scroll para:', targetPosition, 'Atual:', currentScroll);
                     
-                    // Scroll instantâneo
+                    // Scroll instantâneo primeiro (melhora alinhamento em alguns browsers)
                     window.scrollTo({ top: targetPosition, behavior: 'auto' });
                     
-                    // Scroll suave após delay
+                    // Scroll suave após short delay
                     setTimeout(() => {
                         const rect2 = section.getBoundingClientRect();
                         const scrollTop2 = window.pageYOffset || document.documentElement.scrollTop;
@@ -290,12 +297,18 @@
         },
 
         /**
-         * Faz scroll múltiplas vezes com delays crescentes
+         * Faz scroll múltiplas vezes com delays crescentes — apenas se `scroll=1`.
          */
         scrollToProductsMultiple(times = 3) {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('scroll') !== '1') {
+                utils.log('scrollToProductsMultiple: skipped (no scroll=1 param)');
+                return;
+            }
+
             const delays = [100, 300, 600, 1000, 1500, 2000];
             
-            delays.slice(0, times).forEach((delay, index) => {
+            delays.slice(0, times).forEach((delay) => {
                 setTimeout(() => {
                     this.scrollToProducts();
                 }, delay);
@@ -413,14 +426,15 @@
             
             utils.log('Inicializando página de produtos');
             
-            // Garante que todos os produtos estejam visíveis
-            this.makeAllProductsVisible();
-            
-            // Inicializa eventos
+            // Inicializa eventos primeiro (listeners, filtros)
             EventManager.init();
-            
-            // Aplica filtro da URL se houver
+
+            // Aplica filtro da URL se houver. Se não houver filtro, mostra todos os produtos.
             const hasCategoryFilter = FilterManager.applyCategoryFromURL();
+            if (!hasCategoryFilter) {
+                // Nenhum filtro na URL: garantir que todos os produtos fiquem visíveis
+                this.makeAllProductsVisible();
+            }
             
             // Se houver filtro de categoria, faz scroll
             if (hasCategoryFilter) {
@@ -454,10 +468,10 @@
         reinit() {
             state.isInitialized = false;
             this.init();
-            
-            // Faz scroll múltiplas vezes para garantir
+
+            // Faz scroll múltiplas vezes para garantir apenas se scroll=1
             const urlParams = new URLSearchParams(window.location.search);
-            if (urlParams.get('categoria')) {
+            if (urlParams.get('categoria') && urlParams.get('scroll') === '1') {
                 ScrollManager.scrollToProductsMultiple(6);
             }
         }

@@ -38,14 +38,18 @@ class Produto(models.Model):
     nome = models.CharField(max_length=200)
     slug = models.SlugField(unique=True)
     descricao = models.TextField(blank=True)
-    categoria_principal = models.CharField(
-        max_length=100, 
+    categoria_principal = models.ForeignKey(
+        CategoriaPrincipal,
+        on_delete=models.SET_NULL,
+        null=True,
         blank=True,
-        help_text="Categoria principal: Revestimento 3D cimentício, Artefatos Cimentícios, Cube Concreto, Linha Jardim, Elemento Vazado Cobogó"
+        help_text="Categoria principal"
     )
     categoria = models.CharField(max_length=100, blank=True, help_text="Subcategoria: Amadeirados, Tijolinho, Mosaicos, etc.")
     tag = models.CharField(max_length=100, default="Base Cementícia")
     imagem = models.ImageField(upload_to='produtos/', blank=True, null=True)
+    imagem_2 = models.ImageField(upload_to='produtos/', blank=True, null=True)
+    imagem_3 = models.ImageField(upload_to='produtos/', blank=True, null=True)
     imagem_nome = models.CharField(max_length=200, blank=True, help_text="Nome do arquivo da imagem em static/images/")
     dimensoes = models.CharField(max_length=100, blank=True, help_text="Ex: 30x30x2cm")
     cor = models.CharField(max_length=100, blank=True, help_text="Ex: Cor natural (concreto cinza)")
@@ -84,11 +88,30 @@ class Produto(models.Model):
     
     def get_imagem_url(self):
         """Retorna a URL da imagem do produto"""
+        # Retorna a primeira imagem disponível (ordem: imagem, imagem_2, imagem_3, imagem_nome)
         if self.imagem:
             return self.imagem.url
-        elif self.imagem_nome:
+        if self.imagem_2:
+            return self.imagem_2.url
+        if self.imagem_3:
+            return self.imagem_3.url
+        if self.imagem_nome:
             return f'/static/images/{self.imagem_nome}'
         return None
+
+    def get_imagens_urls(self):
+        """Retorna lista de URLs das imagens disponíveis (em ordem)."""
+        urls = []
+        if self.imagem:
+            urls.append(self.imagem.url)
+        if self.imagem_2:
+            urls.append(self.imagem_2.url)
+        if self.imagem_3:
+            urls.append(self.imagem_3.url)
+        if self.imagem_nome and not urls:
+            # apenas adicionar imagem_nome se nenhuma ImageField estiver presente
+            urls.append(f'/static/images/{self.imagem_nome}')
+        return urls
 
 class MensagemContato(models.Model):
     nome = models.CharField(max_length=200)
