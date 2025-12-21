@@ -172,19 +172,7 @@ else:
         MEDIA_URL = 'media/'
         MEDIA_ROOT = BASE_DIR / 'media'
 
-# Serve media files in development
-if DEBUG:
-    urlpatterns = [
-        path('admin/', admin.site.urls),
-        path('htmx/', include('django_htmx.urls')),
-        path('', include('core.urls')),
-    ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-else:
-    urlpatterns = [
-        path('admin/', admin.site.urls),
-        path('htmx/', include('django_htmx.urls')),
-        path('', include('core.urls')),
-    ]
+# URL patterns are defined in urls.py
 
 # Email settings
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'  # For development - prints to console
