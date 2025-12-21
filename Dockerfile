@@ -32,5 +32,5 @@ EXPOSE 8000
 
 # Use entrypoint script
 ENTRYPOINT ["/bin/sh", "/app/docker-entrypoint.sh"]
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+CMD ["gunicorn", "--bind", "0.0.0.0:8000", "betondekor.wsgi:application"]
 
