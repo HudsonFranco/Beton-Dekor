@@ -26,7 +26,7 @@ SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-(3%zw8&787o0=)p+p*lhnmv@s)
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('DEBUG', 'False') == 'True'
 
-ALLOWED_HOSTS = ['https://beton-dekor.onrender.com', 'localhost', '127.0.0.1']  # Em produção, especifique os domínios permitidos
+ALLOWED_HOSTS = ['beton-dekor.onrender.com', 'localhost', '127.0.0.1']  # Em produção, especifique os domínios permitidos
 
 
 # Application definition
