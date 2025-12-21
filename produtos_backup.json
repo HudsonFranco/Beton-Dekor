@@ -1,0 +1,265 @@
+[
+{
+  "model": "core.categoriaprincipal",
+  "pk": 2,
+  "fields": {
+    "nome": "Revestimento 3D cimentício",
+    "ordem": 1,
+    "ativo": true,
+    "created_at": "2025-12-11T19:26:01.655Z",
+    "updated_at": "2025-12-11T19:26:01.655Z"
+  }
+},
+{
+  "model": "core.categoriaprincipal",
+  "pk": 3,
+  "fields": {
+    "nome": "Artefatos Cimentícios",
+    "ordem": 2,
+    "ativo": true,
+    "created_at": "2025-12-11T19:26:28.192Z",
+    "updated_at": "2025-12-11T19:26:28.192Z"
+  }
+},
+{
+  "model": "core.categoriaprincipal",
+  "pk": 4,
+  "fields": {
+    "nome": "Cuba Concreto",
+    "ordem": 3,
+    "ativo": true,
+    "created_at": "2025-12-11T19:26:28.238Z",
+    "updated_at": "2025-12-21T04:27:57.905Z"
+  }
+},
+{
+  "model": "core.categoriaprincipal",
+  "pk": 5,
+  "fields": {
+    "nome": "Linha Jardim",
+    "ordem": 4,
+    "ativo": true,
+    "created_at": "2025-12-11T19:26:28.283Z",
+    "updated_at": "2025-12-11T19:26:28.283Z"
+  }
+},
+{
+  "model": "core.categoriaprincipal",
+  "pk": 6,
+  "fields": {
+    "nome": "Elemento Vazado Cobogó",
+    "ordem": 5,
+    "ativo": true,
+    "created_at": "2025-12-11T19:26:28.333Z",
+    "updated_at": "2025-12-11T19:26:28.333Z"
+  }
+},
+{
+  "model": "core.categoriaprincipal",
+  "pk": 16,
+  "fields": {
+    "nome": "Artefatos",
+    "ordem": 0,
+    "ativo": true,
+    "created_at": "2025-12-21T04:09:10.965Z",
+    "updated_at": "2025-12-21T04:09:10.965Z"
+  }
+},
+{
+  "model": "core.subcategoria",
+  "pk": 1,
+  "fields": {
+    "categoria_principal": 2,
+    "nome": "Amadeirados",
+    "ordem": 1,
+    "ativo": true,
+    "created_at": "2025-12-11T19:26:01.685Z",
+    "updated_at": "2025-12-11T19:26:01.685Z"
+  }
+},
+{
+  "model": "core.subcategoria",
+  "pk": 2,
+  "fields": {
+    "categoria_principal": 2,
+    "nome": "Brick´s/Tijolinho",
+    "ordem": 2,
+    "ativo": true,
+    "created_at": "2025-12-11T19:26:28.129Z",
+    "updated_at": "2025-12-11T19:26:28.129Z"
+  }
+},
+{
+  "model": "core.subcategoria",
+  "pk": 3,
+  "fields": {
+    "categoria_principal": 2,
+    "nome": "Clássicos",
+    "ordem": 3,
+    "ativo": true,
+    "created_at": "2025-12-11T19:26:28.148Z",
+    "updated_at": "2025-12-11T19:26:28.148Z"
+  }
+},
+{
+  "model": "core.subcategoria",
+  "pk": 4,
+  "fields": {
+    "categoria_principal": 2,
+    "nome": "Geométricos",
+    "ordem": 4,
+    "ativo": true,
+    "created_at": "2025-12-11T19:26:28.162Z",
+    "updated_at": "2025-12-11T19:26:28.162Z"
+  }
+},
+{
+  "model": "core.subcategoria",
+  "pk": 5,
+  "fields": {
+    "categoria_principal": 2,
+    "nome": "Mosaicos",
+    "ordem": 5,
+    "ativo": true,
+    "created_at": "2025-12-11T19:26:28.180Z",
+    "updated_at": "2025-12-11T19:26:28.180Z"
+  }
+},
+{
+  "model": "core.subcategoria",
+  "pk": 6,
+  "fields": {
+    "categoria_principal": 3,
+    "nome": "Lajota Piso",
+    "ordem": 1,
+    "ativo": true,
+    "created_at": "2025-12-11T19:26:28.212Z",
+    "updated_at": "2025-12-11T19:26:28.212Z"
+  }
+},
+{
+  "model": "core.subcategoria",
+  "pk": 7,
+  "fields": {
+    "categoria_principal": 3,
+    "nome": "Pingadeira",
+    "ordem": 2,
+    "ativo": true,
+    "created_at": "2025-12-11T19:26:28.224Z",
+    "updated_at": "2025-12-11T19:26:28.224Z"
+  }
+},
+{
+  "model": "core.subcategoria",
+  "pk": 8,
+  "fields": {
+    "categoria_principal": 4,
+    "nome": "Cuba redonda",
+    "ordem": 1,
+    "ativo": true,
+    "created_at": "2025-12-11T19:26:28.253Z",
+    "updated_at": "2025-12-11T19:26:28.253Z"
+  }
+},
+{
+  "model": "core.subcategoria",
+  "pk": 9,
+  "fields": {
+    "categoria_principal": 4,
+    "nome": "Cuba quadrada",
+    "ordem": 2,
+    "ativo": true,
+    "created_at": "2025-12-11T19:26:28.267Z",
+    "updated_at": "2025-12-11T19:26:28.267Z"
+  }
+},
+{
+  "model": "core.subcategoria",
+  "pk": 10,
+  "fields": {
+    "categoria_principal": 5,
+    "nome": "Pisante",
+    "ordem": 1,
+    "ativo": true,
+    "created_at": "2025-12-11T19:26:28.295Z",
+    "updated_at": "2025-12-11T19:26:28.295Z"
+  }
+},
+{
+  "model": "core.subcategoria",
+  "pk": 11,
+  "fields": {
+    "categoria_principal": 5,
+    "nome": "Guia jardim",
+    "ordem": 2,
+    "ativo": true,
+    "created_at": "2025-12-11T19:26:28.306Z",
+    "updated_at": "2025-12-11T19:26:28.306Z"
+  }
+},
+{
+  "model": "core.subcategoria",
+  "pk": 12,
+  "fields": {
+    "categoria_principal": 5,
+    "nome": "Concregrama",
+    "ordem": 3,
+    "ativo": true,
+    "created_at": "2025-12-11T19:26:28.321Z",
+    "updated_at": "2025-12-11T19:26:28.321Z"
+  }
+},
+{
+  "model": "core.subcategoria",
+  "pk": 13,
+  "fields": {
+    "categoria_principal": 6,
+    "nome": "Cobogó 40x40",
+    "ordem": 1,
+    "ativo": true,
+    "created_at": "2025-12-11T19:26:28.349Z",
+    "updated_at": "2025-12-11T19:26:28.349Z"
+  }
+},
+{
+  "model": "core.subcategoria",
+  "pk": 14,
+  "fields": {
+    "categoria_principal": 6,
+    "nome": "Cobogó 30x30",
+    "ordem": 2,
+    "ativo": true,
+    "created_at": "2025-12-11T19:26:28.359Z",
+    "updated_at": "2025-12-11T19:26:28.359Z"
+  }
+},
+{
+  "model": "core.subcategoria",
+  "pk": 15,
+  "fields": {
+    "categoria_principal": 6,
+    "nome": "Cobogó Dupla face 30x30",
+    "ordem": 3,
+    "ativo": true,
+    "created_at": "2025-12-11T19:26:28.371Z",
+    "updated_at": "2025-12-11T19:26:28.371Z"
+  }
+},
+{
+  "model": "core.produto",
+  "pk": 1,
+  "fields": {
+    "nome": "25 Quadros",
+    "slug": "25-quadros",
+    "descricao": "",
+    "categoria_principal": 2,
+    "categoria": "",
+    "tag": "Base Cementícia",
+    "imagem": "produtos/25quadros_o30Ee0S.png",
+    "imagem_2": "produtos/revestimento3d.png",
+    "imagem_3": "",
+    "imagem_nome": "",
+    "dimensoes": "Dimensões: 30x30x2cm",
+    "cor": "",
+    "unidade_venda": "",
+    "especificacoes": 

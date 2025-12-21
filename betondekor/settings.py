@@ -39,6 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'whitenoise.runserver_nostatic',
+    'cloudinary_storage',
+    'cloudinary',
     'django_htmx',
     'core',
 ]
@@ -142,9 +144,47 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 # WhiteNoise settings
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
+# Cloudinary settings
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
+
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': os.getenv('CLOUDINARY_CLOUD_NAME', 'your-cloud-name'),
+    'API_KEY': os.getenv('CLOUDINARY_API_KEY', 'your-api-key'),
+    'API_SECRET': os.getenv('CLOUDINARY_API_SECRET', 'your-api-secret'),
+}
+
+cloudinary.config(**CLOUDINARY_STORAGE)
+
 # Media files
-MEDIA_URL = 'media/'
-MEDIA_ROOT = BASE_DIR / 'media'
+if DEBUG:
+    MEDIA_URL = 'media/'
+    MEDIA_ROOT = BASE_DIR / 'media'
+else:
+    # Use Cloudinary for media files in production
+    CLOUDINARY_URL = os.getenv('CLOUDINARY_URL')
+    if CLOUDINARY_URL:
+        cloudinary.config(cloudinary_url=CLOUDINARY_URL)
+        DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+        MEDIA_URL = 'https://res.cloudinary.com/{}/image/upload/'.format(CLOUDINARY_STORAGE['CLOUD_NAME'])
+    else:
+        MEDIA_URL = 'media/'
+        MEDIA_ROOT = BASE_DIR / 'media'
+
+# Serve media files in development
+if DEBUG:
+    urlpatterns = [
+        path('admin/', admin.site.urls),
+        path('htmx/', include('django_htmx.urls')),
+        path('', include('core.urls')),
+    ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+else:
+    urlpatterns = [
+        path('admin/', admin.site.urls),
+        path('htmx/', include('django_htmx.urls')),
+        path('', include('core.urls')),
+    ]
 
 # Email settings
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'  # For development - prints to console
