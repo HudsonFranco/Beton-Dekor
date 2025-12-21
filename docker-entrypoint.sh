@@ -34,6 +34,9 @@ python manage.py migrate --noinput
 echo "Collecting static files..."
 python manage.py collectstatic --noinput || true
 
+echo "Importing products..."
+python manage.py import_produtos --file core/management/commands/produtos_backup.json || true
+
 echo "Starting server..."
 exec "$@"
 
