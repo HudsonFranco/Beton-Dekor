@@ -2,6 +2,7 @@ from django.db import models
 from django.urls import reverse
 from django.utils.text import slugify
 from django.conf import settings
+from cloudinary import models as cloudinary_models
 
 class CategoriaPrincipal(models.Model):
     nome = models.CharField(max_length=100, unique=True)
@@ -48,9 +49,9 @@ class Produto(models.Model):
     )
     categoria = models.CharField(max_length=100, blank=True, help_text="Subcategoria: Amadeirados, Tijolinho, Mosaicos, etc.")
     tag = models.CharField(max_length=100, default="Base Cementícia")
-    imagem = models.ImageField(upload_to='produtos/', blank=True, null=True)
-    imagem_2 = models.ImageField(upload_to='produtos/', blank=True, null=True)
-    imagem_3 = models.ImageField(upload_to='produtos/', blank=True, null=True)
+    imagem = cloudinary_models.CloudinaryField(folder='produtos/', blank=True, null=True)
+    imagem_2 = cloudinary_models.CloudinaryField(folder='produtos/', blank=True, null=True)
+    imagem_3 = cloudinary_models.CloudinaryField(folder='produtos/', blank=True, null=True)
     imagem_nome = models.CharField(max_length=200, blank=True, help_text="Nome do arquivo da imagem em static/images/")
     dimensoes = models.CharField(max_length=100, blank=True, help_text="Ex: 30x30x2cm")
     cor = models.CharField(max_length=100, blank=True, help_text="Ex: Cor natural (concreto cinza)")
