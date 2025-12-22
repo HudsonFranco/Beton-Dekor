@@ -4541,3 +4541,76 @@ section {
         height: 90px;
     }
 }
+
+/* Partners Section in Quem Somos */
+.secao-parceiros {
+    padding: 60px 0;
+    text-align: center;
+}
+
+.titulo-parceiros {
+    font-family: 'Montserrat';
+    font-weight: 400;
+    font-size: 28px;
+    color: #262626;
+    margin-bottom: 30px;
+}
+
+.partners-logos {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    flex-wrap: wrap;
+}
+
+.partner-logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.partner-image {
+    max-width: 200px;
+    height: auto;
+    object-fit: contain;
+    border-radius: 8px;
+}
+
+/* Responsive Partners */
+@media (max-width: 768px) {
+    .secao-parceiros {
+        padding: 40px 0;
+    }
+
+    .titulo-parceiros {
+        font-size: 24px;
+        margin-bottom: 20px;
+    }
+
+    .partners-logos {
+        gap: 20px;
+    }
+
+    .partner-image {
+        max-width: 150px;
+    }
+}
+
+@media (max-width: 480px) {
+    .secao-parceiros {
+        padding: 30px 0;
+    }
+
+    .titulo-parceiros {
+        font-size: 20px;
+        margin-bottom: 15px;
+    }
+
+    .partners-logos {
+        gap: 15px;
+    }
+
+    .partner-image {
+        max-width: 120px;
+    }
+}

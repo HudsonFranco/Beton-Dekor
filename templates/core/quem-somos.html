@@ -52,26 +52,15 @@
                 Trabalhamos com transparência, precisão e dedicação, porque entendemos que construir bem é assumir responsabilidade.
             </p>
 
-            <!-- Partners Carousel Section -->
+            <!-- Partners Section -->
             <section class="secao-parceiros">
-                <h3 class="titulo-parceiros">Nossas <strong>Parcerias</strong></h3>
-                <div class="carrossel-parceiros">
-                    <div class="container-parceiros">
-                        <div class="item-parceiro parceiro-esquerda">
-                                <img src="{% static 'images/cobogo.png' %}" alt="Parceiro 1" class="logo-parceiro">
-                            </div>
-                            <div class="item-parceiro parceiro-centro">
-                                <img src="{% static 'images/pisante.jpg' %}" alt="Parceiro 2" class="logo-parceiro">
-                            </div>
-                            <div class="item-parceiro parceiro-direita">
-                                <img src="{% static 'images/revestimento3D.jpeg' %}" alt="Parceiro 3" class="logo-parceiro">
-                            </div>
-                            <div class="item-parceiro parceiro-oculto">
-                                <img src="{% static 'images/pingadeira.png' %}" alt="Parceiro 4" class="logo-parceiro">
-                            </div>
-                            <div class="item-parceiro parceiro-oculto">
-                                <img src="{% static 'images/cuba.png' %}" alt="Parceiro 5" class="logo-parceiro">
-                            </div>
+                <h3 class="titulo-parceiros">Nossos <strong>Parceiros</strong></h3>
+                <div class="partners-logos">
+                    <div class="partner-logo">
+                        <img src="{% static 'images/de-lima-imoveis.png' %}" alt="De Lima Imóveis" class="partner-image">
+                    </div>
+                    <div class="partner-logo">
+                        <img src="{% static 'images/de-lima-imoveis1.png' %}" alt="De Lima Imóveis" class="partner-image">
                     </div>
                 </div>
             </section>
@@ -120,44 +109,5 @@
 {% endblock %}
 
 {% block extra_js %}
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    // Carrossel de Parceiros - Rotação Automática
-    const parceiros = document.querySelectorAll('.item-parceiro');
-    let indiceAtual = 0; // Começar com o primeiro item
-
-    function atualizarCarrossel() {
-        parceiros.forEach((parceiro, indice) => {
-            parceiro.classList.remove('parceiro-destacado');
-
-            if (indice === indiceAtual) {
-                parceiro.classList.add('parceiro-destacado');
-            }
-        });
-    }
-
-    function proximoParceiro() {
-        indiceAtual = (indiceAtual + 1) % parceiros.length;
-        atualizarCarrossel();
-    }
-
-    // Inicializar carrossel
-    atualizarCarrossel();
-
-    // Rotacionar automaticamente a cada 2.5 segundos
-    let idIntervalo = setInterval(proximoParceiro, 2500);
-
-    // Opcional: Pausar ao passar o mouse
-    const carrossel = document.querySelector('.carrossel-parceiros');
-
-    carrossel.addEventListener('mouseenter', () => {
-        clearInterval(idIntervalo);
-    });
-
-    carrossel.addEventListener('mouseleave', () => {
-        idIntervalo = setInterval(proximoParceiro, 2500);
-    });
-});
-</script>
 {% endblock %}
 
