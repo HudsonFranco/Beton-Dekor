@@ -31,6 +31,9 @@ echo "Running migrations..."
 python manage.py makemigrations --noinput || true
 python manage.py migrate --noinput
 
+echo "Migrating images to Cloudinary..."
+python manage.py migrate_images_to_cloudinary || true
+
 echo "Collecting static files..."
 python manage.py collectstatic --noinput || true
 
