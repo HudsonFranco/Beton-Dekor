@@ -96,7 +96,14 @@ class Produto(models.Model):
         if self.imagem_3:
             return self.imagem_3.url
         if self.imagem_nome:
-            return f'/static/images/{self.imagem_nome}'
+            # Garante que seja uma URL absoluta
+            imagem_nome = self.imagem_nome.strip()
+            if imagem_nome.startswith('/static/'):
+                return imagem_nome
+            elif imagem_nome.startswith('static/'):
+                return f'/{imagem_nome}'
+            else:
+                return f'/static/images/{imagem_nome}'
         return None
 
     def get_imagens_urls(self):
