@@ -3977,9 +3977,14 @@ section {
     }
 
     .product-image-area {
-        min-height: 300px;
-        aspect-ratio: 4/3;
+        height: 380px;
+        aspect-ratio: unset;
         max-width: none;
+    }
+
+    .product-image-slide {
+        width: 380px;
+        height: 380px;
     }
 
     .product-detail-container {
@@ -4321,7 +4326,7 @@ section {
 .product-image-area {
     width: 100%;
     max-width: 400px;
-    aspect-ratio: 1;
+    height: 490px;
     background: #e9e9e9;
     border-radius: 12px;
     position: relative;
@@ -4345,8 +4350,8 @@ section {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 110%;
-    height: 110%;
+    width: 390px;
+    height: 490px;
     object-fit: contain;
     border-radius: 8px;
     display: none;
