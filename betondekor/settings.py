@@ -149,13 +149,12 @@ import cloudinary
 import cloudinary.uploader
 import cloudinary.api
 
-CLOUDINARY_STORAGE = {
-    'CLOUD_NAME': os.getenv('CLOUDINARY_CLOUD_NAME', 'your-cloud-name'),
-    'API_KEY': os.getenv('CLOUDINARY_API_KEY', 'your-api-key'),
-    'API_SECRET': os.getenv('CLOUDINARY_API_SECRET', 'your-api-secret'),
-}
-
-cloudinary.config(**CLOUDINARY_STORAGE)
+# Configure Cloudinary
+cloudinary.config(
+    cloud_name='dztlh19q1',
+    api_key='446778458951382',
+    api_secret='9kZvTKky6eerqz0hKejA0W4VoJg'
+)
 
 # Media files
 if DEBUG:
@@ -163,14 +162,10 @@ if DEBUG:
     MEDIA_ROOT = BASE_DIR / 'media'
 else:
     # Use Cloudinary for media files in production
+    DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
     CLOUDINARY_URL = os.getenv('CLOUDINARY_URL')
     if CLOUDINARY_URL:
         cloudinary.config(cloudinary_url=CLOUDINARY_URL)
-        DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
-        MEDIA_URL = 'https://res.cloudinary.com/{}/image/upload/'.format(CLOUDINARY_STORAGE['CLOUD_NAME'])
-    else:
-        MEDIA_URL = 'media/'
-        MEDIA_ROOT = BASE_DIR / 'media'
 
 # URL patterns are defined in urls.py
 
