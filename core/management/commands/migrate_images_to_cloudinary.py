@@ -15,6 +15,16 @@ class Command(BaseCommand):
             if not imagem_nome:
                 continue
 
+            # Clean the filename like in the model
+            if imagem_nome.startswith('http'):
+                continue  # Skip URLs
+            elif imagem_nome.startswith(settings.STATIC_URL):
+                imagem_nome = imagem_nome.replace(settings.STATIC_URL, '').lstrip('/')
+            elif imagem_nome.startswith('static/'):
+                imagem_nome = imagem_nome.replace('static/', '', 1)
+            if imagem_nome.startswith('images/'):
+                imagem_nome = imagem_nome.replace('images/', '', 1)
+
             file_path = os.path.join(settings.BASE_DIR, 'static', 'images', imagem_nome)
             if not os.path.exists(file_path):
                 self.stdout.write(self.style.WARNING(f"File {file_path} not found for {produto.nome}"))
