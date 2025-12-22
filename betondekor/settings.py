@@ -164,9 +164,9 @@ MEDIA_ROOT = BASE_DIR / 'media'
 # Cloudinary commented out for now
 # if not DEBUG:
 #     DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
-    CLOUDINARY_URL = os.getenv('CLOUDINARY_URL')
-    if CLOUDINARY_URL:
-        cloudinary.config(cloudinary_url=CLOUDINARY_URL)
+#     CLOUDINARY_URL = os.getenv('CLOUDINARY_URL')
+#     if CLOUDINARY_URL:
+#         cloudinary.config(cloudinary_url=CLOUDINARY_URL)
 
 # URL patterns are defined in urls.py
 
