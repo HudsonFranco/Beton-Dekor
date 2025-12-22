@@ -39,6 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'whitenoise.runserver_nostatic',
+    'cloudinary_storage',
+    'cloudinary',
     'django_htmx',
     'core',
 ]
@@ -142,9 +144,24 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 # WhiteNoise settings - using simpler storage to avoid manifest issues
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
 
+# Cloudinary settings
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
+
+# Configure Cloudinary
+cloudinary.config(
+    cloud_name='dztlh19q1',
+    api_key='446778458951382',
+    api_secret='9kZvTKky6eerqz0hKejA0W4VoJg'
+)
+
 # Media files configuration
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
+
+# Use Cloudinary for media files
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 # URL patterns are defined in urls.py
 
