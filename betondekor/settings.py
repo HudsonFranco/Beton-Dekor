@@ -160,9 +160,10 @@ cloudinary.config(
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
-# Use Cloudinary for media storage in production (Render has ephemeral filesystem)
-if not DEBUG:
-    DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+# Use local storage for media (files are in container)
+# Cloudinary can be enabled later if needed
+# if not DEBUG:
+#     DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 # URL patterns are defined in urls.py
 
