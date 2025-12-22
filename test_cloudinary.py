@@ -6,7 +6,7 @@ from cloudinary.utils import cloudinary_url
 cloudinary.config(
     cloud_name="dztlh19q1",
     api_key="536528844238579",
-    api_secret="9kZvTKky6eerqz0hKejA0W4VoJg",
+    api_secret="u8nhS7roEoSnUh5CcTshmn6Lc8Q",
     secure=True
 )
 
