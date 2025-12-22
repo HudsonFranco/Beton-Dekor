@@ -153,7 +153,8 @@ import cloudinary.api
 cloudinary.config(
     cloud_name='dztlh19q1',
     api_key='536528844238579',
-    api_secret='u8nhS7roEoSnUh5CcTshmn6Lc8Q'
+    api_secret='u8nhS7roEoSnUh5CcTshmn6Lc8Q',
+    secure=True
 )
 
 # Media files configuration
