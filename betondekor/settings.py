@@ -156,13 +156,14 @@ cloudinary.config(
     api_secret='9kZvTKky6eerqz0hKejA0W4VoJg'
 )
 
-# Media files
-if DEBUG:
-    MEDIA_URL = 'media/'
-    MEDIA_ROOT = BASE_DIR / 'media'
-else:
-    # Use Cloudinary for media files in production
-    DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+# Media files - using local storage
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
+# DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'
+
+# Cloudinary commented out for now
+# if not DEBUG:
+#     DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
     CLOUDINARY_URL = os.getenv('CLOUDINARY_URL')
     if CLOUDINARY_URL:
         cloudinary.config(cloudinary_url=CLOUDINARY_URL)
