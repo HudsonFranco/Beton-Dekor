@@ -934,10 +934,15 @@ section.hero-section.products-hero-section {
 }
 
 @media (max-width: 1024px) {
-    .pagina-quem-somos .secao-hero-quem-somos {
-        height: 520px;
+    .pagina-quem-somos .secao-hero-quem-somos .sobreposicao-hero-quem-somos {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: transparent;
     }
-
+    
     .titulo-hero-quem-somos {
         font-size: 42px;
     }
@@ -1717,7 +1722,7 @@ section.hero-section.products-hero-section {
 
 
 .product-modern-image {
-    max-width: 185px;
+    max-width: 380px;
     width: 100%;
     height: 150px;
     margin: 0 auto;
@@ -1861,8 +1866,8 @@ section.hero-section.products-hero-section {
         font-size: 26px;
     }
     .product-modern-image {
-        max-width: 150px;
-        height: 120px;
+        max-width: 390px;
+        height: 380px;
     }
     .product-card-modern {
         min-height: 280px;
@@ -2123,7 +2128,7 @@ section.hero-section.products-hero-section {
         font-size: 24px;
     }
     .product-modern-image {
-        max-width: 120px;
+        max-width: 320px;
         height: 100px;
     }
     .product-card-modern {
@@ -4323,6 +4328,17 @@ section {
     }
 }
 
+/* iPad Pro specific adjustment */
+@media (min-width: 1024px) and (max-width: 1366px) {
+    .product-detail-main {
+        padding-top: 150px;
+    }
+
+    .other-products-section {
+        margin-top: -450px;
+    }
+}
+
 .product-image-area {
     width: 100%;
     max-width: 400px;
@@ -4545,6 +4561,66 @@ section {
         width: 90px;
         height: 90px;
     }
+}
+
+/* Back Button */
+.back-button-container {
+    margin-bottom: 40px;
+    text-align: left;
+}
+
+.back-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    font-family: 'Montserrat';
+    font-weight: 600;
+    font-size: 16px;
+    color: #262626;
+    text-decoration: none;
+    padding: 12px 24px;
+    border-radius: 25px;
+    border: 2px solid #e0e0e0;
+    background: #ffffff;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.back-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(38, 38, 38, 0.1), transparent);
+    transition: left 0.5s ease;
+}
+
+.back-button:hover::before {
+    left: 100%;
+}
+
+.back-button:hover {
+    background-color: #262626;
+    color: #ffffff;
+    border-color: #262626;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+    transform: translateY(-2px);
+    text-decoration: none;
+}
+
+.back-button svg {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+    transition: transform 0.3s ease;
+}
+
+.back-button:hover svg {
+    transform: translateX(-2px);
 }
 
 /* Partners Section in Quem Somos */
