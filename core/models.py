@@ -1,6 +1,7 @@
 from django.db import models
 from django.urls import reverse
 from django.utils.text import slugify
+from django.conf import settings
 
 class CategoriaPrincipal(models.Model):
     nome = models.CharField(max_length=100, unique=True)
@@ -124,17 +125,17 @@ class Produto(models.Model):
 
             if imagem_nome.startswith('http'):
                 return imagem_nome
-            elif imagem_nome.startswith('/static/'):
+            elif imagem_nome.startswith(settings.STATIC_URL):
                 return imagem_nome
             elif imagem_nome.startswith('static/'):
                 return f'/{imagem_nome}'
             elif imagem_nome.startswith('/produtos/'):
                 # Corrige caminhos errados
                 filename = imagem_nome.split('/')[-1]
-                return f'/static/images/{filename}'
+                return f'{settings.STATIC_URL}images/{filename}'
             else:
-                return f'/static/images/{imagem_nome}'
-        return '/static/images/placeholder.png'  # Placeholder se nada funcionar
+                return f'{settings.STATIC_URL}images/{imagem_nome}'
+        return f'{settings.STATIC_URL}images/placeholder.png'  # Placeholder se nada funcionar
 
     def get_imagens_urls(self):
         """Retorna lista de URLs das imagens disponíveis (em ordem)."""
@@ -147,7 +148,7 @@ class Produto(models.Model):
             urls.append(self.imagem_3.url)
         if self.imagem_nome and not urls:
             # apenas adicionar imagem_nome se nenhuma ImageField estiver presente
-            urls.append(f'/static/images/{self.imagem_nome}')
+            urls.append(f'{settings.STATIC_URL}images/{self.imagem_nome}')
         return urls
 
 class MensagemContato(models.Model):
