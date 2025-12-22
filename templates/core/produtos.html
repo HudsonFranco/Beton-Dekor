@@ -272,16 +272,22 @@ function initMobileFilterMenu() {
     mobileCategoryTitles.forEach(title => {
         title.addEventListener('click', function() {
             const categoriaPrincipal = this.getAttribute('data-categoria-principal');
-            const productCards = document.querySelectorAll('.product-card-modern');
+            console.log('Filtering by categoria:', categoriaPrincipal);
+            const productCards = document.querySelectorAll('.product-card-link');
+            let visibleCount = 0;
 
             productCards.forEach(card => {
-                const cardCategoria = card.getAttribute('data-categoria-principal');
-                if (cardCategoria === categoriaPrincipal) {
-                    card.style.display = 'block';
+                const cardCategoriaPrincipal = card.getAttribute('data-categoria-principal');
+                console.log('Card categoria:', cardCategoriaPrincipal);
+                if (cardCategoriaPrincipal === categoriaPrincipal) {
+                    card.style.display = 'flex';
+                    visibleCount++;
                 } else {
                     card.style.display = 'none';
                 }
             });
+
+            console.log('Visible products:', visibleCount);
 
             // Close menu
             closeMobileFilter();
