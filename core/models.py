@@ -113,6 +113,10 @@ class Produto(models.Model):
                 return imagem_nome
             elif imagem_nome.startswith('static/'):
                 return f'/{imagem_nome}'
+            elif imagem_nome.startswith('/produtos/'):
+                # Corrige caminhos errados
+                filename = imagem_nome.split('/')[-1]
+                return f'/static/images/{filename}'
             else:
                 return f'/static/images/{imagem_nome}'
         return '/static/images/placeholder.png'  # Placeholder se nada funcionar
