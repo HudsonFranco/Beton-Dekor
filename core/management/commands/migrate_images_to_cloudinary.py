@@ -2,7 +2,7 @@ import os
 from django.core.management.base import BaseCommand
 from django.conf import settings
 from core.models import Produto
-import cloudinary.uploader
+from cloudinary import uploader
 
 class Command(BaseCommand):
     help = 'Migrate existing static images to Cloudinary and update product fields'
@@ -31,7 +31,7 @@ class Command(BaseCommand):
                 continue
 
             try:
-                result = cloudinary.uploader.upload(file_path, folder='produtos/')
+                result = uploader.upload(file_path, folder='produtos/')
                 produto.imagem = result['public_id']
                 produto.imagem_nome = ''
                 produto.save()

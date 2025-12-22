@@ -1,7 +1,7 @@
 import os
 from django.core.management.base import BaseCommand
 from core.models import Produto
-import cloudinary.uploader
+from cloudinary import uploader
 
 class Command(BaseCommand):
     help = 'Upload existing product images to Cloudinary'
@@ -14,7 +14,7 @@ class Command(BaseCommand):
             if produto.imagem and hasattr(produto.imagem, 'path'):
                 try:
                     with open(produto.imagem.path, 'rb') as f:
-                        result = cloudinary.uploader.upload(f, folder='produtos/')
+                        result = uploader.upload(f, folder='produtos/')
                         produto.imagem = result['public_id']
                         produto.save()
                         self.stdout.write(f"Uploaded imagem for {produto.nome}")
@@ -24,7 +24,7 @@ class Command(BaseCommand):
             if produto.imagem_2 and hasattr(produto.imagem_2, 'path'):
                 try:
                     with open(produto.imagem_2.path, 'rb') as f:
-                        result = cloudinary.uploader.upload(f, folder='produtos/')
+                        result = uploader.upload(f, folder='produtos/')
                         produto.imagem_2 = result['public_id']
                         produto.save()
                         self.stdout.write(f"Uploaded imagem_2 for {produto.nome}")
@@ -34,7 +34,7 @@ class Command(BaseCommand):
             if produto.imagem_3 and hasattr(produto.imagem_3, 'path'):
                 try:
                     with open(produto.imagem_3.path, 'rb') as f:
-                        result = cloudinary.uploader.upload(f, folder='produtos/')
+                        result = uploader.upload(f, folder='produtos/')
                         produto.imagem_3 = result['public_id']
                         produto.save()
                         self.stdout.write(f"Uploaded imagem_3 for {produto.nome}")

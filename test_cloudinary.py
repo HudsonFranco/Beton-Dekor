@@ -1,5 +1,5 @@
 import cloudinary
-import cloudinary.uploader
+from cloudinary import uploader
 from cloudinary.utils import cloudinary_url
 
 # Configuration
@@ -11,9 +11,9 @@ cloudinary.config(
 )
 
 # Upload an image from your project (example: static/images/revestimento3D.jpeg)
-upload_result = cloudinary.uploader.upload("static/images/revestimento3D.jpeg",
-                                           public_id="revestimento3D",
-                                           folder="produtos")
+upload_result = uploader.upload("static/images/revestimento3D.jpeg",
+                                public_id="revestimento3D",
+                                folder="produtos")
 print("Upload URL:", upload_result["secure_url"])
 
 # Optimize delivery by resizing and applying auto-format and auto-quality
