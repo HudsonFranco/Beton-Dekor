@@ -88,54 +88,10 @@ class Produto(models.Model):
         return reverse('produto-detalhe', kwargs={'slug': self.slug})
     
     def get_imagem_url(self):
-        """Retorna a URL da imagem do produto"""
-        # Retorna a primeira imagem disponível (ordem: imagem, imagem_2, imagem_3, imagem_nome)
+        """Retorna a URL da imagem do produto (apenas para ImageField)"""
         if self.imagem:
-            try:
-                return self.imagem.url
-            except:
-                pass
-        if self.imagem_2:
-            try:
-                return self.imagem_2.url
-            except:
-                pass
-        if self.imagem_3:
-            try:
-                return self.imagem_3.url
-            except:
-                pass
-        if self.imagem_nome:
-            # Garante que seja uma URL absoluta
-            imagem_nome = self.imagem_nome.strip()
-
-            # Correções automáticas de case sensitivity comuns
-            corrections = {
-                'Pingadeira.png': 'pingadeira.png',
-                'Demolicao.png': 'Demolicao.png',  # já está correto
-                '25quadros.png': '25quadros.png',  # já está correto
-                'cobogo1.jpg': 'cobogo1.jpg',  # já está correto
-                'pisante1.jpg': 'pisante1.jpg',  # já está correto
-                'Guia_de_jardim_ondas.jpg': 'Guia_de_jardim_ondas.jpg',  # já está correto
-                'revestimento3d.png': 'revestimento3d.png',  # já está correto
-            }
-
-            if imagem_nome in corrections:
-                imagem_nome = corrections[imagem_nome]
-
-            if imagem_nome.startswith('http'):
-                return imagem_nome
-            elif imagem_nome.startswith(settings.STATIC_URL):
-                return imagem_nome
-            elif imagem_nome.startswith('static/'):
-                return f'/{imagem_nome}'
-            elif imagem_nome.startswith('/produtos/'):
-                # Corrige caminhos errados
-                filename = imagem_nome.split('/')[-1]
-                return f'{settings.STATIC_URL}images/{filename}'
-            else:
-                return f'{settings.STATIC_URL}images/{imagem_nome}'
-        return f'{settings.STATIC_URL}images/placeholder.png'  # Placeholder se nada funcionar
+            return self.imagem.url
+        return None
 
     def get_imagens_urls(self):
         """Retorna lista de URLs das imagens disponíveis (em ordem)."""

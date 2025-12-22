@@ -166,8 +166,10 @@
                        data-categoria-principal="{{ produto.categoria_principal|lower }}">
                         <div class="product-card-modern">
                             <p class="product-tag">{{ produto.tag }}</p>
-                            {% if produto.get_imagem_url %}
-                                <img src="{{ produto.get_imagem_url }}" alt="{{ produto.nome }}" class="product-modern-image">
+                            {% if produto.imagem %}
+                                <img src="{{ produto.imagem.url }}" alt="{{ produto.nome }}" class="product-modern-image">
+                            {% elif produto.imagem_nome %}
+                                <img src="{% static 'images/'|add:produto.imagem_nome %}" alt="{{ produto.nome }}" class="product-modern-image">
                             {% else %}
                                 <div class="product-modern-image" style="background: #f0f0f0; height: 150px; display: flex; align-items: center; justify-content: center; color: #999;">Sem imagem</div>
                             {% endif %}
