@@ -5,7 +5,7 @@ from cloudinary.utils import cloudinary_url
 # Configuration
 cloudinary.config(
     cloud_name="dztlh19q1",
-    api_key="446778458951382",
+    api_key="536528844238579",
     api_secret="9kZvTKky6eerqz0hKejA0W4VoJg",
     secure=True
 )
