@@ -141,8 +141,8 @@ STATICFILES_DIRS = [
 ]
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
-# WhiteNoise settings
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+# WhiteNoise settings - using simpler storage to avoid manifest issues
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
 
 # Cloudinary settings
 import cloudinary
@@ -156,17 +156,13 @@ cloudinary.config(
     api_secret='9kZvTKky6eerqz0hKejA0W4VoJg'
 )
 
-# Media files - using local storage
+# Media files configuration
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
-# DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'
 
-# Cloudinary commented out for now
-# if not DEBUG:
-#     DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
-#     CLOUDINARY_URL = os.getenv('CLOUDINARY_URL')
-#     if CLOUDINARY_URL:
-#         cloudinary.config(cloudinary_url=CLOUDINARY_URL)
+# Use Cloudinary for media storage in production (Render has ephemeral filesystem)
+if not DEBUG:
+    DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 # URL patterns are defined in urls.py
 
