@@ -90,21 +90,32 @@ class Produto(models.Model):
         """Retorna a URL da imagem do produto"""
         # Retorna a primeira imagem disponível (ordem: imagem, imagem_2, imagem_3, imagem_nome)
         if self.imagem:
-            return self.imagem.url
+            try:
+                return self.imagem.url
+            except:
+                pass
         if self.imagem_2:
-            return self.imagem_2.url
+            try:
+                return self.imagem_2.url
+            except:
+                pass
         if self.imagem_3:
-            return self.imagem_3.url
+            try:
+                return self.imagem_3.url
+            except:
+                pass
         if self.imagem_nome:
             # Garante que seja uma URL absoluta
             imagem_nome = self.imagem_nome.strip()
-            if imagem_nome.startswith('/static/'):
+            if imagem_nome.startswith('http'):
+                return imagem_nome
+            elif imagem_nome.startswith('/static/'):
                 return imagem_nome
             elif imagem_nome.startswith('static/'):
                 return f'/{imagem_nome}'
             else:
                 return f'/static/images/{imagem_nome}'
-        return None
+        return '/static/images/placeholder.png'  # Placeholder se nada funcionar
 
     def get_imagens_urls(self):
         """Retorna lista de URLs das imagens disponíveis (em ordem)."""
