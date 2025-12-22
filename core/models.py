@@ -107,6 +107,21 @@ class Produto(models.Model):
         if self.imagem_nome:
             # Garante que seja uma URL absoluta
             imagem_nome = self.imagem_nome.strip()
+
+            # Correções automáticas de case sensitivity comuns
+            corrections = {
+                'Pingadeira.png': 'pingadeira.png',
+                'Demolicao.png': 'Demolicao.png',  # já está correto
+                '25quadros.png': '25quadros.png',  # já está correto
+                'cobogo1.jpg': 'cobogo1.jpg',  # já está correto
+                'pisante1.jpg': 'pisante1.jpg',  # já está correto
+                'Guia_de_jardim_ondas.jpg': 'Guia_de_jardim_ondas.jpg',  # já está correto
+                'revestimento3d.png': 'revestimento3d.png',  # já está correto
+            }
+
+            if imagem_nome in corrections:
+                imagem_nome = corrections[imagem_nome]
+
             if imagem_nome.startswith('http'):
                 return imagem_nome
             elif imagem_nome.startswith('/static/'):
