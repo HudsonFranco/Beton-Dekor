@@ -31,11 +31,11 @@
             </ul>
         </nav>
         <div class="header-right">
-            <a href="#" class="contact-button" onclick="openContactModal(); return false;" style="margin-right: 10px;">Entre em Contato</a>
+            <a href="#" class="header-nav-link" onclick="openContactModal(); return false;">Entre em Contato</a>
             {% if user.is_authenticated %}
-                <a href="{% url 'admin-produtos' %}" class="contact-button">Admin</a>
+                <a href="{% url 'admin-produtos' %}" class="header-nav-link">Admin</a>
             {% else %}
-                <a href="{% url 'login' %}" class="contact-button">Entrar</a>
+                <a href="{% url 'login' %}" class="header-nav-link">Entrar</a>
             {% endif %}
         </div>
     </div>
