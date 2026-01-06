@@ -3167,14 +3167,14 @@ section.hero-section.products-hero-section {
     .nav-menu li.mobile-menu-actions {
         display: flex;
         flex-direction: column;
-        gap: 12px;
-        margin-top: 15px;
-        padding-top: 15px;
-        border-top: 2px solid rgba(255, 255, 255, 0.3);
-        align-items: center !important;
+        gap: 0;
+        margin-top: 0;
+        padding-top: 0;
+        border-top: none;
+        align-items: flex-start !important;
         width: 100% !important;
         max-width: 100% !important;
-        margin: 15px 0 0 0 !important;
+        margin: 0 !important;
         padding-left: 0 !important;
         padding-right: 0 !important;
         box-sizing: border-box;
@@ -3183,23 +3183,23 @@ section.hero-section.products-hero-section {
     .nav-menu li.mobile-menu-actions .mobile-action-button {
         display: block;
         width: 100%;
-        max-width: 200px;
-        padding: 8px 16px;
-        background: var(--color-white);
-        color: var(--color-dark-gray) !important;
-        text-align: center;
-        border-radius: 25px;
-        font-weight: 600;
-        font-size: 13px;
+        padding: 17px 0;
+        background: transparent;
+        color: var(--color-white) !important;
+        text-align: left;
+        border-radius: 0;
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 400;
+        font-size: 18px;
         text-decoration: none;
-        transition: opacity 0.2s ease, transform 0.2s ease;
+        transition: opacity 0.2s ease;
         box-sizing: border-box;
     }
     
     .nav-menu li.mobile-menu-actions .mobile-action-button:hover,
     .nav-menu li.mobile-menu-actions .mobile-action-button:active {
-        opacity: 0.9;
-        transform: translateY(-1px);
+        opacity: 0.8;
+        transform: none;
     }
     
     /* Esconder botões do header-right */
