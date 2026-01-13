@@ -32,21 +32,6 @@
 
 <!-- Main Content -->
 <main class="main-content">
-    <!-- About Section -->
-    <section class="about-section-home">
-        <h2 class="about-title-home">BetonDekor</h2>
-        <p class="about-subtitle-home">Revestimentos 3D e Artefatos em cimento</p>
-        <p class="about-description-home">
-            Desenvolvemos e fabricamos <strong>revestimentos 3D</strong> cimentícios e artefatos de concreto com controle total do processo produtivo. Unimos <strong>design</strong>, <strong>tecnologia</strong> e engenharia do concreto para entregar soluções arquitetônicas com <strong>qualidade, resistência e durabilidade.</strong>
-        </p>
-          <a href="{% url 'quem-somos' %}#onde-nos-encontrar"
-              hx-get="{% url 'quem-somos' %}"
-              hx-target="body"
-              hx-swap="outerHTML"
-              hx-push-url="{% url 'quem-somos' %}#onde-nos-encontrar"
-              class="about-button-home">Onde nos encontrar</a>
-    </section>
-    
     <!-- Products Section -->
     <section class="products-section">
         <h2 class="products-main-title">CONHEÇA NOSSOS PRODUTOS</h2>
@@ -143,6 +128,21 @@
                 </div>
                 </div>
             </div>
+    </section>
+    
+    <!-- About Section -->
+    <section class="about-section-home">
+        <h2 class="about-title-home">BetonDekor</h2>
+        <p class="about-subtitle-home">Revestimentos 3D e Artefatos em cimento</p>
+        <p class="about-description-home">
+            Desenvolvemos e fabricamos <strong>revestimentos 3D</strong> cimentícios e artefatos de concreto com controle total do processo produtivo. Unimos <strong>design</strong>, <strong>tecnologia</strong> e engenharia do concreto para entregar soluções arquitetônicas com <strong>qualidade, resistência e durabilidade.</strong>
+        </p>
+          <a href="{% url 'quem-somos' %}#onde-nos-encontrar"
+              hx-get="{% url 'quem-somos' %}"
+              hx-target="body"
+              hx-swap="outerHTML"
+              hx-push-url="{% url 'quem-somos' %}#onde-nos-encontrar"
+              class="about-button-home">Onde nos encontrar</a>
     </section>
     
     <!-- Testimonials Section -->
