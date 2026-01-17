@@ -315,10 +315,10 @@ section.hero-section.products-hero-section {
 .mobile-menu-toggle {
     display: none;
     flex-direction: column;
-    background: transparent;
+    background: rgba(255, 255, 255, 0.1);
     border: none;
     cursor: pointer;
-    padding: 5px;
+    padding: 8px;
     z-index: 1001;
     grid-column: 3;
     justify-self: end;
@@ -329,27 +329,40 @@ section.hero-section.products-hero-section {
     min-width: 44px;
     min-height: 44px;
     position: relative;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.mobile-menu-toggle:hover {
+    background: rgba(255, 255, 255, 0.15);
+    transform: scale(1.05);
 }
 
 .mobile-menu-toggle span {
-    width: 25px;
-    height: 3px;
+    width: 24px;
+    height: 2.5px;
     background: var(--color-white);
-    margin: 3px 0;
-    transition: 0.3s;
-    border-radius: 2px;
+    margin: 2.5px 0;
+    transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    border-radius: 3px;
+    position: relative;
+}
+
+.mobile-menu-toggle.active {
+    background: rgba(255, 255, 255, 0.2);
 }
 
 .mobile-menu-toggle.active span:nth-child(1) {
-    transform: rotate(-45deg) translate(-5px, 6px);
+    transform: rotate(45deg) translate(7px, 7px);
 }
 
 .mobile-menu-toggle.active span:nth-child(2) {
     opacity: 0;
+    transform: translateX(-20px);
 }
 
 .mobile-menu-toggle.active span:nth-child(3) {
-    transform: rotate(45deg) translate(-5px, -6px);
+    transform: rotate(-45deg) translate(7px, -7px);
 }
 
 .logo-container {
@@ -1287,7 +1300,6 @@ section.hero-section.products-hero-section {
         padding: 40px 20px 80px;
         margin-bottom: 80px;
         margin-top: 60px;
-        background: #f5f5f5;
     }
     
     .products-main-title {
@@ -2419,8 +2431,8 @@ section.hero-section.products-hero-section {
     border-radius: 8px;
     padding: 30px 20px;
     width: 100%;
-    min-height: 380px;
-    max-height: 380px;
+    min-height: 460px;
+    max-height: 460px;
     position: relative;
     display: flex;
     flex-direction: column;
@@ -2434,14 +2446,22 @@ section.hero-section.products-hero-section {
     width: 64px;
     height: 64px;
     border-radius: 50%;
-    margin-bottom: 20px;
+    margin-bottom: 8px;
     object-fit: cover;
+}
+
+.testimonial-author {
+    font-family: 'Montserrat';
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--color-black);
+    margin-bottom: 10px;
 }
 
 .testimonial-stars {
     display: flex;
     gap: 2px;
-    margin-bottom: 20px;
+    margin-bottom: 16px;
     justify-content: center;
 }
 
@@ -2457,27 +2477,77 @@ section.hero-section.products-hero-section {
     font-size: 14px;
     line-height: 1.5;
     color: var(--color-black);
-    margin-bottom: 20px;
+    margin-bottom: 0;
     flex-grow: 1;
     display: flex;
     align-items: center;
 }
 
-.testimonial-author {
-    font-family: 'Montserrat';
-    font-weight: 500;
-    font-size: 10px;
-    color: var(--color-black);
+@media (min-width: 768px) and (max-width: 1180px) {
+    .testimonials-section {
+        padding: 0 30px 120px;
+    }
+    
+    .testimonials-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 24px;
+        max-width: 600px;
+        margin: 0 auto;
+    }
+    
+    .testimonial-card {
+        min-height: 440px;
+        max-height: 440px;
+        padding: 30px 28px;
+    }
 }
 
-@media (max-width: 768px) {
+@media (min-width: 820px) and (max-width: 820px) {
     .testimonials-section {
-        padding: 0 20px 80px;
+        padding: 0 10px 120px !important;
+    }
+    
+    .testimonials-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 10px !important;
+        max-width: 220px !important;
+        margin: 0 auto !important;
+    }
+    
+    .testimonial-card {
+        min-height: 440px !important;
+        max-height: 440px !important;
+        padding: 30px 28px !important;
+    }
+}
+
+@media (min-width: 1181px) and (max-width: 1366px) {
+    .testimonials-section {
+        padding: 0 40px 120px;
+    }
+    
+    .testimonials-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 30px;
+        max-width: 750px;
+        margin: 0 auto;
+    }
+    
+    .testimonial-card {
+        min-height: 460px;
+        max-height: 460px;
+        padding: 32px 30px;
+    }
+}
+
+@media (max-width: 767px) {
+    .testimonials-section {
+        padding: 0 16px 80px;
     }
     
     .testimonials-content {
         grid-template-columns: 1fr;
-        gap: 40px;
+        gap: 30px;
     }
     
     .testimonials-left {
@@ -2485,21 +2555,135 @@ section.hero-section.products-hero-section {
     }
     
     .testimonials-title {
-        font-size: 32px;
-        margin-bottom: 20px;
+        font-size: 28px;
+        margin-bottom: 16px;
     }
     
     .testimonials-description {
-        font-size: 14px;
+        font-size: 13px;
+    }
+    
+    .testimonials-right {
+        gap: 8px;
+        width: 100%;
+        max-width: 100%;
     }
     
     .testimonials-grid {
-        grid-template-columns: 1fr;
-        gap: 20px;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+        width: 100%;
     }
     
     .testimonial-nav {
-        display: none;
+        padding: 4px;
+        flex-shrink: 0;
+    }
+    
+    .testimonial-nav svg {
+        width: 18px;
+        height: 18px;
+    }
+    
+    .testimonial-card {
+        min-height: 400px;
+        max-height: 400px;
+        padding: 16px 12px;
+        width: 100%;
+        box-sizing: border-box;
+    }
+    
+    .testimonial-profile {
+        width: 45px;
+        height: 45px;
+        margin-bottom: 6px;
+    }
+    
+    .testimonial-author {
+        font-size: 12px;
+        margin-bottom: 6px;
+    }
+    
+    .testimonial-stars {
+        margin-bottom: 10px;
+    }
+    
+    .star-icon {
+        width: 14px;
+        height: 15px;
+    }
+    
+    .testimonial-text {
+        font-size: 11px;
+        line-height: 1.4;
+    }
+}
+
+@media (max-width: 480px) {
+    .testimonials-section {
+        padding: 0 12px 60px;
+    }
+    
+    .testimonials-content {
+        gap: 24px;
+    }
+    
+    .testimonials-title {
+        font-size: 24px;
+        margin-bottom: 12px;
+    }
+    
+    .testimonials-description {
+        font-size: 12px;
+    }
+    
+    .testimonials-right {
+        gap: 6px;
+    }
+    
+    .testimonials-grid {
+        gap: 8px;
+    }
+    
+    .testimonial-nav {
+        padding: 3px;
+    }
+    
+    .testimonial-nav svg {
+        width: 16px;
+        height: 16px;
+    }
+    
+    .testimonial-card {
+        min-height: 350px;
+        max-height: 350px;
+        padding: 12px 10px;
+    }
+    
+    .testimonial-profile {
+        width: 40px;
+        height: 40px;
+        margin-bottom: 6px;
+    }
+    
+    .testimonial-author {
+        font-size: 10px;
+        margin-bottom: 6px;
+    }
+    
+    .testimonial-stars {
+        margin-bottom: 8px;
+        gap: 1px;
+    }
+    
+    .star-icon {
+        width: 12px;
+        height: 13px;
+    }
+    
+    .testimonial-text {
+        font-size: 10px;
+        line-height: 1.3;
     }
 }
 
@@ -2509,8 +2693,8 @@ section.hero-section.products-hero-section {
     background: transparent;
     text-align: center;
     position: relative;
-    padding-bottom: 60px;
-    margin-top: 40px;
+    padding-bottom: 40px;
+    margin-top: 20px;
     overflow: hidden;
 }
 
@@ -3035,7 +3219,6 @@ section.hero-section.products-hero-section {
     .products-section {
         padding: 50px 40px 100px;
         margin-top: 60px;
-        background: #f8f0f0;
     }
     
     .products-grid {
@@ -3064,21 +3247,6 @@ section.hero-section.products-hero-section {
     
     .product-info {
         padding: 18px;
-    }
-    
-    .testimonials-section {
-        padding: 0 40px 120px;
-    }
-    
-    .testimonials-grid {
-        grid-template-columns: 1fr;
-        gap: 40px;
-        justify-items: center;
-    }
-    
-    .testimonial-card {
-        max-width: 100%;
-        text-align: center;
     }
     
     .contact-section {
@@ -3365,7 +3533,6 @@ section.hero-section.products-hero-section {
         padding: 40px 20px 80px;
         margin-bottom: 80px;
         margin-top: 50px;
-        background: #f5f5f5;
     }
     
     .products-main-title {
