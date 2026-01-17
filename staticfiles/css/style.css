@@ -1109,7 +1109,8 @@ section.hero-section.products-hero-section {
 .about-section-home {
     padding: 80px 116px 60px;
     text-align: center;
-    background: var(--color-white);
+    background: #f5eeee;
+    margin-bottom: 80px;
 }
 
 .about-title-home {
@@ -1248,10 +1249,10 @@ section.hero-section.products-hero-section {
 
 /* Products Section */
 .products-section {
-    padding: 60px 116px 120px;
-    margin-bottom: 240px;
-    margin-top: 80px;
-    background: #f5eeee;
+    padding: 40px 116px 60px;
+    margin-bottom: 0;
+    margin-top: 0;
+    background: var(--color-white);
 }
 
 @media (max-width: 1200px) {
@@ -2417,12 +2418,16 @@ section.hero-section.products-hero-section {
     background: #f2f2f2;
     border-radius: 8px;
     padding: 30px 20px;
-    max-width: 100%;
+    width: 100%;
+    min-height: 380px;
+    max-height: 380px;
     position: relative;
     display: flex;
     flex-direction: column;
     align-items: center;
     text-align: center;
+    box-sizing: border-box;
+    overflow: hidden;
 }
 
 .testimonial-profile {
@@ -2443,15 +2448,19 @@ section.hero-section.products-hero-section {
 .star-icon {
     width: 20px;
     height: 21px;
+    filter: invert(69%) sepia(85%) saturate(1500%) hue-rotate(360deg) brightness(100%) contrast(101%);
 }
 
 .testimonial-text {
     font-family: 'Montserrat';
     font-weight: 300;
     font-size: 14px;
-    line-height: 1.22;
+    line-height: 1.5;
     color: var(--color-black);
     margin-bottom: 20px;
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
 }
 
 .testimonial-author {

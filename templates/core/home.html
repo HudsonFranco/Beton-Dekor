@@ -162,7 +162,7 @@
                 </button>
                 <div class="testimonials-grid">
                     <div class="testimonial-card">
-                        <img src="{% static 'images/Avatar.png' %}" alt="Profile" class="testimonial-profile">
+                        <img src="{% static 'images/nilson-pauli.png' %}" alt="Nilson Pauli" class="testimonial-profile">
                         <div class="testimonial-stars">
                             <img src="{% static 'images/Estrela.png' %}" alt="Star" class="star-icon">
                             <img src="{% static 'images/Estrela.png' %}" alt="Star" class="star-icon">
@@ -171,12 +171,12 @@
                             <img src="{% static 'images/Estrela.png' %}" alt="Star" class="star-icon">
                         </div>
                         <p class="testimonial-text">
-                            Atendimento rápido e impecável, produtos de excelente qualidade, de todas as empresas que pesquisei o melhor custo benefício! Recomendo muito!
+                            Atendimento diferenciado, não precisei nem ir a loja tudo via WhatsApp, tudo ocorreu perfeitamente super indico. Parabéns pelo ótimo atendimento.
                         </p>
-                        <p class="testimonial-author">Mirian Beregs | Fevereiro/2025</p>
+                        <p class="testimonial-author">Nilson Pauli</p>
                     </div>
                     <div class="testimonial-card">
-                        <img src="{% static 'images/Avatar.png' %}" alt="Profile" class="testimonial-profile">
+                        <img src="{% static 'images/marcos-espindola.png' %}" alt="Marcos Espíndola" class="testimonial-profile">
                         <div class="testimonial-stars">
                             <img src="{% static 'images/Estrela.png' %}" alt="Star" class="star-icon">
                             <img src="{% static 'images/Estrela.png' %}" alt="Star" class="star-icon">
@@ -185,9 +185,37 @@
                             <img src="{% static 'images/Estrela.png' %}" alt="Star" class="star-icon">
                         </div>
                         <p class="testimonial-text">
-                            A empresa é excelente, atendimento ágil e entrega super rápida. Recomendo!
+                            Produto muito bom. A atendimento Letícia sensacional, bem atenciosa e explicou como colocar o material e deu dicas para impermeabilização e pintura.
                         </p>
-                        <p class="testimonial-author">Rodrigo C. | Abril/2025</p>
+                        <p class="testimonial-author">Marcos Espíndola</p>
+                    </div>
+                    <div class="testimonial-card">
+                        <img src="{% static 'images/alessandra-isidoro.png' %}" alt="Alessandra Isidoro" class="testimonial-profile">
+                        <div class="testimonial-stars">
+                            <img src="{% static 'images/Estrela.png' %}" alt="Star" class="star-icon">
+                            <img src="{% static 'images/Estrela.png' %}" alt="Star" class="star-icon">
+                            <img src="{% static 'images/Estrela.png' %}" alt="Star" class="star-icon">
+                            <img src="{% static 'images/Estrela.png' %}" alt="Star" class="star-icon">
+                            <img src="{% static 'images/Estrela.png' %}" alt="Star" class="star-icon">
+                        </div>
+                        <p class="testimonial-text">
+                            Excelente atendimento, comprei tudo que precisava pelo whatsapp com mta agilidade. As pingadeiras que comprei são perfeitas de qualidade, lindas msm, com acabamento liso e bem feito. Super recomendo 🤗
+                        </p>
+                        <p class="testimonial-author">Alessandra Isidoro</p>
+                    </div>
+                    <div class="testimonial-card">
+                        <img src="{% static 'images/luis-felipe-nozar.png' %}" alt="Luis Felipe Nozar" class="testimonial-profile">
+                        <div class="testimonial-stars">
+                            <img src="{% static 'images/Estrela.png' %}" alt="Star" class="star-icon">
+                            <img src="{% static 'images/Estrela.png' %}" alt="Star" class="star-icon">
+                            <img src="{% static 'images/Estrela.png' %}" alt="Star" class="star-icon">
+                            <img src="{% static 'images/Estrela.png' %}" alt="Star" class="star-icon">
+                            <img src="{% static 'images/Estrela.png' %}" alt="Star" class="star-icon">
+                        </div>
+                        <p class="testimonial-text">
+                            Produto de qualidade, atendimento excelente, cumprem os prazos e muito bom preço. Super recomendo!
+                        </p>
+                        <p class="testimonial-author">Luis Felipe Nozar</p>
                     </div>
                 </div>
                 <button class="testimonial-nav testimonial-nav-next" aria-label="Próximo depoimento">
@@ -268,6 +296,42 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     });
+
+    // Testimonials carousel
+    const testimonialCards = document.querySelectorAll('.testimonial-card');
+    const prevButton = document.querySelector('.testimonial-nav-prev');
+    const nextButton = document.querySelector('.testimonial-nav-next');
+    let currentIndex = 0;
+
+    function showTestimonials() {
+        testimonialCards.forEach((card, index) => {
+            card.style.display = 'none';
+        });
+        
+        // Show 2 cards at a time
+        testimonialCards[currentIndex].style.display = 'flex';
+        testimonialCards[currentIndex + 1].style.display = 'flex';
+    }
+
+    if (prevButton && nextButton && testimonialCards.length >= 4) {
+        showTestimonials();
+
+        nextButton.addEventListener('click', function() {
+            currentIndex = (currentIndex + 2) % testimonialCards.length;
+            if (currentIndex === testimonialCards.length - 1) {
+                currentIndex = 0;
+            }
+            showTestimonials();
+        });
+
+        prevButton.addEventListener('click', function() {
+            currentIndex = currentIndex - 2;
+            if (currentIndex < 0) {
+                currentIndex = testimonialCards.length - 2;
+            }
+            showTestimonials();
+        });
+    }
 });
 </script>
 {% endblock %}
