@@ -67,7 +67,7 @@
                     </div>
                 </div>
                 <div class="product-card">
-                    <img src="{% static 'images/linhaJardim.jpg' %}" alt="Linha Jardim" class="product-image">
+                    <img src="{% static 'images/linha-jardim.jfif' %}" alt="Linha Jardim" class="product-image">
                     <div class="product-info">
                         <h3 class="product-name">LINHA JARDIM</h3>
                                 <a href="{% url 'produtos' %}?categoria=Linha Jardim&scroll=1" 
@@ -115,8 +115,8 @@
                     <img src="{% static 'images/artefatos.jfif' %}" alt="Artefatos" class="product-image">
                     <div class="product-info">
                         <h3 class="product-name">ARTEFATOS</h3>
-                                <a href="{% url 'produtos' %}?categoria=Artefatos&scroll=1" 
-                                    hx-get="{% url 'produtos' %}?categoria=Artefatos&scroll=1" 
+                                <a href="{% url 'produtos' %}?categoria=pingadeira&scroll=1" 
+                                    hx-get="{% url 'produtos' %}?categoria=pingadeira&scroll=1" 
                            hx-target="body" 
                            hx-swap="outerHTML" 
                            hx-push-url="true"
