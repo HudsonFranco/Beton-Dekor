@@ -26,7 +26,8 @@ SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-(3%zw8&787o0=)p+p*lhnmv@s)
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('DEBUG', 'False') == 'True'
 
-ALLOWED_HOSTS = ['beton-dekor.onrender.com', 'localhost', '127.0.0.1']  # Em produção, especifique os domínios permitidos
+# Parse ALLOWED_HOSTS from environment variable (comma-separated)
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
 
 
 # Application definition
@@ -149,11 +150,11 @@ import cloudinary
 import cloudinary.uploader
 import cloudinary.api
 
-# Configure Cloudinary
+# Configure Cloudinary from environment variables
 cloudinary.config(
-    cloud_name='dztlh19q1',
-    api_key='536528844238579',
-    api_secret='u8nhS7roEoSnUh5CcTshmn6Lc8Q',
+    cloud_name=os.getenv('CLOUDINARY_CLOUD_NAME', ''),
+    api_key=os.getenv('CLOUDINARY_API_KEY', ''),
+    api_secret=os.getenv('CLOUDINARY_API_SECRET', ''),
     secure=True
 )
 
