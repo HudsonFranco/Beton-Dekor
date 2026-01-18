@@ -77,7 +77,7 @@ def contato(request):
                     subject=f'Nova mensagem de contato - {nome}',
                     message=f'Nome: {nome}\nE-mail: {email}\n\nMensagem:\n{mensagem}',
                     from_email=email,  # Usar o e-mail do cliente como from
-                    recipient_list=['hudsonfelipe123@gmail.com'],
+                    recipient_list=['betondekor@outlook.com'],
                     fail_silently=True,
                 )
             except Exception as e:
