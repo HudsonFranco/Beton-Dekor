@@ -1,3 +1,12 @@
+import sib_api_v3_sdk
+from sib_api_v3_sdk.rest import ApiException
+import os
+from dotenv import load_dotenv
+dotenv_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '.env'))
+print("Carregando .env de:", dotenv_path)
+load_dotenv(dotenv_path=dotenv_path, override=True)
+print("BREVO_API_KEY do .env:", os.getenv("BREVO_API_KEY"))
+print("BREVO_API_KEY from env:", os.getenv("BREVO_API_KEY"))
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
@@ -5,6 +14,7 @@ from django.contrib import messages
 from django_htmx.http import HttpResponseClientRedirect
 from django.core.mail import send_mail
 from .models import Produto, CategoriaPrincipal, Subcategoria, MensagemContato
+import os
 
 def home(request):
     return render(request, 'core/home.html')
@@ -71,18 +81,18 @@ def contato(request):
                 mensagem=mensagem
             )
 
-            # Enviar e-mail para o administrador
+            # Enviar e-mail via SMTP
             try:
                 send_mail(
                     subject=f'Nova mensagem de contato - {nome}',
-                    message=f'Nome: {nome}\nE-mail: {email}\n\nMensagem:\n{mensagem}',
-                    from_email=email,  # Usar o e-mail do cliente como from
-                    recipient_list=['betondekor@outlook.com'],
-                    fail_silently=True,
+                    message=f'Nome: {nome}\nE-mail: {email}\nMensagem:\n{mensagem}',
+                    from_email='betondekor@outlook.com',
+                    recipient_list=[os.getenv('BREVO_TEST_EMAIL', 'hudsonfranco17@gmail.com')],
+                    fail_silently=False,
                 )
+                print('Email enviado com sucesso via SMTP')
             except Exception as e:
-                # Log do erro, mas não falhar a operação
-                print(f'Erro ao enviar e-mail: {e}')
+                print(f'Erro ao enviar email: {e}')
             
             if request.htmx:
                 # Retorna uma mensagem de sucesso via HTMX
@@ -468,15 +478,3 @@ def admin_subcategoria_edit(request, pk):
         'categoria': subcategoria.categoria_principal, 
         'subcategoria': subcategoria,
         'categoria_list': categorias_list
-    })
-
-@login_required
-def admin_subcategoria_delete(request, pk):
-    subcategoria = get_object_or_404(Subcategoria, pk=pk)
-    if request.method == 'POST':
-        nome = subcategoria.nome
-        subcategoria.delete()
-        messages.success(request, f'Subcategoria "{nome}" deletada com sucesso!')
-        return redirect('admin-produtos')
-    return render(request, 'core/admin/subcategoria_confirm_delete.html', {'subcategoria': subcategoria})
-
