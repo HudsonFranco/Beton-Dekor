@@ -56,7 +56,7 @@
         <!-- Product Information -->
         <div class="product-info-area">
             <p class="product-category-tag" style="font-family: 'Montserrat'; font-weight: 400; font-size: 14px; color: #999; margin-bottom: 16px;">
-                {% if produto.categoria_principal %}{{ produto.categoria_principal }}{% endif %}{% if produto.categoria %} ({{ produto.categoria }}){% endif %}
+                {% if produto.categoria %}({{ produto.categoria }}){% endif %}
             </p>
             
             <h1 class="product-detail-title">
@@ -131,7 +131,7 @@
                 <h3 class="product-modern-name" style="font-family: 'Montserrat'; font-weight: 700; font-size: 15px; color: #262626; margin: 0;">{{ outro_produto.nome }}</h3>
                 <p class="product-meta" style="margin: -4px 0 4px; font-family: 'Montserrat'; font-weight: 600; font-size: 10px; color: #9a9a9a; line-height: 1.4;">
                     {% if outro_produto.categoria_principal %}{{ outro_produto.categoria_principal }}{% endif %}
-                    {% if outro_produto.categoria %}<br>({{ outro_produto.categoria }}){% endif %}
+                    {% if outro_produto.categoria %}({{ outro_produto.categoria }}){% endif %}
                 </p>
                 <button class="pill-button" style="display: inline-flex; align-items: center; justify-content: center; padding: 10px 20px; background: #0f0f0f; color: #fff; border: none; border-radius: 999px; font-family: 'Montserrat'; font-weight: 600; font-size: 12px; cursor: pointer; width: 100%; margin-top: 8px; transition: opacity 0.2s ease;">Ver detalhes</button>
             </div>

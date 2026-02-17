@@ -478,3 +478,4 @@ def admin_subcategoria_edit(request, pk):
         'categoria': subcategoria.categoria_principal, 
         'subcategoria': subcategoria,
         'categoria_list': categorias_list
+    })

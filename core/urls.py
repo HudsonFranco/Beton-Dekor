@@ -29,6 +29,6 @@ urlpatterns = [
     # Admin - CRUD de Subcategorias
     path('admin/categorias/<int:categoria_pk>/subcategorias/criar/', views.admin_subcategoria_create, name='admin-subcategoria-create'),
     path('admin/subcategorias/<int:pk>/editar/', views.admin_subcategoria_edit, name='admin-subcategoria-edit'),
-    path('admin/subcategorias/<int:pk>/deletar/', views.admin_subcategoria_delete, name='admin-subcategoria-delete'),
+    # path('admin/subcategorias/<int:pk>/deletar/', views.admin_subcategoria_delete, name='admin-subcategoria-delete'),
 ]
 
