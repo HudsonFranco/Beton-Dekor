@@ -28,6 +28,15 @@
     <div class="product-detail-container">
         <!-- Product Image Area: support up to 3 images as a simple carousel -->
         <div id="product-image-section" class="product-image-area">
+            <style>
+                /* Lightbox styles */
+                .image-lightbox { position: fixed; inset: 0; display: none; align-items: center; justify-content: center; background: rgba(0,0,0,0.85); z-index: 2000; padding: 24px; }
+                .image-lightbox.active { display: flex; }
+                .image-lightbox .lightbox-img-wrap { max-width: 1100px; max-height: 90vh; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+                .image-lightbox img.lightbox-img { max-width: 100%; max-height: 100%; transition: transform 200ms ease; cursor: zoom-in; will-change: transform; touch-action: none; }
+                .image-lightbox .lightbox-close { position: absolute; top: 18px; right: 18px; color: #fff; background: transparent; border: none; font-size: 20px; cursor: pointer; }
+                #product-image-section .product-image-slide { cursor: zoom-in; }
+            </style>
             {% with imagens=produto.get_imagens_urls %}
                 {% if imagens %}
                     <div class="product-image-carousel">
@@ -40,13 +49,13 @@
                 {% endif %}
             {% endwith %}
 
-            <!-- Carousel arrows (reuse existing buttons) -->
-            <button class="carousel-arrow carousel-arrow-left" aria-label="Anterior" style="position: absolute; left: 20px; top: 50%; transform: translateY(-50%); background: rgba(38, 38, 38, 0.8); border: none; border-radius: 50%; width: 48px; height: 48px; cursor: pointer; display: flex; align-items: center; justify-content: center;">
+            <!-- Carousel arrows -->
+            <button class="carousel-arrow carousel-arrow-left" aria-label="Anterior">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M15 18L9 12L15 6" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
             </button>
-            <button class="carousel-arrow carousel-arrow-right" aria-label="Próximo" style="position: absolute; right: 20px; top: 50%; transform: translateY(-50%); background: rgba(38, 38, 38, 0.8); border: none; border-radius: 50%; width: 48px; height: 48px; cursor: pointer; display: flex; align-items: center; justify-content: center;">
+            <button class="carousel-arrow carousel-arrow-right" aria-label="Próximo">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M9 18L15 12L9 6" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
@@ -55,7 +64,7 @@
 
         <!-- Product Information -->
         <div class="product-info-area">
-            <p class="product-category-tag" style="font-family: 'Montserrat'; font-weight: 400; font-size: 14px; color: #999; margin-bottom: 16px;">
+            <p class="product-category-tag">
                 {% if produto.categoria %}({{ produto.categoria }}){% endif %}
             </p>
             
@@ -64,52 +73,124 @@
             </h1>
 
             {% if produto.dimensoes %}
-            <p class="product-dimensions" style="font-family: 'Montserrat'; font-weight: 400; font-size: 16px; color: #262626; margin-bottom: 32px;">
-                <strong style="font-weight: 700;">Dimensões:</strong> {{ produto.dimensoes }}
+            <p class="product-dimensions">
+                <strong>Dimensões:</strong> {{ produto.dimensoes }}
             </p>
             {% endif %}
 
-            <div class="product-specifications" style="margin-bottom: 40px;">
-                <ul style="list-style: none; padding: 0; margin: 0;">
+            <div class="product-specifications">
+                <ul>
                     {% if produto.categoria %}
-                    <li style="font-family: 'Montserrat'; font-weight: 400; font-size: 16px; color: #262626; margin-bottom: 12px;">
-                        <strong style="font-weight: 700;">Categoria:</strong> {{ produto.categoria }}
+                    <li>
+                        <strong>Categoria:</strong> {{ produto.categoria }}
                     </li>
                     {% endif %}
                     {% if produto.categoria_principal %}
-                    <li style="font-family: 'Montserrat'; font-weight: 400; font-size: 16px; color: #262626; margin-bottom: 12px;">
-                        <strong style="font-weight: 700;">Categoria Principal:</strong> {{ produto.categoria_principal }}
+                    <li>
+                        <strong>Categoria Principal:</strong> {{ produto.categoria_principal }}
                     </li>
                     {% endif %}
                     {% if produto.cor %}
-                    <li style="font-family: 'Montserrat'; font-weight: 400; font-size: 16px; color: #262626; margin-bottom: 12px;">
-                        <strong style="font-weight: 700;">Cor:</strong> {{ produto.cor }}
+                    <li>
+                        <strong>Cor:</strong> {{ produto.cor }}
                     </li>
                     {% endif %}
                     {% if produto.unidade_venda %}
-                    <li style="font-family: 'Montserrat'; font-weight: 400; font-size: 16px; color: #262626; margin-bottom: 12px;">
-                        <strong style="font-weight: 700;">Unidade de Venda:</strong> {{ produto.unidade_venda }}
+                    <li>
+                        <strong>Unidade de Venda:</strong> {{ produto.unidade_venda }}
                     </li>
                     {% endif %}
                     {% if produto.especificacoes %}
-                    <li style="font-family: 'Montserrat'; font-weight: 400; font-size: 16px; color: #262626; margin-bottom: 12px;">
-                        <strong style="font-weight: 700;">Especificação:</strong> {{ produto.especificacoes }}
+                    <li>
+                        <strong>Especificação:</strong> {{ produto.especificacoes }}
                     </li>
                     {% endif %}
                 </ul>
             </div>
 
-            <a href="#" class="contact-button-main" onclick="openContactModal(); return false;" style="display: inline-block; padding: 14px 32px; background: #262626; color: white; border-radius: 45px; text-decoration: none; font-family: 'Montserrat'; font-weight: 600; font-size: 16px; text-align: center; max-width: 250px;">
+            <a href="#" class="contact-button-main" onclick="openContactModal(); return false;">
                 Entre em Contato
             </a>
         </div>
     </div>
 </main>
 
+<!-- Lightbox for product detail images -->
+<div id="detail-image-lightbox" class="image-lightbox" aria-hidden="true">
+    <button class="lightbox-close" id="detail-lightbox-close" aria-label="Fechar">✕</button>
+    <div class="lightbox-img-wrap">
+        <img src="" alt="" id="detail-lightbox-img" class="lightbox-img">
+    </div>
+</div>
+
 <!-- Other Products Section -->
-<section class="other-products-section" style="background: #f7f7f7; padding: 80px 116px;">
-    <h2 class="other-products-title" style="text-align: center; font-family: 'Montserrat'; font-weight: 400; font-size: 40px; color: #262626; margin-bottom: 60px;">
-        <span style="font-weight: 400;">OUTROS</span> <strong style="font-weight: 700;">PRODUTOS</strong>
+<style>
+    /* Cards "Outros Produtos" — mesmo padrão visual da página /produtos */
+    .other-products-grid .product-card-modern {
+        position: relative;
+        width: 100%;
+        padding: 0;
+        border-radius: 12px;
+        overflow: hidden;
+        background: #fff;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        display: flex;
+        align-items: stretch;
+        justify-content: center;
+        aspect-ratio: 4 / 5;
+        max-height: 420px;
+        border: none;
+    }
+    .other-products-grid .product-modern-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+    }
+    .other-products-grid .product-card-modern .pill-button {
+        position: absolute;
+        bottom: 18px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 5;
+        background: rgba(0,0,0,0.35);
+        border: none;
+        color: #fff !important;
+        text-transform: uppercase;
+        font-size: 13px;
+        letter-spacing: 1px;
+        font-weight: 600;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 6px 10px;
+        white-space: nowrap;
+        text-decoration: none;
+        width: auto;
+        max-width: none;
+        box-shadow: none;
+        cursor: pointer;
+        text-shadow: 0 1px 2px rgba(0,0,0,0.6);
+        border-radius: 8px;
+        backdrop-filter: blur(2px);
+        margin: 0;
+    }
+    .other-products-grid .product-card-modern .pill-button::after {
+        content: '\2192';
+        display: inline-block;
+        font-size: 16px;
+        line-height: 1;
+        margin-left: 6px;
+        transform: translateY(1px);
+    }
+    .other-products-grid .product-card-modern .pill-button:hover { opacity: 0.95; }
+    .other-products-grid .product-tag,
+    .other-products-grid .product-meta,
+    .other-products-grid .product-modern-name { display: none !important; }
+</style>
+<section class="other-products-section">
+    <h2 class="other-products-title">
+        <span>OUTROS</span> <strong>PRODUTOS</strong>
     </h2>
     
     <div class="other-products-grid">
@@ -121,19 +202,13 @@
            hx-push-url="true"
            class="product-card-wrapper product-card-link"
            style="text-decoration: none; color: inherit;">
-            <div class="product-card-modern" style="background: #ffffff; border-radius: 12px; padding: 16px 16px 18px; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.08); border: 1px solid #f0f0f0; display: flex; flex-direction: column; gap: 10px; transition: box-shadow 0.2s ease;">
-                <p class="product-tag" style="margin: 0; font-family: 'Montserrat'; font-weight: 600; font-size: 10px; color: #c5c5c5;">{{ outro_produto.tag }}</p>
+            <div class="product-card-modern">
                 {% if outro_produto.get_imagem_url %}
-                    <img src="{{ outro_produto.get_imagem_url }}" alt="{{ outro_produto.nome }}" class="product-modern-image" style="max-width: 185px; width: 100%; height: auto; margin: 0 auto; object-fit: contain;">
+                    <img src="{{ outro_produto.get_imagem_url }}" alt="{{ outro_produto.nome }}" class="product-modern-image">
                 {% else %}
-                    <div class="product-modern-image" style="background: #f0f0f0; height: 150px; display: flex; align-items: center; justify-content: center; color: #999; font-family: 'Montserrat'; font-size: 12px;">Sem imagem</div>
+                    <div class="product-modern-image" style="background: #f0f0f0; height: 150px; display: flex; align-items: center; justify-content: center; color: #999;">Sem imagem</div>
                 {% endif %}
-                <h3 class="product-modern-name" style="font-family: 'Montserrat'; font-weight: 700; font-size: 15px; color: #262626; margin: 0;">{{ outro_produto.nome }}</h3>
-                <p class="product-meta" style="margin: -4px 0 4px; font-family: 'Montserrat'; font-weight: 600; font-size: 10px; color: #9a9a9a; line-height: 1.4;">
-                    {% if outro_produto.categoria_principal %}{{ outro_produto.categoria_principal }}{% endif %}
-                    {% if outro_produto.categoria %}({{ outro_produto.categoria }}){% endif %}
-                </p>
-                <button class="pill-button" style="display: inline-flex; align-items: center; justify-content: center; padding: 10px 20px; background: #0f0f0f; color: #fff; border: none; border-radius: 999px; font-family: 'Montserrat'; font-weight: 600; font-size: 12px; cursor: pointer; width: 100%; margin-top: 8px; transition: opacity 0.2s ease;">Ver detalhes</button>
+                <button class="pill-button">Ver detalhes</button>
             </div>
         </a>
         {% empty %}
@@ -265,15 +340,81 @@
         initProductCarousel();
     }
 
-    document.addEventListener('DOMContentLoaded', initProductPage);
+    // Initialize immediately (script runs after DOM above it)
+    initProductPage();
 
-    // Re-inicializar após swaps do HTMX
-    if (typeof htmx !== 'undefined') {
-        document.body.addEventListener('htmx:afterSwap', function(event) {
-            if (event.detail.target === document.body) {
-                initProductPage();
-            }
-        });
-    }
+    /* Lightbox and image interactions for product detail page (pan/zoom) */
+    (function(){
+        let scale = 1, tx = 0, ty = 0;
+        let isPanning = false, startX = 0, startY = 0, activePointer = null;
+
+        function getLB() { return document.getElementById('detail-image-lightbox'); }
+        function getLBImg() { return document.getElementById('detail-lightbox-img'); }
+
+        function apply(){
+            const lbImg = getLBImg();
+            if (!lbImg) return;
+            lbImg.style.transform = `translate(${tx}px, ${ty}px) scale(${scale})`;
+            lbImg.style.cursor = scale > 1 ? 'grab' : 'zoom-in';
+        }
+
+        function openLB(src, alt){
+            const lb = getLB(); const lbImg = getLBImg();
+            if (!lb || !lbImg) return;
+            lbImg.src = src; lbImg.alt = alt || '';
+            lb.classList.add('active'); lb.setAttribute('aria-hidden','false');
+            document.body.style.overflow = 'hidden';
+            scale = 1; tx = 0; ty = 0; apply();
+            lbImg.style.touchAction = 'none';
+        }
+
+        function closeLB(){
+            const lb = getLB(); const lbImg = getLBImg();
+            if (!lb) return;
+            lb.classList.remove('active'); lb.setAttribute('aria-hidden','true');
+            if (lbImg) { lbImg.src = ''; lbImg.style.touchAction = ''; }
+            document.body.style.overflow = '';
+            scale = 1; tx = 0; ty = 0; apply();
+        }
+
+        // Global escape key (only needs to bind once)
+        document.addEventListener('keydown', function(e){ if (e.key === 'Escape') closeLB(); });
+
+        function initDetailLightbox() {
+            const lb = getLB(); const lbImg = getLBImg();
+            const lbClose = document.getElementById('detail-lightbox-close');
+
+            if (lbClose) lbClose.onclick = closeLB;
+            if (lb) lb.onclick = function(e){ if (e.target === lb) closeLB(); };
+
+            // Attach click on all images in the image section
+            const slides = document.querySelectorAll('#product-image-section img, #product-image-section .product-image-slide, #product-image-section .product-modern-image');
+            slides.forEach(function(elem) {
+                elem.style.cursor = 'zoom-in';
+                elem.onclick = function(e){
+                    e.preventDefault();
+                    e.stopPropagation();
+                    if (elem.tagName === 'IMG') {
+                        openLB(elem.src, elem.alt || '');
+                    }
+                };
+            });
+
+            if (!lbImg) return;
+            // Pan/zoom interactions — use onclick/on* to avoid duplicate listeners on re-init
+            lbImg.onpointerdown = function(e){ if (scale <= 1) return; isPanning = true; startX = e.clientX - tx; startY = e.clientY - ty; activePointer = e.pointerId; lbImg.setPointerCapture(activePointer); lbImg.style.cursor = 'grabbing'; };
+            lbImg.onpointermove = function(e){ if (!isPanning || e.pointerId !== activePointer) return; tx = e.clientX - startX; ty = e.clientY - startY; apply(); };
+            lbImg.onpointerup = lbImg.onpointercancel = lbImg.onpointerleave = function(e){ if (e.pointerId !== activePointer) return; isPanning = false; try{ lbImg.releasePointerCapture(activePointer); }catch(_){} activePointer = null; lbImg.style.cursor = scale > 1 ? 'grab' : 'zoom-in'; };
+
+            // Wheel zoom
+            lb.onwheel = function(e){ e.preventDefault(); const d = e.deltaY > 0 ? -0.1 : 0.1; scale = Math.max(1, Math.min(3, scale + d)); if (scale === 1){ tx = 0; ty = 0; } apply(); };
+
+            // Double-click toggle zoom
+            lbImg.ondblclick = function(){ if (scale > 1){ scale = 1; tx = 0; ty = 0; } else { scale = 2; } apply(); };
+        }
+
+        // Initialize immediately
+        initDetailLightbox();
+    })();
 </script>
 {% endblock %}

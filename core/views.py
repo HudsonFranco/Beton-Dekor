@@ -1,16 +1,9 @@
-import sib_api_v3_sdk
-from sib_api_v3_sdk.rest import ApiException
-import os
-from dotenv import load_dotenv
-dotenv_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '.env'))
-print("Carregando .env de:", dotenv_path)
-load_dotenv(dotenv_path=dotenv_path, override=True)
-print("BREVO_API_KEY do .env:", os.getenv("BREVO_API_KEY"))
-print("BREVO_API_KEY from env:", os.getenv("BREVO_API_KEY"))
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.http import JsonResponse
+from django.views.decorators.http import require_POST
 from django_htmx.http import HttpResponseClientRedirect
 from django.core.mail import send_mail
 from .models import Produto, CategoriaPrincipal, Subcategoria, MensagemContato
@@ -81,16 +74,16 @@ def contato(request):
                 mensagem=mensagem
             )
 
-            # Enviar e-mail via SMTP
+            # Enviar e-mail via SMTP Outlook
             try:
+                from django.conf import settings as django_settings
                 send_mail(
-                    subject=f'Nova mensagem de contato - {nome}',
-                    message=f'Nome: {nome}\nE-mail: {email}\nMensagem:\n{mensagem}',
-                    from_email='betondekor@outlook.com',
-                    recipient_list=[os.getenv('BREVO_TEST_EMAIL', 'hudsonfranco17@gmail.com')],
+                    subject=f'Novo contato do site - {nome}',
+                    message=f'Nome: {nome}\nE-mail: {email}\n\nMensagem:\n{mensagem}',
+                    from_email=django_settings.EMAIL_HOST_USER,
+                    recipient_list=[django_settings.EMAIL_DESTINO],
                     fail_silently=False,
                 )
-                print('Email enviado com sucesso via SMTP')
             except Exception as e:
                 print(f'Erro ao enviar email: {e}')
             
@@ -142,9 +135,11 @@ def logout_view(request):
 def admin_produtos(request):
     produtos_list = Produto.objects.all()
     categorias = CategoriaPrincipal.objects.filter(ativo=True).prefetch_related('subcategorias')
+    subcategorias = Subcategoria.objects.select_related('categoria_principal').all()
     return render(request, 'core/admin/produtos_list.html', {
         'produtos': produtos_list,
-        'categorias': categorias
+        'categorias': categorias,
+        'subcategorias': subcategorias
     })
 
 @login_required
@@ -247,35 +242,38 @@ def admin_produto_edit(request, pk):
             produto.imagem_2 = request.FILES['imagem_2']
         if 'imagem_3' in request.FILES:
             produto.imagem_3 = request.FILES['imagem_3']
-
-        # Remover imagens existentes se o checkbox correspondente foi marcado
-        if request.POST.get('remove_imagem') == 'on':
-            try:
-                if produto.imagem:
-                    produto.imagem.delete(save=False)
-            except Exception:
-                pass
-            produto.imagem = None
-        if request.POST.get('remove_imagem_2') == 'on':
-            try:
-                if getattr(produto, 'imagem_2', None):
-                    produto.imagem_2.delete(save=False)
-            except Exception:
-                pass
-            produto.imagem_2 = None
-        if request.POST.get('remove_imagem_3') == 'on':
-            try:
-                if getattr(produto, 'imagem_3', None):
-                    produto.imagem_3.delete(save=False)
-            except Exception:
-                pass
-            produto.imagem_3 = None
         
         produto.save()
         messages.success(request, f'Produto "{produto.nome}" atualizado com sucesso!')
         return redirect('admin-produtos')
     categorias_principais = CategoriaPrincipal.objects.filter(ativo=True).order_by('ordem', 'nome')
     return render(request, 'core/admin/produto_form.html', {'produto': produto, 'categorias_principais': categorias_principais})
+
+@login_required
+@require_POST
+def admin_produto_remove_image(request, pk):
+    """Remove uma imagem específica do produto via AJAX (sem precisar salvar o form)."""
+    import cloudinary.uploader
+    produto = get_object_or_404(Produto, pk=pk)
+    field = request.POST.get('field', '')
+    allowed = {'imagem', 'imagem_2', 'imagem_3'}
+    if field not in allowed:
+        return JsonResponse({'ok': False, 'error': 'Campo inválido'}, status=400)
+    try:
+        img = getattr(produto, field, None)
+        if img:
+            # CloudinaryField armazena o public_id; usar a API do Cloudinary para deletar
+            public_id = img.public_id if hasattr(img, 'public_id') else str(img)
+            if public_id:
+                try:
+                    cloudinary.uploader.destroy(public_id)
+                except Exception:
+                    pass  # Se falhar no Cloudinary, ainda limpa o campo no banco
+        setattr(produto, field, None)
+        produto.save(update_fields=[field])
+        return JsonResponse({'ok': True})
+    except Exception as e:
+        return JsonResponse({'ok': False, 'error': str(e)}, status=500)
 
 @login_required
 def admin_produto_delete(request, pk):
@@ -323,11 +321,6 @@ def admin_produto_duplicate(request, pk):
     return redirect('admin-produtos')
 
 # Admin - CRUD de Categorias
-@login_required
-def admin_categorias(request):
-    categorias = CategoriaPrincipal.objects.all().prefetch_related('subcategorias')
-    return render(request, 'core/admin/categorias_list.html', {'categorias': categorias})
-
 @login_required
 def admin_categoria_create(request):
     if request.method == 'POST':
@@ -458,14 +451,32 @@ def admin_categoria_duplicate(request, pk):
 
 # Admin - CRUD de Subcategorias
 @login_required
-def admin_subcategoria_create(request, categoria_pk):
-    categoria = get_object_or_404(CategoriaPrincipal, pk=categoria_pk)
+def admin_subcategoria_create(request, categoria_pk=None):
+    categoria = None
+    if categoria_pk:
+        categoria = get_object_or_404(CategoriaPrincipal, pk=categoria_pk)
+    
+    categorias_list = CategoriaPrincipal.objects.all()
+    
     if request.method == 'POST':
         nome = request.POST.get('nome', '').strip()
         ordem = request.POST.get('ordem', 0)
         ativo = request.POST.get('ativo') == 'on'
+        categoria_principal_id = request.POST.get('categoria_principal', '')
         
-        if nome:
+        # Se veio categoria_principal do form, usar ela
+        if categoria_principal_id:
+            try:
+                categoria = CategoriaPrincipal.objects.get(pk=categoria_principal_id)
+            except CategoriaPrincipal.DoesNotExist:
+                messages.error(request, 'Categoria principal inválida.')
+                return render(request, 'core/admin/subcategoria_form.html', {
+                    'categoria': categoria, 'subcategoria': None, 'categoria_list': categorias_list
+                })
+        
+        if not categoria:
+            messages.error(request, 'Selecione uma categoria principal.')
+        elif nome:
             subcategoria = Subcategoria(
                 categoria_principal=categoria,
                 nome=nome,
@@ -478,7 +489,9 @@ def admin_subcategoria_create(request, categoria_pk):
         else:
             messages.error(request, 'O nome da subcategoria é obrigatório.')
     
-    return render(request, 'core/admin/subcategoria_form.html', {'categoria': categoria, 'subcategoria': None})
+    return render(request, 'core/admin/subcategoria_form.html', {
+        'categoria': categoria, 'subcategoria': None, 'categoria_list': categorias_list
+    })
 
 @login_required
 def admin_subcategoria_edit(request, pk):
@@ -496,4 +509,32 @@ def admin_subcategoria_edit(request, pk):
         'categoria': subcategoria.categoria_principal, 
         'subcategoria': subcategoria,
         'categoria_list': categorias_list
+    })
+
+@login_required
+def admin_subcategoria_delete(request, pk):
+    subcategoria = get_object_or_404(Subcategoria, pk=pk)
+    if request.method == 'POST':
+        nome = subcategoria.nome
+        categoria_nome = subcategoria.categoria_principal.nome
+        
+        # Remover a subcategoria dos produtos associados
+        produtos_associados = Produto.objects.filter(subcategoria=subcategoria)
+        quantidade_produtos = produtos_associados.count()
+        produtos_associados.update(subcategoria=None)
+        
+        subcategoria.delete()
+        
+        if quantidade_produtos > 0:
+            messages.success(request, f'Subcategoria "{nome}" da categoria "{categoria_nome}" deletada com sucesso! {quantidade_produtos} produto(s) tiveram a subcategoria removida.')
+        else:
+            messages.success(request, f'Subcategoria "{nome}" da categoria "{categoria_nome}" deletada com sucesso!')
+        
+        return redirect('admin-produtos')
+    
+    quantidade_produtos = Produto.objects.filter(subcategoria=subcategoria).count()
+    
+    return render(request, 'core/admin/subcategoria_confirm_delete.html', {
+        'subcategoria': subcategoria,
+        'quantidade_produtos': quantidade_produtos
     })

@@ -124,8 +124,7 @@
                             <p style="font-family: 'Montserrat'; font-size: 12px; color: #666; margin-bottom: 5px;">Imagem atual:</p>
                             <img src="{{ produto.imagem.url }}" alt="{{ produto.nome }}" style="max-width: 200px; max-height: 200px; border-radius: 8px; border: 1px solid #e4e4e4;">
                             <div style="margin-top:12px;">
-                                <input type="hidden" id="remove_imagem" name="remove_imagem" value="">
-                                <button type="button" data-input="remove_imagem" onclick="toggleRemove('remove_imagem', this)" class="remove-image-btn">Remover imagem</button>
+                                <button type="button" onclick="removeImageAjax('imagem', this)" class="remove-image-btn">Remover imagem</button>
                             </div>
                         </div>
                     {% endif %}
@@ -146,8 +145,7 @@
                             <p style="font-family: 'Montserrat'; font-size: 12px; color: #666; margin-bottom: 5px;">Imagem atual (1):</p>
                             <img src="{{ produto.imagem_2.url }}" alt="{{ produto.nome }} - 2" style="max-width: 200px; max-height: 200px; border-radius: 8px; border: 1px solid #e4e4e4;">
                             <div style="margin-top:12px;">
-                                <input type="hidden" id="remove_imagem_2" name="remove_imagem_2" value="">
-                                <button type="button" data-input="remove_imagem_2" onclick="toggleRemove('remove_imagem_2', this)" class="remove-image-btn">Remover imagem 1</button>
+                                <button type="button" onclick="removeImageAjax('imagem_2', this)" class="remove-image-btn">Remover imagem 1</button>
                             </div>
                         </div>
                     {% endif %}
@@ -168,8 +166,7 @@
                             <p style="font-family: 'Montserrat'; font-size: 12px; color: #666; margin-bottom: 5px;">Imagem atual (2):</p>
                             <img src="{{ produto.imagem_3.url }}" alt="{{ produto.nome }} - 3" style="max-width: 200px; max-height: 200px; border-radius: 8px; border: 1px solid #e4e4e4;">
                             <div style="margin-top:12px;">
-                                <input type="hidden" id="remove_imagem_3" name="remove_imagem_3" value="">
-                                <button type="button" data-input="remove_imagem_3" onclick="toggleRemove('remove_imagem_3', this)" class="remove-image-btn">Remover imagem 2</button>
+                                <button type="button" onclick="removeImageAjax('imagem_3', this)" class="remove-image-btn">Remover imagem 2</button>
                             </div>
                         </div>
                     {% endif %}
@@ -211,7 +208,7 @@
                 
                 <div style="margin-bottom: 20px;">
                     <label style="display: block; font-family: 'Montserrat'; font-weight: 600; font-size: 14px; color: #262626; margin-bottom: 8px;">Categoria Principal *</label>
-                    <select name="categoria_principal" required style="width: 100%; padding: 12px; border: 1px solid #e4e4e4; border-radius: 8px; font-family: 'Montserrat'; font-size: 14px; box-sizing: border-box;">
+                    <select name="categoria_principal" id="id_categoria_principal" required style="width: 100%; padding: 12px; border: 1px solid #e4e4e4; border-radius: 8px; font-family: 'Montserrat'; font-size: 14px; box-sizing: border-box;">
                         <option value="">Selecione uma categoria</option>
                         {% for categoria in categorias_principais %}
                         <option value="{{ categoria.id }}" {% if produto.categoria_principal and produto.categoria_principal.id == categoria.id %}selected{% endif %}>{{ categoria.nome }}</option>
@@ -295,9 +292,10 @@
         cursor: pointer;
         box-shadow: 0 6px 18px rgba(198,40,40,0.18);
     }
-    .remove-image-btn.armed {
-        background: #8b0000;
-        box-shadow: 0 8px 22px rgba(139,0,0,0.22);
+    .remove-image-btn:disabled {
+        background: #999;
+        cursor: not-allowed;
+        box-shadow: none;
     }
     .remove-image-btn:focus { outline: 3px solid rgba(198,40,40,0.18); }
     /* Styled choose file button and filename */
@@ -319,30 +317,36 @@
     .file-name { font-family:'Montserrat'; color:#444; font-size:13px; max-width:420px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
 </style>
 <script>
-function toggleRemove(inputId, btn){
-    var input = document.getElementById(inputId);
-    if(!input) return;
-    if(input.value === 'on'){
-        input.value = '';
-        btn.classList.remove('armed');
-        btn.textContent = btn.getAttribute('data-default') || 'Remover imagem';
-    } else {
-        input.value = 'on';
-        btn.classList.add('armed');
-        btn.setAttribute('data-default', btn.textContent);
-        btn.textContent = 'Pronto para remover — Salve para confirmar';
-    }
+function removeImageAjax(field, btn) {
+    if (!confirm('Tem certeza que deseja remover esta imagem? Esta ação é imediata e não pode ser desfeita.')) return;
+    btn.disabled = true;
+    btn.textContent = 'Removendo...';
+    var csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+    fetch('{% if produto %}{% url "admin-produto-remove-image" produto.pk %}{% else %}#{% endif %}', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded', 'X-CSRFToken': csrfToken },
+        body: 'field=' + encodeURIComponent(field)
+    })
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+        if (data.ok) {
+            // Remover todo o bloco de preview da imagem
+            var wrapper = btn.closest('div[style*="margin-top"]');
+            if (wrapper) wrapper.remove();
+        } else {
+            alert('Erro ao remover imagem: ' + (data.error || 'desconhecido'));
+            btn.disabled = false;
+            btn.textContent = 'Remover imagem';
+        }
+    })
+    .catch(function(err) {
+        alert('Erro de rede ao remover imagem.');
+        btn.disabled = false;
+        btn.textContent = 'Remover imagem';
+    });
 }
 
 document.addEventListener('DOMContentLoaded', function(){
-    // initialize buttons text if inputs already set
-    ['remove_imagem','remove_imagem_2','remove_imagem_3'].forEach(function(id){
-        var inp = document.getElementById(id);
-        if(inp && inp.value === 'on'){
-            var btn = document.querySelector('button[data-input="'+id+'"]');
-            if(btn){ btn.classList.add('armed'); btn.textContent = 'Pronto para remover — Salve para confirmar'; }
-        }
-    });
     // file chooser buttons
     document.querySelectorAll('.choose-file-btn').forEach(function(btn){
         var targetId = btn.getAttribute('data-target');
@@ -365,6 +369,41 @@ document.addEventListener('DOMContentLoaded', function(){
         }
     });
 });
+
+// Filtrar subcategorias pela categoria principal selecionada
+(function() {
+    const catSelect = document.getElementById('id_categoria_principal');
+    const subSelect = document.getElementById('id_subcategoria');
+    if (!catSelect || !subSelect) return;
+    
+    const allOptions = Array.from(subSelect.querySelectorAll('option[data-categoria-principal]'));
+    const emptyOption = subSelect.querySelector('option[value=""]');
+    
+    function filterSubcategorias() {
+        const selectedCat = catSelect.value;
+        const currentSubVal = subSelect.value;
+        
+        // Remove all subcategoria options
+        allOptions.forEach(opt => opt.remove());
+        
+        // Re-add only matching ones
+        allOptions.forEach(opt => {
+            if (!selectedCat || opt.getAttribute('data-categoria-principal') === selectedCat) {
+                subSelect.appendChild(opt);
+            }
+        });
+        
+        // If current selection is no longer visible, reset to empty
+        const visibleValues = Array.from(subSelect.options).map(o => o.value);
+        if (!visibleValues.includes(currentSubVal)) {
+            subSelect.value = '';
+        }
+    }
+    
+    catSelect.addEventListener('change', filterSubcategorias);
+    // Run on page load to filter based on pre-selected categoria
+    filterSubcategorias();
+})();
 </script>
 {% endblock %}
 

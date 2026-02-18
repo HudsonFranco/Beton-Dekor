@@ -126,13 +126,15 @@
         
         // Reinicializar após swaps do HTMX
         if (typeof htmx !== 'undefined') {
-            document.body.addEventListener('htmx:afterSwap', function() {
-                // Resetar flag para permitir reinicialização
-                const menuToggle = document.querySelector('.mobile-menu-toggle');
-                if (menuToggle) {
-                    menuToggle._menuInitialized = false;
+            document.addEventListener('htmx:afterSwap', function(event) {
+                if (event.detail.target === document.body || event.detail.target.tagName === 'BODY') {
+                    // Resetar flag para permitir reinicialização
+                    const menuToggle = document.querySelector('.mobile-menu-toggle');
+                    if (menuToggle) {
+                        menuToggle._menuInitialized = false;
+                    }
+                    setTimeout(initMobileMenu, 50);
                 }
-                setTimeout(initMobileMenu, 100);
             });
         }
 
@@ -178,8 +180,8 @@
         });
 
         // Scroll behavior after HTMX swaps: prefer jumping to fragment/hash when present
-        document.body.addEventListener('htmx:afterSwap', function(event) {
-            if (event.detail.target === document.body) {
+        document.addEventListener('htmx:afterSwap', function(event) {
+            if (event.detail.target === document.body || event.detail.target.tagName === 'BODY') {
                 // If there's a fragment in the URL (hash), try to scroll to it
                 if (window.location.hash) {
                     try {
@@ -291,11 +293,13 @@
             
             // Atualizar após HTMX swap
             if (typeof htmx !== 'undefined') {
-                document.body.addEventListener('htmx:afterSwap', function() {
-                    setTimeout(function() {
-                        initHeaderBackground();
-                        updateHeaderBackground();
-                    }, 100);
+                document.addEventListener('htmx:afterSwap', function(event) {
+                    if (event.detail.target === document.body || event.detail.target.tagName === 'BODY') {
+                        setTimeout(function() {
+                            initHeaderBackground();
+                            updateHeaderBackground();
+                        }, 50);
+                    }
                 });
             }
         });
@@ -358,8 +362,10 @@
 
             document.addEventListener('DOMContentLoaded', runIfProductDetail);
             if (typeof htmx !== 'undefined') {
-                document.body.addEventListener('htmx:afterSwap', function() {
-                    runIfProductDetail();
+                document.addEventListener('htmx:afterSwap', function(event) {
+                    if (event.detail.target === document.body || event.detail.target.tagName === 'BODY') {
+                        runIfProductDetail();
+                    }
                 });
             }
         })();

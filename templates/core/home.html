@@ -281,17 +281,17 @@
 
 {% block extra_js %}
 <script>
-document.addEventListener('DOMContentLoaded', function() {
+function initHomePage() {
     const cards = document.querySelectorAll('.products-grid .product-card');
     cards.forEach(card => {
-        // Avoid interfering with links/buttons inside the card
+        if (card._homeInit) return;
+        card._homeInit = true;
         card.addEventListener('click', function(e) {
             const clickedLink = e.target.closest('a, button');
-            if (clickedLink) return; // let default behaviour for inner links/buttons
+            if (clickedLink) return;
 
             const detailLink = card.querySelector('a.product-link');
             if (detailLink) {
-                // Trigger a real click so HTMX handles hx-get, hx-swap if present
                 detailLink.click();
             }
         });
@@ -314,24 +314,31 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     if (prevButton && nextButton && testimonialCards.length >= 4) {
-        showTestimonials();
-
-        nextButton.addEventListener('click', function() {
-            currentIndex = (currentIndex + 2) % testimonialCards.length;
-            if (currentIndex === testimonialCards.length - 1) {
-                currentIndex = 0;
-            }
+        if (!prevButton._carouselInit) {
+            prevButton._carouselInit = true;
+            nextButton._carouselInit = true;
             showTestimonials();
-        });
 
-        prevButton.addEventListener('click', function() {
-            currentIndex = currentIndex - 2;
-            if (currentIndex < 0) {
-                currentIndex = testimonialCards.length - 2;
-            }
-            showTestimonials();
-        });
+            nextButton.addEventListener('click', function() {
+                currentIndex = (currentIndex + 2) % testimonialCards.length;
+                if (currentIndex === testimonialCards.length - 1) {
+                    currentIndex = 0;
+                }
+                showTestimonials();
+            });
+
+            prevButton.addEventListener('click', function() {
+                currentIndex = currentIndex - 2;
+                if (currentIndex < 0) {
+                    currentIndex = testimonialCards.length - 2;
+                }
+                showTestimonials();
+            });
+        }
     }
-});
+}
+
+// Call immediately (script runs after DOM above it)
+initHomePage();
 </script>
 {% endblock %}

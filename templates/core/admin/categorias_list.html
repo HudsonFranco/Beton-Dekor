@@ -98,6 +98,67 @@
         white-space: nowrap;
     }
     
+    .admin-subcategoria-list {
+        margin-top: 10px;
+        padding-left: 20px;
+        border-left: 3px solid #e0e0e0;
+    }
+    
+    .admin-subcategoria-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 12px;
+        background: #fafafa;
+        border-radius: 8px;
+        margin-bottom: 6px;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+    
+    .admin-subcategoria-info {
+        font-family: 'Montserrat';
+        font-size: 14px;
+        color: #444;
+        font-weight: 500;
+    }
+    
+    .admin-subcategoria-actions {
+        display: flex;
+        gap: 6px;
+        align-items: center;
+    }
+    
+    .admin-subcategoria-btn {
+        display: inline-block;
+        padding: 4px 10px;
+        color: white;
+        border-radius: 5px;
+        text-decoration: none;
+        font-family: 'Montserrat';
+        font-size: 11px;
+        font-weight: 600;
+        white-space: nowrap;
+    }
+    
+    .admin-add-subcategoria-btn {
+        display: inline-block;
+        margin-top: 8px;
+        padding: 6px 14px;
+        background: #5cb85c;
+        color: white;
+        border-radius: 6px;
+        text-decoration: none;
+        font-family: 'Montserrat';
+        font-size: 12px;
+        font-weight: 600;
+        white-space: nowrap;
+    }
+    
+    .admin-add-subcategoria-btn:hover {
+        background: #4cae4c;
+    }
+
     @media (max-width: 768px) {
         .admin-container {
             padding: 20px 15px;
@@ -142,6 +203,16 @@
             text-align: center;
             padding: 8px 12px;
             min-width: 80px;
+        }
+        
+        .admin-subcategoria-item {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        
+        .admin-subcategoria-actions {
+            width: 100%;
+            justify-content: flex-start;
         }
     }
     
@@ -224,6 +295,29 @@
                         <a href="{% url 'admin-categoria-edit' categoria.pk %}" class="admin-action-btn" style="background: #4A90E2;">Editar</a>
                         <a href="{% url 'admin-categoria-delete' categoria.pk %}" class="admin-action-btn" style="background: #e33;">Deletar</a>
                     </div>
+                </div>
+                
+                <!-- Subcategorias -->
+                <div class="admin-subcategoria-list">
+                    <p style="font-family: 'Montserrat'; font-size: 13px; color: #888; font-weight: 600; margin: 0 0 8px 0; text-transform: uppercase; letter-spacing: 0.5px;">Subcategorias</p>
+                    {% for sub in categoria.subcategorias.all %}
+                    <div class="admin-subcategoria-item">
+                        <div class="admin-subcategoria-info">
+                            {{ sub.nome }}
+                            <span style="font-size: 11px; color: #999; margin-left: 6px;">
+                                (Ordem: {{ sub.ordem }} | 
+                                {% if sub.ativo %}<span style="color: #3c3;">Ativo</span>{% else %}<span style="color: #c33;">Inativo</span>{% endif %})
+                            </span>
+                        </div>
+                        <div class="admin-subcategoria-actions">
+                            <a href="{% url 'admin-subcategoria-edit' sub.pk %}" class="admin-subcategoria-btn" style="background: #4A90E2;">Editar</a>
+                            <a href="{% url 'admin-subcategoria-delete' sub.pk %}" class="admin-subcategoria-btn" style="background: #e33;">Deletar</a>
+                        </div>
+                    </div>
+                    {% empty %}
+                    <p style="font-family: 'Montserrat'; font-size: 12px; color: #aaa; margin: 0; font-style: italic;">Nenhuma subcategoria</p>
+                    {% endfor %}
+                    <a href="{% url 'admin-subcategoria-create-cat' categoria.pk %}" class="admin-add-subcategoria-btn">+ Nova Subcategoria</a>
                 </div>
             </div>
             {% empty %}

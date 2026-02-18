@@ -13,6 +13,12 @@
                 Tem certeza que deseja deletar a subcategoria <strong>"{{ subcategoria.nome }}"</strong> da categoria <strong>"{{ subcategoria.categoria_principal.nome }}"</strong>?
             </p>
             
+            {% if quantidade_produtos > 0 %}
+            <div style="padding: 12px; margin-bottom: 20px; border-radius: 8px; background: #fff3cd; color: #856404; font-family: 'Montserrat'; font-size: 14px;">
+                ⚠️ {{ quantidade_produtos }} produto(s) estão associados a esta subcategoria. A subcategoria será removida desses produtos (os produtos NÃO serão deletados).
+            </div>
+            {% endif %}
+            
             <form method="POST" style="margin-top: 30px;">
                 {% csrf_token %}
                 <div style="display: flex; gap: 10px;">

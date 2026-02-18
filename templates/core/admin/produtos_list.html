@@ -278,6 +278,7 @@
             <h1 class="admin-title">Painel BetonDekor</h1>
             <div class="admin-actions">
                 <a href="{% url 'admin-categoria-create' %}" class="admin-btn" style="background: #262626;">+ Nova Categoria</a>
+                <a href="{% url 'admin-subcategoria-create' %}" class="admin-btn" style="background: #5cb85c;">+ Nova Subcategoria</a>
                 <a href="{% url 'admin-produto-create' %}" class="admin-btn" style="background: #4A90E2;">+ Novo Produto</a>
                 <a href="{% url 'logout' %}" class="admin-btn" style="background: #999;">Sair</a>
             </div>
@@ -326,6 +327,51 @@
                         <tr>
                             <td colspan="4" style="padding: 40px; text-align: center; font-family: 'Montserrat'; font-size: 14px; color: #666;">
                                 Nenhuma categoria cadastrada ainda.
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <!-- Painel de Subcategorias -->
+        <div style="margin-bottom: 40px;">
+            <h3 class="admin-section-title">Gerenciar Subcategorias</h3>
+            
+            <div class="admin-table-wrapper">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Nome</th>
+                            <th>Categoria</th>
+                            <th>Ordem</th>
+                            <th class="text-center">Status</th>
+                            <th class="text-center">Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for sub in subcategorias %}
+                        <tr>
+                            <td style="font-weight: 600;">{{ sub.nome }}</td>
+                            <td style="color: #666;">{{ sub.categoria_principal.nome }}</td>
+                            <td style="color: #666;">{{ sub.ordem }}</td>
+                            <td class="text-center">
+                                <span class="{% if sub.ativo %}status-ativo{% else %}status-inativo{% endif %}" style="padding: 4px 12px; border-radius: 12px; font-family: 'Montserrat'; font-size: 12px; font-weight: 600;">
+                                    {% if sub.ativo %}Ativo{% else %}Inativo{% endif %}
+                                </span>
+                            </td>
+                            <td class="text-center">
+                                <div class="admin-actions-cell">
+                                    <a href="{% url 'admin-subcategoria-edit' sub.pk %}" class="admin-action-btn" style="background: #4A90E2;">Editar</a>
+                                    <a href="{% url 'admin-subcategoria-delete' sub.pk %}" class="admin-action-btn" style="background: #e33;">Deletar</a>
+                                </div>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="5" style="padding: 40px; text-align: center; font-family: 'Montserrat'; font-size: 14px; color: #666;">
+                                Nenhuma subcategoria cadastrada ainda.
                             </td>
                         </tr>
                         {% endfor %}

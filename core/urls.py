@@ -18,17 +18,18 @@ urlpatterns = [
     path('admin/produtos/<int:pk>/editar/', views.admin_produto_edit, name='admin-produto-edit'),
     path('admin/produtos/<int:pk>/duplicar/', views.admin_produto_duplicate, name='admin-produto-duplicate'),
     path('admin/produtos/<int:pk>/deletar/', views.admin_produto_delete, name='admin-produto-delete'),
+    path('admin/produtos/<int:pk>/remover-imagem/', views.admin_produto_remove_image, name='admin-produto-remove-image'),
     
     # Admin - CRUD de Categorias
-    path('admin/categorias/', views.admin_categorias, name='admin-categorias'),
     path('admin/categorias/criar/', views.admin_categoria_create, name='admin-categoria-create'),
     path('admin/categorias/<int:pk>/editar/', views.admin_categoria_edit, name='admin-categoria-edit'),
     path('admin/categorias/<int:pk>/duplicar/', views.admin_categoria_duplicate, name='admin-categoria-duplicate'),
     path('admin/categorias/<int:pk>/deletar/', views.admin_categoria_delete, name='admin-categoria-delete'),
     
     # Admin - CRUD de Subcategorias
-    path('admin/categorias/<int:categoria_pk>/subcategorias/criar/', views.admin_subcategoria_create, name='admin-subcategoria-create'),
+    path('admin/subcategorias/criar/', views.admin_subcategoria_create, name='admin-subcategoria-create'),
+    path('admin/categorias/<int:categoria_pk>/subcategorias/criar/', views.admin_subcategoria_create, name='admin-subcategoria-create-cat'),
     path('admin/subcategorias/<int:pk>/editar/', views.admin_subcategoria_edit, name='admin-subcategoria-edit'),
-    # path('admin/subcategorias/<int:pk>/deletar/', views.admin_subcategoria_delete, name='admin-subcategoria-delete'),
+    path('admin/subcategorias/<int:pk>/deletar/', views.admin_subcategoria_delete, name='admin-subcategoria-delete'),
 ]
 

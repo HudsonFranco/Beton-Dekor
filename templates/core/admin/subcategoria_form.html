@@ -32,12 +32,13 @@
             <form method="POST">
                 {% csrf_token %}
                 
-                {% if subcategoria and categoria_list %}
+                {% if categoria_list %}
                 <div style="margin-bottom: 20px;">
-                    <label style="display: block; font-family: 'Montserrat'; font-weight: 600; font-size: 14px; color: #262626; margin-bottom: 8px;">Categoria Principal</label>
+                    <label style="display: block; font-family: 'Montserrat'; font-weight: 600; font-size: 14px; color: #262626; margin-bottom: 8px;">Categoria Principal *</label>
                     <select name="categoria_principal" required style="width: 100%; padding: 12px; border: 1px solid #e4e4e4; border-radius: 8px; font-family: 'Montserrat'; font-size: 14px;">
+                        <option value="">Selecione uma categoria</option>
                         {% for cat in categoria_list %}
-                        <option value="{{ cat.pk }}" {% if cat.pk == subcategoria.categoria_principal.pk %}selected{% endif %}>{{ cat.nome }}</option>
+                        <option value="{{ cat.pk }}" {% if subcategoria and cat.pk == subcategoria.categoria_principal.pk %}selected{% elif categoria and cat.pk == categoria.pk %}selected{% endif %}>{{ cat.nome }}</option>
                         {% endfor %}
                     </select>
                 </div>

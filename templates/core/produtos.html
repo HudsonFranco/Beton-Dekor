@@ -3,21 +3,23 @@
 
 {% block title %}Produtos - BetonDekor{% endblock %}
 
-                        <a href="#" class="filter-subcategory-link" data-subcategoria="{{ sub.nome|lower }}" data-categoria-principal="{{ item.categoria.nome|lower }}">{{ sub.nome }}</a>
-        color: #666 !important;
+{% block extra_css %}
+<style>
+    /* Subcategoria / filtros: usar cinza mais claro */
+    .filter-group ul li a.filter-product-link,
+    .mobile-filter-content .mobile-filter-item a.mobile-filter-product-link,
+    .mobile-filter-content .mobile-filter-group ul li a,
+    .filter-subcategory-link,
+    .mobile-filter-subcategory-link {
+        color: #888 !important;
         text-decoration: none;
     }
     .filter-group ul li a.filter-product-link:hover,
     .mobile-filter-content .mobile-filter-item a.mobile-filter-product-link:hover,
-                    {% for sub in item.categoria.subcategorias.all %}
-                    {% if sub.ativo %}
-                    <li class="filter-item">
-                        <a href="#" class="filter-subcategory-link" data-subcategoria="{{ sub.nome|lower }}" data-categoria-principal="{{ item.categoria.nome|lower }}">{{ sub.nome }}</a>
-                    </li>
-                    {% endif %}
-                    {% endfor %}
-    .mobile-filter-content .mobile-filter-group ul li a:hover {
-        color: #444 !important;
+    .mobile-filter-content .mobile-filter-group ul li a:hover,
+    .filter-subcategory-link:hover,
+    .mobile-filter-subcategory-link:hover {
+        color: #666 !important;
         text-decoration: none;
     }
 
@@ -55,6 +57,176 @@
             background-position: center top !important;
         }
     }
+
+    /* Cards: imagem preenche todo o card; botão sobreposto */
+    .product-card-wrapper {
+        display: block;
+        width: 100%;
+    }
+    /* garantir que o link que envolve o card ocupe todo o espaço do card */
+    .product-card-link {
+        display: block;
+        height: 100%;
+        text-decoration: none;
+        color: inherit;
+    }
+    .product-card-modern {
+        position: relative;
+        width: 100%;
+        padding: 0;
+        border-radius: 12px;
+        overflow: hidden; /* container recorta imagem, evitando vazios cinza */
+        background: #fff;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        display: flex;
+        align-items: stretch;
+        justify-content: center;
+        aspect-ratio: 4 / 5; /* mantém proporção consistente */
+        max-height: 420px;
+    }
+    .product-modern-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+    }
+
+    /* responsive tweaks for cards */
+    @media (max-width: 1024px) {
+        .product-card-modern { aspect-ratio: 4 / 5; max-height: 400px; }
+    }
+    @media (max-width: 768px) {
+        .product-card-modern { aspect-ratio: 3 / 4; max-height: 360px; }
+    }
+    @media (max-width: 480px) {
+        .product-card-modern { aspect-ratio: 1 / 1; max-height: 360px; }
+    }
+
+    /* Lightbox / modal de imagem */
+    .image-lightbox {
+        position: fixed;
+        inset: 0;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        background: rgba(0,0,0,0.85);
+        z-index: 2000;
+        padding: 24px;
+    }
+    .image-lightbox.active {
+        display: flex;
+    }
+    .image-lightbox .lightbox-img-wrap {
+        max-width: 1100px;
+        max-height: 90vh;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .image-lightbox img.lightbox-img {
+        max-width: 100%;
+        max-height: 100%;
+        transition: transform 200ms ease;
+        cursor: zoom-in;
+        will-change: transform;
+    }
+    .image-lightbox .lightbox-close {
+        position: absolute;
+        top: 18px;
+        right: 18px;
+        color: #fff;
+        background: transparent;
+        border: none;
+        font-size: 20px;
+        cursor: pointer;
+    }
+    /* esconder textos que não devem aparecer (exceção: o nome do produto ficará visível como overlay) */
+    .product-tag,
+    .product-meta {
+        display: none !important;
+    }
+
+    /* overlay: gradiente leve para melhorar contraste do título sobre a imagem */
+    .product-card-modern::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(180deg, rgba(0,0,0,0.6) 10%, rgba(0,0,0,0.25) 30%, rgba(0,0,0,0.05) 60%, rgba(0,0,0,0) 100%);
+        z-index: 4;
+        pointer-events: none;
+    }
+
+    /* Nome do produto posicionado mais embaixo, próximo ao botão "Ver detalhes".
+       Use a classe global `product-name` (mesma usada na home) for typography, keeping
+       only positioning/overlay-specific rules here so the lettering matches the home cards. */
+    .product-card-modern .product-modern-name {
+        position: absolute;
+        bottom: 64px; /* acima do botão (btn bottom:18px), ajuste se necessário */
+        left: 20px;
+        right: 20px;
+        margin: 0;
+        z-index: 6;
+        color: #fff;
+        /* typography comes from global `.product-name` (font-family, size, weight, transform) */
+        text-shadow: 0 4px 18px rgba(0,0,0,0.65);
+        display: block !important;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: normal;
+        max-height: 2.6em; /* até 2 linhas */
+    }
+
+    @media (max-width: 1024px) {
+        .product-card-modern .product-modern-name { bottom: 64px; }
+    }
+    @media (max-width: 768px) {
+        .product-card-modern .product-modern-name { bottom: 60px; left: 14px; right: 14px; }
+    }
+    /* botão sobreposto na parte inferior, estilo similar à referência
+       - branco, maiúsculas, seta à direita, posicionado canto inferior esquerdo */
+    .product-card-modern .pill-button {
+        position: absolute;
+        bottom: 18px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 5;
+        background: rgba(0,0,0,0.35);
+        border: none;
+        color: #fff !important;
+        text-transform: uppercase;
+        font-size: 13px;
+        letter-spacing: 1px;
+        font-weight: 600;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 6px 10px;
+        white-space: nowrap;
+        text-decoration: none;
+        width: auto;
+        max-width: none;
+        box-shadow: none;
+        cursor: pointer;
+        text-shadow: 0 1px 2px rgba(0,0,0,0.6);
+        border-radius: 8px;
+        backdrop-filter: blur(2px);
+    }
+
+    /* seta à direita como pseudo-elemento */
+    .product-card-modern .pill-button::after {
+        content: '\2192'; /* → */
+        display: inline-block;
+        font-size: 16px;
+        line-height: 1;
+        margin-left: 6px;
+        transform: translateY(1px);
+    }
+
+    /* hover: leve clareamento para indicar interatividade */
+    .product-card-modern .pill-button:hover {
+        opacity: 0.95;
+    }
 </style>
 {% endblock %}
 
@@ -78,6 +250,43 @@
         </h1>
     </div>
 </section>
+
+<!-- Inline critical styles for products page (included in body so HTMX swaps apply them) -->
+<style id="products-inline-styles">
+    .product-card-wrapper { display: block; width: 100%; text-decoration: none; color: inherit; }
+    .product-card-link { display: block; height: 100%; text-decoration: none; color: inherit; }
+    .product-card-modern { position: relative; width: 100%; padding: 0; border-radius: 12px; overflow: hidden; background: #fff; box-shadow: 0 2px 8px rgba(0,0,0,0.06); display: flex; align-items: stretch; justify-content: center; aspect-ratio: 4 / 5; max-height: 420px; border: none; }
+    .product-modern-image { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .product-tag, .product-meta { display: none !important; }
+    .product-card-modern::before { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,0.6) 10%, rgba(0,0,0,0.25) 30%, rgba(0,0,0,0.05) 60%, rgba(0,0,0,0) 100%); z-index: 4; pointer-events: none; }
+    .product-card-modern .pill-button { position: absolute; bottom: 18px; left: 50%; transform: translateX(-50%); z-index: 5; white-space: nowrap; background: rgba(0,0,0,0.35); border: none; color: #fff !important; text-transform: uppercase; font-size: 13px; letter-spacing: 1px; font-weight: 600; display: inline-flex; align-items: center; gap: 8px; padding: 6px 10px; text-decoration: none; width: auto; max-width: none; margin: 0; box-shadow: none; cursor: pointer; text-shadow: 0 1px 2px rgba(0,0,0,0.6); border-radius: 8px; backdrop-filter: blur(2px); }
+    .product-card-modern .pill-button::after { content: '\2192'; display: inline-block; font-size: 16px; line-height: 1; margin-left: 6px; transform: translateY(1px); }
+    .product-card-modern .pill-button:hover { opacity: 0.95; }
+    /* Responsive inline (HTMX compat) */
+    .products-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
+    @media (max-width: 1200px) { .products-cards { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 992px) { .products-filter { display: none; } .products-layout { grid-template-columns: 1fr; } }
+    @media (max-width: 480px) { .products-cards { grid-template-columns: repeat(2, 1fr); gap: 8px; } .product-card-modern { aspect-ratio: 3/4; max-height: 280px; border-radius: 8px; } }
+    @media (max-width: 360px) { .products-cards { gap: 6px; } .product-card-modern { max-height: 240px; } }
+</style>
+<style id="products-inline-filters">
+    .filter-group ul li a.filter-product-link,
+    .mobile-filter-content .mobile-filter-item a.mobile-filter-product-link,
+    .mobile-filter-content .mobile-filter-group ul li a,
+    .filter-subcategory-link,
+    .mobile-filter-subcategory-link {
+        color: #888 !important;
+        text-decoration: none;
+    }
+    .filter-group ul li a.filter-product-link:hover,
+    .mobile-filter-content .mobile-filter-item a.mobile-filter-product-link:hover,
+    .mobile-filter-content .mobile-filter-group ul li a:hover,
+    .filter-subcategory-link:hover,
+    .mobile-filter-subcategory-link:hover {
+        color: #666 !important;
+        text-decoration: none;
+    }
+</style>
 
 <!-- Mobile Filter Menu -->
 <div class="mobile-filter-overlay" id="mobile-filter-overlay"></div>
@@ -180,11 +389,7 @@
                             {% else %}
                                 <div class="product-modern-image" style="background: #f0f0f0; height: 150px; display: flex; align-items: center; justify-content: center; color: #999;">Sem imagem</div>
                             {% endif %}
-                            <h3 class="product-modern-name">{{ produto.nome }}</h3>
-                            <p class="product-meta">
-                                {% if produto.categoria_principal %}{{ produto.categoria_principal }}{% endif %}
-                                {% if produto.categoria %}({{ produto.categoria }}){% endif %}
-                            </p>
+                            <!-- Nome removido do card; aparece apenas no detalhe -->
                             <button class="pill-button">Ver detalhes</button>
                         </div>
                     </a>
@@ -197,6 +402,7 @@
         </div>
     </div>
 </main>
+
 {% endblock %}
 
 {% block extra_js %}
@@ -303,20 +509,9 @@ function initMobileFilterMenu() {
 }
 
 // Initialize on page load
-document.addEventListener('DOMContentLoaded', initMobileFilterMenu);
-
-// Initialize immediately
 initMobileFilterMenu();
 
-// Re-initialize after HTMX swaps
-if (typeof htmx !== 'undefined') {
-    document.body.addEventListener('htmx:afterSwap', function(event) {
-        if (event.detail.target === document.body) {
-            initMobileFilterMenu();
-        }
-    });
-}
-    document.addEventListener('DOMContentLoaded', function() {
+    function initProductsFilters() {
         // Filtrar produtos por subcategoria
         const productCards = document.querySelectorAll('.products-cards .product-card-wrapper');
 
@@ -337,13 +532,13 @@ if (typeof htmx !== 'undefined') {
                     card.style.display = 'none';
                 }
             });
-            // Scroll to top of products list
-            const container = document.getElementById('products-cards-section');
-            if (container) container.scrollIntoView({behavior: 'smooth'});
         }
 
         // Desktop subcategory links
         document.querySelectorAll('.filter-subcategory-link').forEach(link => {
+            // avoid duplicate listeners
+            if (link._filterInit) return;
+            link._filterInit = true;
             link.addEventListener('click', function(e) {
                 e.preventDefault();
                 const sub = this.dataset.subcategoria;
@@ -353,6 +548,8 @@ if (typeof htmx !== 'undefined') {
 
         // Mobile subcategory links
         document.querySelectorAll('.mobile-filter-subcategory-link').forEach(link => {
+            if (link._filterInit) return;
+            link._filterInit = true;
             link.addEventListener('click', function(e) {
                 e.preventDefault();
                 const sub = this.dataset.subcategoria;
@@ -365,6 +562,11 @@ if (typeof htmx !== 'undefined') {
                 filterBySubcategory(sub);
             });
         });
-    });
+    }
+
+    // Initialize immediately
+    initProductsFilters();
+
+    // Lightbox removed from products listing — loupe available only on product detail page
 </script>
 {% endblock %}

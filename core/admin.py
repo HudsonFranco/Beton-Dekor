@@ -45,12 +45,19 @@ class ImageWithAddWidget(forms.ClearableFileInput):
 
                 return mark_safe(input_html + btn + script)
 
+class SubcategoriaInline(admin.TabularInline):
+    model = Subcategoria
+    extra = 1
+    fields = ['nome', 'ordem', 'ativo']
+    ordering = ['ordem', 'nome']
+
 @admin.register(CategoriaPrincipal)
 class CategoriaPrincipalAdmin(admin.ModelAdmin):
     list_display = ['nome', 'ordem', 'ativo', 'created_at']
     list_filter = ['ativo']
     search_fields = ['nome']
     ordering = ['ordem', 'nome']
+    inlines = [SubcategoriaInline]
 
 @admin.register(Subcategoria)
 class SubcategoriaAdmin(admin.ModelAdmin):
@@ -61,8 +68,8 @@ class SubcategoriaAdmin(admin.ModelAdmin):
 
 @admin.register(Produto)
 class ProdutoAdmin(admin.ModelAdmin):
-    list_display = ['nome', 'categoria_principal', 'categoria', 'ativo', 'ordem', 'created_at']
-    list_filter = ['ativo', 'categoria_principal', 'categoria']
+    list_display = ['nome', 'categoria_principal', 'subcategoria', 'categoria', 'ativo', 'ordem', 'created_at']
+    list_filter = ['ativo', 'categoria_principal', 'subcategoria', 'categoria']
     search_fields = ['nome', 'categoria', 'categoria_principal', 'descricao']
     ordering = ['ordem', 'nome']
     
@@ -89,7 +96,7 @@ class ProdutoAdmin(admin.ModelAdmin):
             'fields': ('nome', 'slug', 'descricao', 'ativo', 'ordem')
         }),
         ('Categorização', {
-            'fields': ('categoria_principal', 'categoria', 'tag')
+            'fields': ('categoria_principal', 'subcategoria', 'categoria', 'tag')
         }),
         ('Imagem do Produto', {
                 'fields': ('imagem', 'imagem_2', 'imagem_3', 'imagem_nome'),

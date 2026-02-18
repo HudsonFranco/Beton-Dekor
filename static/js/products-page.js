@@ -507,8 +507,8 @@
     // INTEGRAÇÃO COM HTMX
     // ============================================
     if (typeof htmx !== 'undefined') {
-        document.body.addEventListener('htmx:afterSwap', (event) => {
-            if (event.detail.target === document.body && 
+        document.addEventListener('htmx:afterSwap', (event) => {
+            if ((event.detail.target === document.body || event.detail.target.tagName === 'BODY') && 
                 window.location.pathname.includes('/produtos')) {
                 utils.log('HTMX swap detectado, reinicializando...');
                 
