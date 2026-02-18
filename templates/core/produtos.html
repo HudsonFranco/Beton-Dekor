@@ -3,8 +3,24 @@
 
 {% block title %}Produtos - BetonDekor{% endblock %}
 
-{% block extra_css %}
-<style>
+                        <a href="#" class="filter-subcategory-link" data-subcategoria="{{ sub.nome|lower }}" data-categoria-principal="{{ item.categoria.nome|lower }}">{{ sub.nome }}</a>
+        color: #666 !important;
+        text-decoration: none;
+    }
+    .filter-group ul li a.filter-product-link:hover,
+    .mobile-filter-content .mobile-filter-item a.mobile-filter-product-link:hover,
+                    {% for sub in item.categoria.subcategorias.all %}
+                    {% if sub.ativo %}
+                    <li class="filter-item">
+                        <a href="#" class="filter-subcategory-link" data-subcategoria="{{ sub.nome|lower }}" data-categoria-principal="{{ item.categoria.nome|lower }}">{{ sub.nome }}</a>
+                    </li>
+                    {% endif %}
+                    {% endfor %}
+    .mobile-filter-content .mobile-filter-group ul li a:hover {
+        color: #444 !important;
+        text-decoration: none;
+    }
+
     .products-hero-section {
         background-image: url('{% static "images/ConhecaProdutos.jpg" %}') !important;
         background-size: cover !important;
@@ -89,14 +105,9 @@
         <div class="mobile-filter-group">
             <h3 class="mobile-filter-category-title" data-categoria-principal="{{ item.categoria.nome|lower }}">{{ item.categoria.nome }}</h3>
             <ul>
-                {% for produto in item.produtos %}
+                {% for sub in item.categoria.subcategorias.all %}
                 <li class="mobile-filter-item">
-                    <a href="{% url 'produto-detalhe' produto.slug %}"
-                       hx-get="{% url 'produto-detalhe' produto.slug %}"
-                       hx-target="body"
-                       hx-swap="outerHTML"
-                       hx-push-url="true"
-                       class="mobile-filter-product-link">{{ produto.nome }}</a>
+                    <a href="#" class="mobile-filter-subcategory-link" data-subcategoria="{{ sub.nome|lower }}" data-categoria-principal="{{ item.categoria.nome|lower }}">{{ sub.nome }}</a>
                 </li>
                 {% endfor %}
             </ul>
@@ -135,14 +146,9 @@
             <div class="filter-group">
                 <h3 class="filter-category-title" data-categoria-principal="{{ item.categoria.nome|lower }}" style="cursor: pointer;">{{ item.categoria.nome }}</h3>
                 <ul>
-                    {% for produto in item.produtos %}
+                    {% for sub in item.categoria.subcategorias.all %}
                     <li class="filter-item">
-                        <a href="{% url 'produto-detalhe' produto.slug %}" 
-                           hx-get="{% url 'produto-detalhe' produto.slug %}"
-                           hx-target="body"
-                           hx-swap="outerHTML"
-                           hx-push-url="true"
-                           class="filter-product-link">{{ produto.nome }}</a>
+                        <a href="#" class="filter-subcategory-link" data-subcategoria="{{ sub.nome|lower }}" data-categoria-principal="{{ item.categoria.nome|lower }}">{{ sub.nome }}</a>
                     </li>
                     {% endfor %}
                 </ul>
@@ -163,6 +169,7 @@
                        class="product-card-wrapper product-card-link"
                        data-product-name="{{ produto.nome|lower }}"
                        data-product-category="{{ produto.categoria|lower }}"
+                       data-product-subcategoria="{{ produto.subcategoria_nome|lower }}"
                        data-categoria-principal="{{ produto.categoria_principal|lower }}">
                         <div class="product-card-modern">
                             <p class="product-tag">{{ produto.tag }}</p>
@@ -309,5 +316,55 @@ if (typeof htmx !== 'undefined') {
         }
     });
 }
+    document.addEventListener('DOMContentLoaded', function() {
+        // Filtrar produtos por subcategoria
+        const productCards = document.querySelectorAll('.products-cards .product-card-wrapper');
+
+        function showAllProducts() {
+            productCards.forEach(card => card.style.display = '');
+        }
+
+        function filterBySubcategory(sub) {
+            if (!sub) {
+                showAllProducts();
+                return;
+            }
+            productCards.forEach(card => {
+                const cardSub = (card.dataset.productSubcategoria || card.dataset.productCategory || '').toLowerCase();
+                if (cardSub === sub.toLowerCase()) {
+                    card.style.display = '';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+            // Scroll to top of products list
+            const container = document.getElementById('products-cards-section');
+            if (container) container.scrollIntoView({behavior: 'smooth'});
+        }
+
+        // Desktop subcategory links
+        document.querySelectorAll('.filter-subcategory-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const sub = this.dataset.subcategoria;
+                filterBySubcategory(sub);
+            });
+        });
+
+        // Mobile subcategory links
+        document.querySelectorAll('.mobile-filter-subcategory-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const sub = this.dataset.subcategoria;
+                // close mobile menu
+                const mobileMenu = document.getElementById('mobile-filter-menu');
+                const mobileOverlay = document.getElementById('mobile-filter-overlay');
+                if (mobileMenu) mobileMenu.classList.remove('active');
+                if (mobileOverlay) mobileOverlay.classList.remove('active');
+                document.body.style.overflow = '';
+                filterBySubcategory(sub);
+            });
+        });
+    });
 </script>
 {% endblock %}

@@ -173,6 +173,7 @@ def admin_produto_create(request):
             descricao=descricao,
             categoria_principal=categoria_principal,
             categoria=categoria,
+            subcategoria=None,
             tag=tag,
             imagem_nome=imagem_nome,
             dimensoes=request.POST.get('dimensoes', ''),
@@ -192,6 +193,14 @@ def admin_produto_create(request):
             produto.imagem_3 = request.FILES['imagem_3']
         
         produto.save()  # Isso vai gerar o slug automaticamente se não foi fornecido
+        # associar subcategoria se enviada
+        subcategoria_id = request.POST.get('subcategoria')
+        if subcategoria_id:
+            try:
+                produto.subcategoria = Subcategoria.objects.get(pk=subcategoria_id)
+                produto.save()
+            except Subcategoria.DoesNotExist:
+                pass
         messages.success(request, f'Produto "{produto.nome}" criado com sucesso!')
         return redirect('admin-produtos')
     categorias_principais = CategoriaPrincipal.objects.filter(ativo=True).order_by('ordem', 'nome')
@@ -213,6 +222,15 @@ def admin_produto_edit(request, pk):
                 pass
         produto.categoria_principal = categoria_principal
         produto.categoria = request.POST.get('categoria', '')
+        # Atualizar subcategoria (FK)
+        subcategoria_id = request.POST.get('subcategoria', '')
+        if subcategoria_id:
+            try:
+                produto.subcategoria = Subcategoria.objects.get(pk=subcategoria_id)
+            except Subcategoria.DoesNotExist:
+                produto.subcategoria = None
+        else:
+            produto.subcategoria = None
         produto.tag = request.POST.get('tag', 'Base Cementícia')
         produto.imagem_nome = request.POST.get('imagem_nome', '')
         produto.dimensoes = request.POST.get('dimensoes', '')

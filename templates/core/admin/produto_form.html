@@ -222,14 +222,28 @@
                 
                 <div class="admin-form-grid" style="margin-bottom: 20px;">
                     <div>
-                        <label style="display: block; font-family: 'Montserrat'; font-weight: 600; font-size: 14px; color: #262626; margin-bottom: 8px;">Subcategoria</label>
-                        <input type="text" name="categoria" value="{{ produto.categoria|default:'' }}" style="width: 100%; padding: 12px; border: 1px solid #e4e4e4; border-radius: 8px; font-family: 'Montserrat'; font-size: 14px; box-sizing: border-box;" placeholder="ex: Tijolinho, Mosaicos">
+                        <label style="display: block; font-family: 'Montserrat'; font-weight: 600; font-size: 14px; color: #262626; margin-bottom: 8px;">Subcategoria (opcional)</label>
+                        <select name="subcategoria" id="id_subcategoria" style="width: 100%; padding: 12px; border: 1px solid #e4e4e4; border-radius: 8px; font-family: 'Montserrat'; font-size: 14px; box-sizing: border-box;">
+                            <option value="">-- Usar sem subcategoria --</option>
+                            {% for cat in categorias_principais %}
+                                {% for sub in cat.subcategorias.all %}
+                                    <option value="{{ sub.id }}" {% if produto.subcategoria and produto.subcategoria.id == sub.id %}selected{% endif %} data-categoria-principal="{{ cat.id }}">{{ cat.nome }} — {{ sub.nome }}</option>
+                                {% endfor %}
+                            {% endfor %}
+                        </select>
+                        <small style="font-family: 'Montserrat'; font-size: 12px; color: #666;">Se desejar manter o valor legado como texto, use o campo abaixo.</small>
                     </div>
                     
                     <div>
                         <label style="display: block; font-family: 'Montserrat'; font-weight: 600; font-size: 14px; color: #262626; margin-bottom: 8px;">Tag</label>
                         <input type="text" name="tag" value="{{ produto.tag|default:'Base Cementícia' }}" style="width: 100%; padding: 12px; border: 1px solid #e4e4e4; border-radius: 8px; font-family: 'Montserrat'; font-size: 14px; box-sizing: border-box;">
                     </div>
+                </div>
+
+                <div style="margin-bottom: 20px;">
+                    <label style="display: block; font-family: 'Montserrat'; font-weight: 600; font-size: 14px; color: #262626; margin-bottom: 8px;">Subcategoria (texto legado)</label>
+                    <input type="text" name="categoria" value="{{ produto.categoria|default:'' }}" style="width: 100%; padding: 12px; border: 1px solid #e4e4e4; border-radius: 8px; font-family: 'Montserrat'; font-size: 14px; box-sizing: border-box;" placeholder="ex: Tijolinho, Mosaicos">
+                    <small style="font-family: 'Montserrat'; font-size: 12px; color: #666;">Campo legado para compatibilidade. Prefira selecionar a subcategoria acima.</small>
                 </div>
                 
                 <div class="admin-form-grid" style="margin-bottom: 20px;">

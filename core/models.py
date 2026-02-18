@@ -47,6 +47,14 @@ class Produto(models.Model):
         blank=True,
         help_text="Categoria principal"
     )
+    subcategoria = models.ForeignKey(
+        Subcategoria,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='produtos',
+        help_text="Subcategoria associada (quando aplicável)"
+    )
     categoria = models.CharField(max_length=100, blank=True, help_text="Subcategoria: Amadeirados, Tijolinho, Mosaicos, etc.")
     tag = models.CharField(max_length=100, default="Base Cementícia")
     imagem = cloudinary_models.CloudinaryField(folder='produtos/', blank=True, null=True)
@@ -107,6 +115,13 @@ class Produto(models.Model):
             # apenas adicionar imagem_nome se nenhuma ImageField estiver presente
             urls.append(f'{settings.STATIC_URL}images/{self.imagem_nome}')
         return urls
+
+    @property
+    def subcategoria_nome(self):
+        """Retorna o nome da subcategoria (FK) ou o valor legado do campo `categoria`."""
+        if self.subcategoria:
+            return self.subcategoria.nome
+        return self.categoria
 
 class MensagemContato(models.Model):
     nome = models.CharField(max_length=200)
