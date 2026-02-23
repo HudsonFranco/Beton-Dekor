@@ -37,6 +37,12 @@ DEBUG = os.getenv('DEBUG', 'False') == 'True'
 # Parse ALLOWED_HOSTS from environment variable (comma-separated)
 ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
 
+# Trusted origins for CSRF when serving over HTTPS
+CSRF_TRUSTED_ORIGINS = [
+    "https://betondekor.com.br",
+    "https://www.betondekor.com.br",
+]
+
 # Security settings for production (only when DEBUG=False)
 if not DEBUG:
     SESSION_COOKIE_SECURE = True
