@@ -4859,6 +4859,36 @@ section {
     overflow: hidden;
 }
 
+/* Carousel arrows: position absolute so one stays at left and the other at right of the image */
+.carousel-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0,0,0,0.45);
+    border: none;
+    color: #fff;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    z-index: 30;
+    cursor: pointer;
+    transition: background 150ms ease, transform 120ms ease;
+}
+.carousel-arrow:hover { background: rgba(0,0,0,0.6); transform: translateY(-50%) scale(1.03); }
+.carousel-arrow svg { width: 20px; height: 20px; }
+.carousel-arrow-left { left: 12px; }
+.carousel-arrow-right { right: 12px; }
+
+/* Ensure contact button in product detail is spaced and aligned to the left on desktop but centered on small screens (mobile rules already present) */
+.product-info-area .contact-button-main {
+    margin-top: 22px;
+    align-self: flex-start;
+}
+
+
 .product-image-carousel {
     width: 100%;
     display: flex;
