@@ -22,7 +22,6 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('', include('core.urls')),
     path('admin/', admin.site.urls),
-    path('robots.txt', include('core.urls')), # Vamos colocar no core.urls para ficar organizado
 ]
 
 # Serve media files in all environments (needed for local storage)

@@ -427,7 +427,55 @@
             </div>
         </div>
         
-        <div style="margin-top: 20px; text-align: center;">
+        <!-- Painel de Destaques (Carrossel) -->
+        <div style="margin-top: 40px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                <h3 class="admin-section-title" style="margin: 0;">Gerenciar Carrossel</h3>
+                <a href="{% url 'admin-destaque-create' %}" class="admin-btn" style="background: #28a745;">+ Novo Slide</a>
+            </div>
+            
+            <div class="admin-table-wrapper">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Título</th>
+                            <th>Tipo</th>
+                            <th>Ordem</th>
+                            <th class="text-center">Status</th>
+                            <th class="text-center">Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for destaque in destaques %}
+                        <tr>
+                            <td style="font-weight: 600;">{{ destaque.titulo|default:"Sem Título" }}</td>
+                            <td style="color: #666; text-transform: capitalize;">{{ destaque.tipo }}</td>
+                            <td style="color: #666;">{{ destaque.ordem }}</td>
+                            <td class="text-center">
+                                <span class="{% if destaque.ativo %}status-ativo{% else %}status-inativo{% endif %}" style="padding: 4px 12px; border-radius: 12px; font-family: 'Montserrat'; font-size: 12px; font-weight: 600;">
+                                    {% if destaque.ativo %}Ativo{% else %}Inativo{% endif %}
+                                </span>
+                            </td>
+                            <td class="text-center">
+                                <div class="admin-actions-cell">
+                                    <a href="{% url 'admin-destaque-edit' destaque.pk %}" class="admin-action-btn" style="background: #4A90E2;">Editar</a>
+                                    <a href="{% url 'admin-destaque-delete' destaque.pk %}" class="admin-action-btn" style="background: #e33;">Deletar</a>
+                                </div>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="5" style="padding: 40px; text-align: center; font-family: 'Montserrat'; font-size: 14px; color: #666;">
+                                Nenhum item no carrossel cadastrado ainda.
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <div style="margin-top: 40px; text-align: center;">
             <a href="{% url 'home' %}" style="font-family: 'Montserrat'; font-size: 14px; color: #666; text-decoration: none;">← Voltar para o site</a>
         </div>
     </div>

@@ -137,10 +137,12 @@ def admin_produtos(request):
     produtos_list = Produto.objects.all()
     categorias = CategoriaPrincipal.objects.filter(ativo=True).prefetch_related('subcategorias')
     subcategorias = Subcategoria.objects.select_related('categoria_principal').all()
+    destaques = Destaque.objects.all().order_by('ordem')
     return render(request, 'core/admin/produtos_list.html', {
         'produtos': produtos_list,
         'categorias': categorias,
-        'subcategorias': subcategorias
+        'subcategorias': subcategorias,
+        'destaques': destaques
     })
 
 @login_required
