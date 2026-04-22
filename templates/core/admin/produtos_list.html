@@ -280,7 +280,7 @@
                 <a href="{% url 'admin-categoria-create' %}" class="admin-btn" style="background: #262626;">+ Nova Categoria</a>
                 <a href="{% url 'admin-subcategoria-create' %}" class="admin-btn" style="background: #5cb85c;">+ Nova Subcategoria</a>
                 <a href="{% url 'admin-produto-create' %}" class="admin-btn" style="background: #4A90E2;">+ Novo Produto</a>
-                <a href="{% url 'admin-destaques' %}" class="admin-btn" style="background: #f39c12;">📸 Gerenciar Carrossel</a>
+                <a href="{% url 'admin-destaque-create' %}" class="admin-btn" style="background: #f39c12;">📸 Novo Slide Carrossel</a>
                 <a href="{% url 'logout' %}" class="admin-btn" style="background: #999;">Sair</a>
             </div>
         </div>
@@ -429,10 +429,7 @@
         
         <!-- Painel de Destaques (Carrossel) -->
         <div style="margin-top: 40px;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-                <h3 class="admin-section-title" style="margin: 0;">Gerenciar Carrossel</h3>
-                <a href="{% url 'admin-destaque-create' %}" class="admin-btn" style="background: #28a745;">+ Novo Slide</a>
-            </div>
+            <h3 class="admin-section-title">Gerenciar Carrossel</h3>
             
             <div class="admin-table-wrapper">
                 <table class="admin-table">
