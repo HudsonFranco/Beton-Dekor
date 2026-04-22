@@ -1,0 +1,182 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{% if destaque %}Editar Slide{% else %}Novo Slide{% endif %} - BetonDekor{% endblock %}
+
+{% block extra_css %}
+<style>
+    .admin-container {
+        min-height: 100vh;
+        background: #f7f7f7;
+        padding: 40px 20px;
+    }
+    
+    .form-card {
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        padding: 30px;
+        max-width: 800px;
+        margin: 0 auto;
+    }
+    
+    .form-title {
+        font-family: 'Montserrat';
+        font-weight: 700;
+        font-size: 28px;
+        color: #262626;
+        margin-bottom: 30px;
+        border-bottom: 2px solid #f0f0f0;
+        padding-bottom: 15px;
+    }
+    
+    .form-group {
+        margin-bottom: 20px;
+    }
+    
+    .form-label {
+        display: block;
+        font-family: 'Montserrat';
+        font-weight: 600;
+        font-size: 14px;
+        color: #262626;
+        margin-bottom: 8px;
+    }
+    
+    .form-input, .form-select, .form-textarea {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        font-family: 'Montserrat';
+        font-size: 14px;
+        transition: border-color 0.2s;
+    }
+    
+    .form-input:focus {
+        border-color: #4A90E2;
+        outline: none;
+    }
+    
+    .form-checkbox-group {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    
+    .form-checkbox {
+        width: 18px;
+        height: 18px;
+    }
+    
+    .form-actions {
+        display: flex;
+        gap: 15px;
+        margin-top: 30px;
+        padding-top: 20px;
+        border-top: 2px solid #f0f0f0;
+    }
+    
+    .btn-save {
+        padding: 12px 30px;
+        background: #262626;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-family: 'Montserrat';
+        font-weight: 600;
+        cursor: pointer;
+    }
+    
+    .btn-cancel {
+        padding: 12px 30px;
+        background: #999;
+        color: white;
+        text-decoration: none;
+        border-radius: 8px;
+        font-family: 'Montserrat';
+        font-weight: 600;
+    }
+
+    .preview-img {
+        max-width: 200px;
+        margin-top: 10px;
+        border-radius: 8px;
+        display: block;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="admin-container">
+    <div class="form-card">
+        <h1 class="form-title">{% if destaque %}Editar Slide{% else %}Novo Slide do Carrossel{% endif %}</h1>
+        
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            
+            <div class="form-group">
+                <label class="form-label">Tipo de Mídia</label>
+                <select name="tipo" class="form-select">
+                    <option value="imagem" {% if destaque.tipo == 'imagem' %}selected{% endif %}>Imagem</option>
+                    <option value="video" {% if destaque.tipo == 'video' %}selected{% endif %}>Vídeo</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Arquivo (Foto ou Vídeo)</label>
+                <input type="file" name="arquivo" class="form-input">
+                {% if destaque.arquivo %}
+                    {% if destaque.tipo == 'imagem' %}
+                        <img src="{{ destaque.arquivo.url }}" class="preview-img">
+                    {% else %}
+                        <p style="font-size: 12px; color: #666; margin-top: 5px;">Vídeo atual: {{ destaque.arquivo.url }}</p>
+                    {% endif %}
+                {% endif %}
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">Título (ex: REVESTIMENTO EM TIJOLOS)</label>
+                <input type="text" name="titulo" class="form-input" value="{{ destaque.titulo|default:'' }}" placeholder="Título principal">
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">Subtítulo (ex: Perfeito para sua sala)</label>
+                <input type="text" name="subtitulo" class="form-input" value="{{ destaque.subtitulo|default:'' }}" placeholder="Frase de apoio">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Vincular a um Produto (Botão Saiba Mais)</label>
+                <select name="produto_link" class="form-select">
+                    <option value="">-- Selecione um produto (opcional) --</option>
+                    {% for p in produtos %}
+                        <option value="{{ p.id }}" {% if destaque.produto_link_id == p.id %}selected{% endif %}>{{ p.nome }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Link Externo (caso não queira vincular a produto)</label>
+                <input type="text" name="link_externo" class="form-input" value="{{ destaque.link_externo|default:'' }}" placeholder="https://...">
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">Ordem de Exibição</label>
+                <input type="number" name="ordem" class="form-input" value="{{ destaque.ordem|default:0 }}">
+            </div>
+            
+            <div class="form-group">
+                <div class="form-checkbox-group">
+                    <input type="checkbox" name="ativo" id="ativo" class="form-checkbox" {% if destaque.ativo or not destaque %}checked{% endif %}>
+                    <label for="ativo" class="form-label" style="margin-bottom: 0;">Slide Ativo</label>
+                </div>
+            </div>
+            
+            <div class="form-actions">
+                <button type="submit" class="btn-save">Salvar Slide</button>
+                <a href="{% url 'admin-destaques' %}" class="btn-cancel">Cancelar</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

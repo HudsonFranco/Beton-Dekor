@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Deletar Slide - BetonDekor{% endblock %}
+
+{% block content %}
+<div style="min-height: 100vh; background: #f7f7f7; padding: 100px 20px; display: flex; align-items: center; justify-content: center;">
+    <div style="background: white; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); padding: 40px; max-width: 500px; width: 100%; text-align: center;">
+        <div style="width: 80px; height: 80px; background: #fee; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px;">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#e33" stroke-width="2">
+                <path d="M3 6h18M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"></path>
+            </svg>
+        </div>
+        <h1 style="font-family: 'Montserrat'; font-weight: 700; font-size: 24px; color: #262626; margin-bottom: 10px;">Tem certeza?</h1>
+        <p style="font-family: 'Montserrat'; font-size: 16px; color: #666; margin-bottom: 30px;">
+            Você está prestes a deletar o slide <strong>"{{ destaque.titulo|default:'Sem título' }}"</strong>. Esta ação não pode ser desfeita.
+        </p>
+        
+        <form method="POST">
+            {% csrf_token %}
+            <div style="display: flex; gap: 15px; justify-content: center;">
+                <button type="submit" style="padding: 12px 30px; background: #e33; color: white; border: none; border-radius: 8px; font-family: 'Montserrat'; font-weight: 600; cursor: pointer;">Sim, Deletar</button>
+                <a href="{% url 'admin-destaques' %}" style="padding: 12px 30px; background: #eee; color: #666; text-decoration: none; border-radius: 8px; font-family: 'Montserrat'; font-weight: 600;">Cancelar</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

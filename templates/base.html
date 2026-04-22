@@ -3,15 +3,79 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=AW-11467953467"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'AW-11467953467');
+    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <meta name="description" content="Beton Dekor - Especialista em Revestimentos 3D Cimentícios, Cobogós, Pisantes e Artefatos em Concreto. Qualidade, resistência e design exclusivo para sua obra.">
+    <meta name="keywords" content="revestimento 3d, cimento, concreto arquitetonico, cobogo, pisante, pingadeira, arquitetura, decoração, palhoça, santa catarina">
+    <meta name="author" content="Beton Dekor">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://www.betondekor.com.br/">
+    <meta property="og:title" content="Beton Dekor - Revestimentos 3D e Artefatos em Cimento">
+    <meta property="og:description" content="Transforme seu ambiente com a sofisticação dos nossos revestimentos 3D e artefatos de cimento de alta qualidade.">
+    <meta property="og:image" content="{% static 'images/revestimento3D.jpeg' %}">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:title" content="Beton Dekor - Revestimentos 3D e Artefatos em Cimento">
+    <meta property="twitter:description" content="Transforme seu ambiente com a sofisticação dos nossos revestimentos 3D e artefatos de cimento.">
     <title>{% block title %}Beton Dekor{% endblock %}</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="icon" href="{% static 'favicon.ico' %}" type="image/x-icon">
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}?v=2.0">
     <script src="https://unpkg.com/htmx.org@1.9.10"></script>
     {% django_htmx_script %}
     {% block extra_css %}{% endblock %}
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "LocalBusiness",
+      "name": "Beton Dekor",
+      "image": "https://www.betondekor.com.br/static/images/revestimento3D.jpeg",
+      "@id": "https://www.betondekor.com.br",
+      "url": "https://www.betondekor.com.br",
+      "telephone": "+5548996578140",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Rua Madre Peulina, 920, Lj 21 - Passa Vinte",
+        "addressLocality": "Palhoça",
+        "addressRegion": "SC",
+        "postalCode": "88130-050",
+        "addressCountry": "BR"
+      },
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": -27.6436,
+        "longitude": -48.6653
+      },
+      "openingHoursSpecification": {
+        "@type": "OpeningHoursSpecification",
+        "dayOfWeek": [
+          "Monday",
+          "Tuesday",
+          "Wednesday",
+          "Thursday",
+          "Friday"
+        ],
+        "opens": "08:00",
+        "closes": "18:00"
+      },
+      "sameAs": [
+        "https://www.instagram.com/betondekor/",
+        "https://www.facebook.com/p/BetonDekor-61556013232990/"
+      ]
+    }
+    </script>
 </head>
 <body>
     {% block content %}{% endblock %}

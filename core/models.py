@@ -137,3 +137,49 @@ class MensagemContato(models.Model):
     
     def __str__(self):
         return f"{self.nome} - {self.email} ({self.created_at.strftime('%d/%m/%Y %H:%M')})"
+
+class Destaque(models.Model):
+    TIPO_CHOICES = (
+        ('imagem', 'Imagem'),
+        ('video', 'Vídeo'),
+    )
+    tipo = models.CharField(max_length=10, choices=TIPO_CHOICES, default='imagem', verbose_name="Tipo de Mídia")
+    titulo = models.CharField(max_length=200, blank=True, verbose_name="Título (ex: Revestimento em Tijolos)")
+    subtitulo = models.CharField(max_length=200, blank=True, verbose_name="Subtítulo (ex: Perfeito para sua sala)")
+    arquivo = cloudinary_models.CloudinaryField(
+        resource_type='auto', 
+        folder='destaques/', 
+        blank=True, 
+        null=True, 
+        verbose_name="Arquivo (Foto ou Vídeo)"
+    )
+    produto_link = models.ForeignKey(
+        'Produto', 
+        on_delete=models.SET_NULL, 
+        null=True, 
+        blank=True, 
+        verbose_name="Produto para 'Saiba Mais'"
+    )
+    link_externo = models.CharField(max_length=500, blank=True, verbose_name="Link Externo (caso não seja produto)")
+    ordem = models.IntegerField(default=0, verbose_name="Ordem")
+    ativo = models.BooleanField(default=True, verbose_name="Ativo")
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['ordem', 'created_at']
+        verbose_name = 'Destaque'
+        verbose_name_plural = 'Destaques'
+
+    def save(self, *args, **kwargs):
+        if self.arquivo:
+            # Tenta detectar o tipo pelo nome do arquivo ou URL
+            url = str(self.arquivo).lower()
+            video_extensions = ['.mp4', '.mov', '.avi', '.m4v', 'video/upload']
+            if any(ext in url for ext in video_extensions):
+                self.tipo = 'video'
+            else:
+                self.tipo = 'imagem'
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return self.titulo or f"Slide {self.id}"

@@ -1,7 +1,9 @@
 from django.urls import path
+from django.views.generic import TemplateView
 from . import views
 
 urlpatterns = [
+    path('robots.txt', TemplateView.as_view(template_name="robots.txt", content_type="text/plain")),
     path('', views.home, name='home'),
     path('quem-somos/', views.quem_somos, name='quem-somos'),
     path('produtos/', views.produtos, name='produtos'),
@@ -31,5 +33,11 @@ urlpatterns = [
     path('admin/categorias/<int:categoria_pk>/subcategorias/criar/', views.admin_subcategoria_create, name='admin-subcategoria-create-cat'),
     path('admin/subcategorias/<int:pk>/editar/', views.admin_subcategoria_edit, name='admin-subcategoria-edit'),
     path('admin/subcategorias/<int:pk>/deletar/', views.admin_subcategoria_delete, name='admin-subcategoria-delete'),
+    
+    # Admin - CRUD de Destaques
+    path('admin/destaques/', views.admin_destaques, name='admin-destaques'),
+    path('admin/destaques/criar/', views.admin_destaque_create, name='admin-destaque-create'),
+    path('admin/destaques/<int:pk>/editar/', views.admin_destaque_edit, name='admin-destaque-edit'),
+    path('admin/destaques/<int:pk>/deletar/', views.admin_destaque_delete, name='admin-destaque-delete'),
 ]
 

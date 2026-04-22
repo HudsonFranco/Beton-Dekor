@@ -6,11 +6,12 @@ from django.http import JsonResponse
 from django.views.decorators.http import require_POST
 from django_htmx.http import HttpResponseClientRedirect
 from django.core.mail import send_mail
-from .models import Produto, CategoriaPrincipal, Subcategoria, MensagemContato
+from .models import Produto, CategoriaPrincipal, Subcategoria, MensagemContato, Destaque
 import os
 
 def home(request):
-    return render(request, 'core/home.html')
+    destaques = Destaque.objects.filter(ativo=True).order_by('ordem', 'created_at')
+    return render(request, 'core/home.html', {'destaques': destaques})
 
 def quem_somos(request):
     return render(request, 'core/quem-somos.html')
@@ -538,3 +539,100 @@ def admin_subcategoria_delete(request, pk):
         'subcategoria': subcategoria,
         'quantidade_produtos': quantidade_produtos
     })
+
+# Admin - CRUD de Destaques
+@login_required
+def admin_destaques(request):
+    destaques = Destaque.objects.all().order_by('ordem', 'created_at')
+    categorias = CategoriaPrincipal.objects.filter(ativo=True).prefetch_related('subcategorias')
+    subcategorias = Subcategoria.objects.select_related('categoria_principal').all()
+    # Adicionando outros dados para manter compatibilidade com o template base se necessário
+    return render(request, 'core/admin/destaques_list.html', {
+        'destaques': destaques,
+        'categorias': categorias,
+        'subcategorias': subcategorias
+    })
+
+@login_required
+def admin_destaque_create(request):
+    if request.method == 'POST':
+        tipo = request.POST.get('tipo', 'imagem')
+        titulo = request.POST.get('titulo', '').strip()
+        subtitulo = request.POST.get('subtitulo', '').strip()
+        produto_link_id = request.POST.get('produto_link', '')
+        link_externo = request.POST.get('link_externo', '').strip()
+        ordem = request.POST.get('ordem', 0)
+        ativo = request.POST.get('ativo') == 'on'
+        
+        produto_link = None
+        if produto_link_id:
+            try:
+                produto_link = Produto.objects.get(pk=produto_link_id)
+            except Produto.DoesNotExist:
+                pass
+
+        destaque = Destaque(
+            tipo=tipo,
+            titulo=titulo,
+            subtitulo=subtitulo,
+            produto_link=produto_link,
+            link_externo=link_externo,
+            ordem=int(ordem) if ordem else 0,
+            ativo=ativo
+        )
+        
+        if 'arquivo' in request.FILES:
+            destaque.arquivo = request.FILES['arquivo']
+            
+        destaque.save()
+        messages.success(request, f'Destaque "{destaque.titulo}" criado com sucesso!')
+        return redirect('admin-destaques')
+    
+    produtos_list = Produto.objects.filter(ativo=True).order_by('nome')
+    return render(request, 'core/admin/destaque_form.html', {
+        'destaque': None,
+        'produtos': produtos_list
+    })
+
+@login_required
+def admin_destaque_edit(request, pk):
+    destaque = get_object_or_404(Destaque, pk=pk)
+    if request.method == 'POST':
+        destaque.tipo = request.POST.get('tipo', 'imagem')
+        destaque.titulo = request.POST.get('titulo', '').strip()
+        destaque.subtitulo = request.POST.get('subtitulo', '').strip()
+        produto_link_id = request.POST.get('produto_link', '')
+        destaque.link_externo = request.POST.get('link_externo', '').strip()
+        destaque.ordem = int(request.POST.get('ordem', 0)) if request.POST.get('ordem') else 0
+        destaque.ativo = request.POST.get('ativo') == 'on'
+        
+        if produto_link_id:
+            try:
+                destaque.produto_link = Produto.objects.get(pk=produto_link_id)
+            except Produto.DoesNotExist:
+                destaque.produto_link = None
+        else:
+            destaque.produto_link = None
+
+        if 'arquivo' in request.FILES:
+            destaque.arquivo = request.FILES['arquivo']
+            
+        destaque.save()
+        messages.success(request, f'Destaque "{destaque.titulo}" atualizado com sucesso!')
+        return redirect('admin-destaques')
+        
+    produtos_list = Produto.objects.filter(ativo=True).order_by('nome')
+    return render(request, 'core/admin/destaque_form.html', {
+        'destaque': destaque,
+        'produtos': produtos_list
+    })
+
+@login_required
+def admin_destaque_delete(request, pk):
+    destaque = get_object_or_404(Destaque, pk=pk)
+    if request.method == 'POST':
+        titulo = destaque.titulo
+        destaque.delete()
+        messages.success(request, f'Destaque "{titulo}" deletado com sucesso!')
+        return redirect('admin-destaques')
+    return render(request, 'core/admin/destaque_confirm_delete.html', {'destaque': destaque})
