@@ -41,3 +41,7 @@ db.sqlite3-journal
 .DS_Store
 Thumbs.db
 
+# SSL Certificates (managed by Let's Encrypt on server - never commit!)
+cert.crt
+cert.key
+key.pem
